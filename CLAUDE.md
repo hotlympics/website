@@ -54,6 +54,7 @@ npm run build      # Build for production
 npm run preview    # Preview production build
 npm run lint       # Run linter
 npm run typecheck  # Run TypeScript type checking
+./run-checks.sh    # Run all CI checks locally
 ```
 
 ## API Integration
