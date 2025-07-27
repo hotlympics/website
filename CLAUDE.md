@@ -22,6 +22,7 @@ Hotlympics is a face rating application where users can:
 - **Code Quality**: Clean, readable, and modular
 - **Comments**: Conservative use only when necessary
 - **React Components**: All components must be functional components (no class components)
+- **File Naming**: Use kebab-case for all file names (e.g., `rating-arena.tsx`, not `RatingArena.tsx`)
 
 ## Project Structure
 
@@ -56,6 +57,25 @@ npm run lint       # Run linter
 npm run typecheck  # Run TypeScript type checking
 ./run-checks.sh    # Run all CI checks locally
 ```
+
+## Development Workflow
+
+After making code changes (not for every minor change, but after completing a set of related changes), run:
+
+```bash
+npm i && npm run build
+```
+
+When running the build, also run linting and formatting:
+
+```bash
+npm run lint
+npm run format
+```
+
+Fix any linting or formatting errors before considering the changes complete.
+
+This ensures dependencies are installed and the build succeeds. The user will manually run and test the website once the build completes successfully.
 
 ## API Integration
 
