@@ -1,0 +1,28 @@
+runtime: nodejs20
+
+automatic_scaling:
+    max_instances: 2
+
+handlers:
+    # Serve robots.txt
+    - url: /robots.txt
+      static_files: dist/robots.txt
+      upload: dist/robots.txt
+      secure: always
+
+    # Serve static assets
+    - url: /assets
+      static_dir: dist/assets
+      secure: always
+
+    # Serve other static files
+    - url: /(.*\..+)$
+      static_files: dist/\1
+      upload: dist/.*\..+$
+      secure: always
+
+    # Handle all other routes and serve the index.html file
+    - url: /.*
+      static_files: dist/index.html
+      upload: dist/index.html
+      secure: always
