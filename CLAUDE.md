@@ -63,15 +63,15 @@ npm run typecheck  # Run TypeScript type checking
 After making code changes (not for every minor change, but after completing a set of related changes), run:
 
 ```bash
-npm i && npm run build
+./run-checks.sh
 ```
 
-When running the build, also run linting and formatting:
+This script will:
 
-```bash
-npm run lint
-npm run format
-```
+- Install dependencies
+- Run linting and formatting
+- Build the project
+- Run type checking
 
 Fix any linting or formatting errors before considering the changes complete.
 

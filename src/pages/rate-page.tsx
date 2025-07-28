@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function RatePage() {
+const RatePage = () => {
+    const navigate = useNavigate();
     const [leftImage] = useState<string>("");
     const [rightImage] = useState<string>("");
 
@@ -14,6 +16,14 @@ function RatePage() {
     return (
         <div className="min-h-screen bg-gray-100 p-4">
             <div className="mx-auto max-w-7xl">
+                <div className="absolute top-4 right-4">
+                    <button
+                        onClick={() => navigate("/signin")}
+                        className="rounded-lg bg-blue-600 px-4 py-2 text-white shadow-md transition-colors hover:bg-blue-700"
+                    >
+                        Add your photo
+                    </button>
+                </div>
                 <div className="mb-6 text-center">
                     <h1 className="mb-6 text-4xl font-bold text-gray-800">
                         Hotlympics Rating Arena
