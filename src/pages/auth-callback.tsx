@@ -17,7 +17,10 @@ const AuthCallback = () => {
         const handleCallback = async () => {
             try {
                 await authService.handleOAuthCallback(provider, code);
-                navigate("/upload");
+                const redirectPath =
+                    sessionStorage.getItem("auth_redirect") || "/account";
+                sessionStorage.removeItem("auth_redirect");
+                navigate(redirectPath);
             } catch (error) {
                 console.error("Authentication failed:", error);
                 navigate("/signin");
@@ -35,6 +38,6 @@ const AuthCallback = () => {
             </div>
         </div>
     );
-}
+};
 
 export default AuthCallback;

@@ -15,7 +15,7 @@ const oauthConfig: OAuthConfig = {
 };
 
 export const authService = {
-    initiateOAuthLogin(provider: "google") {
+    initiateOAuthLogin(provider: "google", redirectPath?: string) {
         const config = oauthConfig[provider];
 
         if (!config.clientId) {
@@ -24,6 +24,10 @@ export const authService = {
         }
 
         let authUrl = "";
+
+        if (redirectPath) {
+            sessionStorage.setItem("auth_redirect", redirectPath);
+        }
 
         switch (provider) {
             case "google":
@@ -63,6 +67,14 @@ export const authService = {
             }
 
             const data = await response.json();
+
+            if (data.token) {
+                localStorage.setItem("auth_token", data.token);
+            }
+            if (data.user) {
+                localStorage.setItem("user_info", JSON.stringify(data.user));
+            }
+
             return data;
         } catch (error) {
             console.error("OAuth callback error:", error);
@@ -87,6 +99,14 @@ export const authService = {
             }
 
             const data = await response.json();
+
+            if (data.token) {
+                localStorage.setItem("auth_token", data.token);
+            }
+            if (data.user) {
+                localStorage.setItem("user_info", JSON.stringify(data.user));
+            }
+
             return data;
         } catch (error) {
             console.error("Sign in error:", error);
@@ -111,6 +131,14 @@ export const authService = {
             }
 
             const data = await response.json();
+
+            if (data.token) {
+                localStorage.setItem("auth_token", data.token);
+            }
+            if (data.user) {
+                localStorage.setItem("user_info", JSON.stringify(data.user));
+            }
+
             return data;
         } catch (error) {
             console.error("Sign up error:", error);

@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { authService } from "../services/auth";
 
 const SignInPage = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const redirect = searchParams.get("redirect") || "/account";
     const [isSignUp, setIsSignUp] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -25,7 +27,7 @@ const SignInPage = () => {
             } else {
                 await authService.signInWithEmail(email, password);
             }
-            navigate("/upload");
+            navigate(redirect);
         } catch {
             setError(
                 isSignUp
@@ -36,7 +38,7 @@ const SignInPage = () => {
     };
 
     const handleSocialLogin = (provider: "google") => {
-        authService.initiateOAuthLogin(provider);
+        authService.initiateOAuthLogin(provider, redirect);
     };
 
     return (
@@ -169,6 +171,6 @@ const SignInPage = () => {
             </div>
         </div>
     );
-}
+};
 
 export default SignInPage;
