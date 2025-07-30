@@ -17,6 +17,7 @@
     "dependencies": {
         "@dr.pogodin/react-helmet": "^3.0.2",
         "@tailwindcss/vite": "^4.0.9",
+        "browser-image-compression": "^2.0.2",
         "clsx": "^2.1.1",
         "lucide-react": "^0.511.0",
         "motion": "^12.23.3",
