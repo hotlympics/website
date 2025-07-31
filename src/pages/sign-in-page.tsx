@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { EmailVerificationPending } from "../components/email-verification-pending";
 import { authService } from "../services/auth";
 
 const SignInPage = () => {
@@ -11,6 +12,12 @@ const SignInPage = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
+    const [verificationPending, setVerificationPending] = useState<{
+        firebaseUid: string;
+        email: string;
+        isGoogleUser?: boolean;
+        userId?: string;
+    } | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -23,7 +30,21 @@ const SignInPage = () => {
 
         try {
             if (isSignUp) {
-                await authService.signUpWithEmail(email, password);
+                const result = await authService.signUpWithEmail(
+                    email,
+                    password
+                );
+
+                // Check if email verification is pending
+                if (result.status === "pending_verification") {
+                    setVerificationPending({
+                        firebaseUid: result.firebaseUid,
+                        email: email,
+                        isGoogleUser: result.isGoogleUser,
+                        userId: result.userId,
+                    });
+                    return;
+                }
             } else {
                 await authService.signInWithEmail(email, password);
             }
@@ -44,6 +65,18 @@ const SignInPage = () => {
     const handleSocialLogin = (provider: "google") => {
         authService.initiateOAuthLogin(provider, redirect);
     };
+
+    // Show email verification pending component if needed
+    if (verificationPending) {
+        return (
+            <EmailVerificationPending
+                firebaseUid={verificationPending.firebaseUid}
+                email={verificationPending.email}
+                isGoogleUser={verificationPending.isGoogleUser}
+                userId={verificationPending.userId}
+            />
+        );
+    }
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">

@@ -134,6 +134,12 @@ export const authService = {
 
             const data = await response.json();
 
+            // Check if email verification is pending
+            if (data.status === "pending_verification") {
+                // Don't store token/user for pending verification
+                return data;
+            }
+
             if (data.token) {
                 localStorage.setItem("auth_token", data.token);
             }

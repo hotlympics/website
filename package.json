@@ -12,13 +12,16 @@
         "format": "prettier --write .",
         "preview": "vite preview",
         "prepare": "husky",
-        "lint-staged": "lint-staged"
+        "lint-staged": "lint-staged",
+        "deploy": "npm run build && firebase deploy --only hosting",
+        "deploy:preview": "npm run build && firebase hosting:channel:deploy preview"
     },
     "dependencies": {
         "@dr.pogodin/react-helmet": "^3.0.2",
         "@tailwindcss/vite": "^4.0.9",
         "browser-image-compression": "^2.0.2",
         "clsx": "^2.1.1",
+        "firebase": "^12.0.0",
         "lucide-react": "^0.511.0",
         "motion": "^12.23.3",
         "react": "^19.0.0",
@@ -41,6 +44,7 @@
         "eslint-plugin-react": "^7.37.4",
         "eslint-plugin-react-hooks": "^5.1.0",
         "eslint-plugin-react-refresh": "^0.4.18",
+        "firebase-tools": "^14.11.2",
         "husky": "^9.1.7",
         "lint-staged": "^16.0.0",
         "postcss": "^8.5.1",
