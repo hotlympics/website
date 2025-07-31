@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { authService } from "../services/auth";
 
@@ -7,12 +7,19 @@ const AuthCallback = () => {
     const { provider } = useParams<{ provider: string }>();
     const [searchParams] = useSearchParams();
     const code = searchParams.get("code");
+    const hasRun = useRef(false);
 
     useEffect(() => {
         if (!provider || !code) {
             navigate("/signin");
             return;
         }
+
+        if (hasRun.current) {
+            return;
+        }
+
+        hasRun.current = true;
 
         const handleCallback = async () => {
             try {
