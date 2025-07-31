@@ -18,7 +18,7 @@ const AuthCallback = () => {
             try {
                 await authService.handleOAuthCallback(provider, code);
                 const redirectPath =
-                    sessionStorage.getItem("auth_redirect") || "/account";
+                    sessionStorage.getItem("auth_redirect") || "/profile";
                 sessionStorage.removeItem("auth_redirect");
                 navigate(redirectPath);
             } catch (error) {

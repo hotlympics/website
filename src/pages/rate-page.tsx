@@ -18,7 +18,7 @@ const RatePage = () => {
             <div className="mx-auto max-w-7xl">
                 <div className="absolute top-4 right-4">
                     <button
-                        onClick={() => navigate("/account")}
+                        onClick={() => navigate("/profile")}
                         className="rounded-lg bg-blue-600 px-4 py-2 text-white shadow-md transition-colors hover:bg-blue-700"
                     >
                         Add your photo

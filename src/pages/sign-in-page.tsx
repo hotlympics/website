@@ -5,7 +5,7 @@ import { authService } from "../services/auth";
 const SignInPage = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const redirect = searchParams.get("redirect") || "/account";
+    const redirect = searchParams.get("redirect") || "/profile";
     const [isSignUp, setIsSignUp] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
