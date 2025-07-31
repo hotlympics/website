@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/use-auth";
+import { firebaseAuthService } from "../services/firebase-auth";
 import { compressImage, validateImageFile } from "../utils/image-compression";
 
 interface UploadedPhoto {
@@ -18,6 +20,7 @@ interface UserInfo {
 
 const ProfilePage = () => {
     const navigate = useNavigate();
+    const { user: firebaseUser, loading: authLoading } = useAuth();
     const [user, setUser] = useState<UserInfo | null>(null);
     const [uploadedPhotos, setUploadedPhotos] = useState<UploadedPhoto[]>([]);
     const [isUploading, setIsUploading] = useState(false);
@@ -40,33 +43,61 @@ const ProfilePage = () => {
     } | null>(null);
 
     useEffect(() => {
-        const token = localStorage.getItem("auth_token");
-        if (!token) {
+        if (authLoading) return;
+
+        if (!firebaseUser) {
             navigate("/signin?redirect=/profile");
             return;
         }
 
-        const userInfo = localStorage.getItem("user_info");
-        if (userInfo) {
-            const parsedUser = JSON.parse(userInfo) as UserInfo;
-            setUser(parsedUser);
-            // Initialize pool selections from user's poolImageIds
-            if (parsedUser.poolImageIds) {
-                setPoolSelections(new Set(parsedUser.poolImageIds));
-            }
-        }
+        // Fetch user info from backend using Firebase auth
+        const fetchUserInfo = async () => {
+            try {
+                const idToken = await firebaseAuthService.getIdToken();
+                if (!idToken) {
+                    navigate("/signin?redirect=/profile");
+                    return;
+                }
 
+                const response = await fetch(
+                    `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/user`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${idToken}`,
+                        },
+                    }
+                );
+
+                if (response.ok) {
+                    const userData = await response.json();
+                    setUser(userData);
+                    // Initialize pool selections from user's poolImageIds
+                    if (userData.poolImageIds) {
+                        setPoolSelections(new Set(userData.poolImageIds));
+                    }
+                } else if (response.status === 401) {
+                    navigate("/signin?redirect=/profile");
+                    return;
+                }
+            } catch (err) {
+                console.error("Failed to fetch user info:", err);
+            }
+        };
+
+        fetchUserInfo();
         fetchUploadedPhotos();
-    }, [navigate]);
+    }, [firebaseUser, authLoading, navigate]);
 
     const fetchUploadedPhotos = async () => {
         try {
-            const token = localStorage.getItem("auth_token");
+            const idToken = await firebaseAuthService.getIdToken();
+            if (!idToken) return;
+
             const response = await fetch(
                 `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/images/user`,
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${idToken}`,
                     },
                 }
             );
@@ -92,10 +123,15 @@ const ProfilePage = () => {
         }
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem("auth_token");
-        localStorage.removeItem("user_info");
-        navigate("/signin");
+    const handleLogout = async () => {
+        try {
+            await firebaseAuthService.signOut();
+            localStorage.removeItem("auth_token");
+            localStorage.removeItem("user_info");
+            navigate("/signin");
+        } catch (error) {
+            console.error("Logout error:", error);
+        }
     };
 
     const handleFileSelect = async (
@@ -133,13 +169,17 @@ const ProfilePage = () => {
             const formData = new FormData();
             formData.append("image", compressedFile);
 
-            const token = localStorage.getItem("auth_token");
+            const idToken = await firebaseAuthService.getIdToken();
+            if (!idToken) {
+                throw new Error("Not authenticated");
+            }
+
             const response = await fetch(
                 `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/images/upload`,
                 {
                     method: "POST",
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${idToken}`,
                     },
                     body: formData,
                 }
@@ -200,13 +240,17 @@ const ProfilePage = () => {
         setError(null);
 
         try {
-            const token = localStorage.getItem("auth_token");
+            const idToken = await firebaseAuthService.getIdToken();
+            if (!idToken) {
+                throw new Error("Not authenticated");
+            }
+
             const response = await fetch(
                 `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/images/${photoId}`,
                 {
                     method: "DELETE",
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${idToken}`,
                     },
                 }
             );
@@ -264,14 +308,18 @@ const ProfilePage = () => {
         setError(null);
 
         try {
-            const token = localStorage.getItem("auth_token");
+            const idToken = await firebaseAuthService.getIdToken();
+            if (!idToken) {
+                throw new Error("Not authenticated");
+            }
+
             const response = await fetch(
                 `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/user/pool`,
                 {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${idToken}`,
                     },
                     body: JSON.stringify({
                         poolImageIds: Array.from(poolSelections),
@@ -288,7 +336,6 @@ const ProfilePage = () => {
 
             const updatedUser = await response.json();
             setUser(updatedUser);
-            localStorage.setItem("user_info", JSON.stringify(updatedUser));
 
             // Show success message
             setSuccessMessage("Pool selections updated successfully!");
@@ -308,14 +355,18 @@ const ProfilePage = () => {
         setError(null);
 
         try {
-            const token = localStorage.getItem("auth_token");
+            const idToken = await firebaseAuthService.getIdToken();
+            if (!idToken) {
+                throw new Error("Not authenticated");
+            }
+
             const response = await fetch(
                 `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/user/profile`,
                 {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${idToken}`,
                     },
                     body: JSON.stringify({
                         gender: profileForm.gender,
@@ -333,7 +384,6 @@ const ProfilePage = () => {
 
             const updatedUser = await response.json();
             setUser(updatedUser);
-            localStorage.setItem("user_info", JSON.stringify(updatedUser));
         } catch (err) {
             setError(
                 err instanceof Error ? err.message : "Failed to update profile"
@@ -343,7 +393,7 @@ const ProfilePage = () => {
         }
     };
 
-    if (!user) {
+    if (authLoading || !user) {
         return (
             <div className="flex min-h-screen items-center justify-center bg-gray-100">
                 <div className="text-center">
