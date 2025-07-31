@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/use-auth";
 
 const RatePage = () => {
     const navigate = useNavigate();
+    const { user, loading } = useAuth();
     const [leftImage] = useState<string>("");
     const [rightImage] = useState<string>("");
 
@@ -18,8 +20,15 @@ const RatePage = () => {
             <div className="mx-auto max-w-7xl">
                 <div className="absolute top-4 right-4">
                     <button
-                        onClick={() => navigate("/account")}
-                        className="rounded-lg bg-blue-600 px-4 py-2 text-white shadow-md transition-colors hover:bg-blue-700"
+                        onClick={() => {
+                            if (user) {
+                                navigate("/profile");
+                            } else {
+                                navigate("/signin?redirect=/profile");
+                            }
+                        }}
+                        disabled={loading}
+                        className="rounded-lg bg-blue-600 px-4 py-2 text-white shadow-md transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         Add your photo
                     </button>
