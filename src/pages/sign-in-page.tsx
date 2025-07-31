@@ -28,12 +28,16 @@ const SignInPage = () => {
                 await authService.signInWithEmail(email, password);
             }
             navigate(redirect);
-        } catch {
-            setError(
-                isSignUp
-                    ? "Sign up failed. Please try again."
-                    : "Sign in failed. Please check your credentials."
-            );
+        } catch (error) {
+            if (error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError(
+                    isSignUp
+                        ? "Sign up failed. Please try again."
+                        : "Sign in failed. Please check your credentials."
+                );
+            }
         }
     };
 

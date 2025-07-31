@@ -95,7 +95,8 @@ export const authService = {
             });
 
             if (!response.ok) {
-                throw new Error("Sign in failed");
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Sign in failed");
             }
 
             const data = await response.json();
@@ -127,7 +128,8 @@ export const authService = {
             });
 
             if (!response.ok) {
-                throw new Error("Sign up failed");
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Sign up failed");
             }
 
             const data = await response.json();
