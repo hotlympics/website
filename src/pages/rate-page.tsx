@@ -1,18 +1,71 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/use-auth";
+import { ImageData, imageService } from "../services/image-service";
+import { ratingService } from "../services/rating-service";
+import { userService } from "../services/user-service";
 
 const RatePage = () => {
     const navigate = useNavigate();
     const { user, loading } = useAuth();
-    const [leftImage] = useState<string>("");
-    const [rightImage] = useState<string>("");
+    const [imagePair, setImagePair] = useState<ImageData[] | null>(null);
+    const [loadingImages, setLoadingImages] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const handleImageClick = (selectedImage: string) => {
-        const winnerId = selectedImage;
-        const loserId = selectedImage === leftImage ? rightImage : leftImage;
+    useEffect(() => {
+        fetchImagePair();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user]);
 
-        console.log(`Winner: ${winnerId}, Loser: ${loserId}`);
+    const fetchImagePair = async () => {
+        setLoadingImages(true);
+        setError(null);
+
+        try {
+            let gender: "male" | "female" = "female"; // Default to female for non-logged in users
+
+            if (user) {
+                // Fetch user details to get their gender
+                const userDetails = await userService.getCurrentUser();
+                if (userDetails && userDetails.gender !== "unknown") {
+                    // Show opposite gender
+                    gender = userDetails.gender === "male" ? "female" : "male";
+                }
+            }
+
+            const pair = await imageService.fetchImagePair(gender);
+            if (pair) {
+                setImagePair(pair);
+            } else {
+                setError("No images available for rating at this time.");
+            }
+        } catch (err) {
+            console.error("Error fetching images:", err);
+            setError("Failed to load images. Please try again.");
+        } finally {
+            setLoadingImages(false);
+        }
+    };
+
+    const handleImageClick = async (selectedImage: ImageData) => {
+        if (!imagePair || imagePair.length !== 2) return;
+
+        const winnerId = selectedImage.imageId;
+        const loser = imagePair.find((img) => img.imageId !== winnerId);
+
+        if (!loser) return;
+
+        const loserId = loser.imageId;
+
+        // Submit rating to server
+        const success = await ratingService.submitRating(winnerId, loserId);
+
+        if (success) {
+            // Fetch new pair after successful rating
+            fetchImagePair();
+        } else {
+            setError("Failed to submit rating. Please try again.");
+        }
     };
 
     return (
@@ -40,29 +93,53 @@ const RatePage = () => {
                     <p className="text-xl text-gray-600">Pick who you prefer</p>
                 </div>
 
-                <div className="flex flex-col items-center justify-center gap-8 md:flex-row">
-                    <div
-                        className="cursor-pointer"
-                        onClick={() => handleImageClick(leftImage)}
-                    >
-                        <img
-                            src={leftImage}
-                            alt="Left face"
-                            className="h-96 w-full max-w-md rounded-lg object-cover shadow-lg transition-transform hover:scale-105"
-                        />
+                {loadingImages ? (
+                    <div className="flex items-center justify-center py-32">
+                        <div className="text-xl text-gray-600">
+                            Loading images...
+                        </div>
                     </div>
+                ) : error ? (
+                    <div className="flex flex-col items-center justify-center py-32">
+                        <p className="mb-4 text-xl text-red-600">{error}</p>
+                        <button
+                            onClick={fetchImagePair}
+                            className="rounded-lg bg-blue-600 px-4 py-2 text-white shadow-md transition-colors hover:bg-blue-700"
+                        >
+                            Try Again
+                        </button>
+                    </div>
+                ) : imagePair && imagePair.length === 2 ? (
+                    <div className="flex flex-col items-center justify-center gap-8 md:flex-row">
+                        <div
+                            className="cursor-pointer"
+                            onClick={() => handleImageClick(imagePair[0])}
+                        >
+                            <img
+                                src={`${import.meta.env.VITE_API_URL || "http://localhost:3000"}${imagePair[0].imageUrl}`}
+                                alt="Left face"
+                                className="h-96 w-full max-w-md rounded-lg object-cover shadow-lg transition-transform hover:scale-105"
+                            />
+                        </div>
 
-                    <div
-                        className="cursor-pointer"
-                        onClick={() => handleImageClick(rightImage)}
-                    >
-                        <img
-                            src={rightImage}
-                            alt="Right face"
-                            className="h-96 w-full max-w-md rounded-lg object-cover shadow-lg transition-transform hover:scale-105"
-                        />
+                        <div
+                            className="cursor-pointer"
+                            onClick={() => handleImageClick(imagePair[1])}
+                        >
+                            <img
+                                src={`${import.meta.env.VITE_API_URL || "http://localhost:3000"}${imagePair[1].imageUrl}`}
+                                alt="Right face"
+                                className="h-96 w-full max-w-md rounded-lg object-cover shadow-lg transition-transform hover:scale-105"
+                            />
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <div className="flex items-center justify-center py-32">
+                        <p className="text-xl text-gray-600">
+                            No images available
+                        </p>
+                    </div>
+                )}
             </div>
         </div>
     );
