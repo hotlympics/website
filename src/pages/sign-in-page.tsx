@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { firebaseAuthService } from "../services/firebase-auth";
 
@@ -6,66 +6,24 @@ const SignInPage = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const redirect = searchParams.get("redirect") || "/profile";
-    const [isSignUp, setIsSignUp] = useState(false);
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const [verificationSent, setVerificationSent] = useState(false);
-    const [checkingVerification, setCheckingVerification] = useState(false);
+    const [magicLinkSent, setMagicLinkSent] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
         setLoading(true);
 
-        if (isSignUp && password !== confirmPassword) {
-            setError("Passwords don't match");
-            setLoading(false);
-            return;
-        }
-
         try {
-            if (isSignUp) {
-                const result = await firebaseAuthService.signUpWithEmail(
-                    email,
-                    password
-                );
-
-                if (result.needsVerification) {
-                    // Store credentials temporarily for auto-sign in after verification
-                    localStorage.setItem("pending_verification_email", email);
-                    localStorage.setItem(
-                        "pending_verification_password",
-                        password
-                    );
-
-                    setVerificationSent(true);
-                    setLoading(false);
-                    return;
-                }
-
-                // If email is already verified (shouldn't happen with new signups)
-                await syncUserWithBackend(result.user.uid);
-                navigate(redirect);
-            } else {
-                const user = await firebaseAuthService.signInWithEmail(
-                    email,
-                    password
-                );
-                await syncUserWithBackend(user.uid);
-                navigate(redirect);
-            }
+            await firebaseAuthService.sendMagicLink(email);
+            setMagicLinkSent(true);
         } catch (error) {
             if (error instanceof Error) {
                 setError(error.message);
             } else {
-                setError(
-                    isSignUp
-                        ? "Sign up failed. Please try again."
-                        : "Sign in failed. Please check your credentials."
-                );
+                setError("Failed to send magic link. Please try again.");
             }
         } finally {
             setLoading(false);
@@ -90,68 +48,6 @@ const SignInPage = () => {
             setLoading(false);
         }
     };
-
-    // Sync user with backend after successful authentication
-    // Auto-check email verification status
-    useEffect(() => {
-        if (!verificationSent || checkingVerification) return;
-
-        const checkInterval = setInterval(async () => {
-            try {
-                setCheckingVerification(true);
-                const isVerified =
-                    await firebaseAuthService.checkEmailVerified();
-                if (isVerified) {
-                    clearInterval(checkInterval);
-                    // Auto sign in when email is verified
-                    const user = await firebaseAuthService.signInWithEmail(
-                        email,
-                        password
-                    );
-                    const apiUrl =
-                        import.meta.env.VITE_API_URL || "http://localhost:3000";
-                    const idToken = await firebaseAuthService.getIdToken();
-
-                    if (idToken) {
-                        const response = await fetch(
-                            `${apiUrl.replace(/\/$/, "")}/auth/sync`,
-                            {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    Authorization: `Bearer ${idToken}`,
-                                },
-                                body: JSON.stringify({ firebaseUid: user.uid }),
-                            }
-                        );
-
-                        if (response.ok) {
-                            const data = await response.json();
-                            localStorage.setItem(
-                                "user_info",
-                                JSON.stringify(data.user)
-                            );
-                            navigate(redirect);
-                        }
-                    }
-                }
-            } catch (error) {
-                // Silently ignore errors during auto-check
-                console.log("Auto-check error:", error);
-            } finally {
-                setCheckingVerification(false);
-            }
-        }, 5000); // Check every 5 seconds
-
-        return () => clearInterval(checkInterval);
-    }, [
-        verificationSent,
-        email,
-        password,
-        navigate,
-        redirect,
-        checkingVerification,
-    ]);
 
     const syncUserWithBackend = async (firebaseUid: string) => {
         const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -189,7 +85,7 @@ const SignInPage = () => {
         localStorage.setItem("user_info", JSON.stringify(data.user));
     };
 
-    if (verificationSent) {
+    if (magicLinkSent) {
         return (
             <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
                 <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
@@ -211,88 +107,35 @@ const SignInPage = () => {
                         </div>
 
                         <h2 className="mb-2 text-2xl font-bold text-gray-800">
-                            Verify Your Email
+                            Check Your Email
                         </h2>
 
                         <p className="mb-6 text-gray-600">
-                            We've sent a verification email to{" "}
-                            <strong>{email}</strong>. Please check your inbox
-                            and click the verification link to complete your
-                            registration.
+                            We've sent a magic sign-in link to{" "}
+                            <strong>{email}</strong>
                         </p>
 
                         <p className="mb-4 text-sm text-gray-500">
-                            After verifying your email, click the button below
-                            to continue.
+                            Click the link in your email to sign in instantly.
+                            The link will expire in 1 hour.
                         </p>
 
-                        {checkingVerification && (
-                            <p className="mb-4 animate-pulse text-sm text-blue-600">
-                                Checking verification status...
+                        <div className="mb-6 rounded-lg bg-blue-50 p-4">
+                            <p className="text-sm text-blue-700">
+                                <strong>Tip:</strong> Keep this tab open. You'll
+                                be automatically signed in when you click the
+                                link.
                             </p>
-                        )}
-
-                        {error && (
-                            <div className="mb-4 rounded-lg bg-red-50 p-3 text-center">
-                                <p className="text-sm text-red-600">{error}</p>
-                            </div>
-                        )}
-
-                        <button
-                            onClick={async () => {
-                                setLoading(true);
-                                setError(null);
-                                try {
-                                    // Check if email is verified and sign in
-                                    const isVerified =
-                                        await firebaseAuthService.checkEmailVerified();
-                                    if (isVerified) {
-                                        // Email is verified, proceed with sign in
-                                        const user =
-                                            await firebaseAuthService.signInWithEmail(
-                                                email,
-                                                password
-                                            );
-                                        await syncUserWithBackend(user.uid);
-                                        navigate(redirect);
-                                    } else {
-                                        setError(
-                                            "Email not yet verified. Please check your inbox."
-                                        );
-                                    }
-                                } catch {
-                                    setError(
-                                        "Please sign in again after verifying your email."
-                                    );
-                                    setVerificationSent(false);
-                                    setIsSignUp(false);
-                                } finally {
-                                    setLoading(false);
-                                }
-                            }}
-                            disabled={loading}
-                            className="mb-4 w-full rounded-lg bg-blue-600 py-2 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                            {loading ? "Checking..." : "I've verified my email"}
-                        </button>
+                        </div>
 
                         <button
                             onClick={() => {
-                                setVerificationSent(false);
-                                setIsSignUp(false);
-                                setPassword("");
-                                // Clear stored credentials
-                                localStorage.removeItem(
-                                    "pending_verification_email"
-                                );
-                                localStorage.removeItem(
-                                    "pending_verification_password"
-                                );
+                                setMagicLinkSent(false);
+                                setEmail("");
                             }}
-                            disabled={loading}
-                            className="text-blue-600 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="text-blue-600 hover:text-blue-700"
                         >
-                            Back to sign in
+                            Use a different email
                         </button>
                     </div>
                 </div>
@@ -312,13 +155,11 @@ const SignInPage = () => {
                 </button>
 
                 <h2 className="mb-6 text-center text-3xl font-bold text-gray-800">
-                    {isSignUp ? "Create Account" : "Sign In"}
+                    Sign In or Sign Up
                 </h2>
 
                 <p className="mb-6 text-center text-gray-600">
-                    {isSignUp
-                        ? "Create an account to upload your photo"
-                        : "Sign in to upload your photo"}
+                    Enter your email to get a magic sign-in link
                 </p>
 
                 <div className="space-y-3">
@@ -367,41 +208,10 @@ const SignInPage = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                             disabled={loading}
+                            placeholder="Enter your email"
                             className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                         />
                     </div>
-
-                    <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">
-                            Password
-                        </label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            disabled={loading}
-                            className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                        />
-                    </div>
-
-                    {isSignUp && (
-                        <div>
-                            <label className="mb-1 block text-sm font-medium text-gray-700">
-                                Confirm Password
-                            </label>
-                            <input
-                                type="password"
-                                value={confirmPassword}
-                                onChange={(e) =>
-                                    setConfirmPassword(e.target.value)
-                                }
-                                required
-                                disabled={loading}
-                                className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                            />
-                        </div>
-                    )}
 
                     {error && (
                         <div className="mb-2 rounded-lg bg-red-50 p-3 text-center">
@@ -414,29 +224,13 @@ const SignInPage = () => {
                         disabled={loading}
                         className="w-full rounded-lg bg-blue-600 py-2 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                        {loading
-                            ? "Please wait..."
-                            : isSignUp
-                              ? "Create Account"
-                              : "Sign In"}
+                        {loading ? "Sending..." : "Send Magic Link"}
                     </button>
                 </form>
 
                 <div className="mt-4 text-center text-sm text-gray-600">
-                    {isSignUp
-                        ? "Already have an account?"
-                        : "Don't have an account?"}
-                    <button
-                        type="button"
-                        onClick={() => {
-                            setIsSignUp(!isSignUp);
-                            setError(null);
-                        }}
-                        disabled={loading}
-                        className="ml-1 text-blue-600 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                        {isSignUp ? "Sign in" : "Sign up"}
-                    </button>
+                    No password needed! We'll email you a secure link to sign
+                    in.
                 </div>
             </div>
         </div>
