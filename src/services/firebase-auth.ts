@@ -1,11 +1,12 @@
 import {
+    ActionCodeSettings,
     AuthError,
-    createUserWithEmailAndPassword,
     getAuth,
     GoogleAuthProvider,
+    isSignInWithEmailLink,
     onAuthStateChanged,
-    sendEmailVerification,
-    signInWithEmailAndPassword,
+    sendSignInLinkToEmail,
+    signInWithEmailLink,
     signInWithPopup,
     signOut,
     User,
@@ -24,51 +25,45 @@ export interface AuthUser {
 }
 
 export const firebaseAuthService = {
-    // Sign up with email and password
-    async signUpWithEmail(
-        email: string,
-        password: string
-    ): Promise<{ user: AuthUser; needsVerification: boolean }> {
+    // Send magic link to email
+    async sendMagicLink(email: string): Promise<void> {
         try {
-            const userCredential = await createUserWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
-            const user = userCredential.user;
-
-            // Send verification email
-            await sendEmailVerification(user);
-
-            return {
-                user: {
-                    uid: user.uid,
-                    email: user.email,
-                    emailVerified: user.emailVerified,
-                    displayName: user.displayName,
-                    photoURL: user.photoURL,
-                },
-                needsVerification: !user.emailVerified,
+            const actionCodeSettings: ActionCodeSettings = {
+                // URL to redirect back to after email link is clicked
+                url: `${window.location.origin}/auth/verify`,
+                handleCodeInApp: true,
             };
+
+            await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+
+            // Store email for later use when completing sign-in
+            window.localStorage.setItem("emailForSignIn", email);
         } catch (error) {
             const authError = error as AuthError;
             throw new Error(this.getErrorMessage(authError.code));
         }
     },
 
-    // Sign in with email and password
-    async signInWithEmail(email: string, password: string): Promise<AuthUser> {
+    // Complete sign in with magic link
+    async signInWithMagicLink(
+        email: string,
+        emailLink: string
+    ): Promise<AuthUser> {
         try {
-            const userCredential = await signInWithEmailAndPassword(
+            // Verify this is a sign-in email link
+            if (!isSignInWithEmailLink(auth, emailLink)) {
+                throw new Error("Invalid sign-in link");
+            }
+
+            const userCredential = await signInWithEmailLink(
                 auth,
                 email,
-                password
+                emailLink
             );
             const user = userCredential.user;
 
-            if (!user.emailVerified) {
-                throw new Error("Please verify your email before signing in");
-            }
+            // Clear the stored email
+            window.localStorage.removeItem("emailForSignIn");
 
             return {
                 uid: user.uid,
@@ -81,6 +76,16 @@ export const firebaseAuthService = {
             const authError = error as AuthError;
             throw new Error(this.getErrorMessage(authError.code));
         }
+    },
+
+    // Check if the current URL is a sign-in link
+    isSignInLink(url: string): boolean {
+        return isSignInWithEmailLink(auth, url);
+    },
+
+    // Get stored email for sign-in
+    getStoredEmail(): string | null {
+        return window.localStorage.getItem("emailForSignIn");
     },
 
     // Sign in with Google
@@ -149,30 +154,6 @@ export const firebaseAuthService = {
         });
     },
 
-    // Resend verification email
-    async resendVerificationEmail(): Promise<void> {
-        const user = auth.currentUser;
-        if (!user) {
-            throw new Error("No user is signed in");
-        }
-
-        try {
-            await sendEmailVerification(user);
-        } catch (error) {
-            const authError = error as AuthError;
-            throw new Error(this.getErrorMessage(authError.code));
-        }
-    },
-
-    // Check if email is verified (refresh user data)
-    async checkEmailVerified(): Promise<boolean> {
-        const user = auth.currentUser;
-        if (!user) return false;
-
-        await user.reload();
-        return user.emailVerified;
-    },
-
     // Helper to get user-friendly error messages
     getErrorMessage(code: string): string {
         switch (code) {
@@ -181,17 +162,21 @@ export const firebaseAuthService = {
             case "auth/invalid-email":
                 return "Invalid email address";
             case "auth/operation-not-allowed":
-                return "Email/password accounts are not enabled";
-            case "auth/weak-password":
-                return "Password is too weak";
+                return "Email link sign-in is not enabled";
             case "auth/user-disabled":
                 return "This account has been disabled";
             case "auth/user-not-found":
                 return "No account found with this email";
-            case "auth/wrong-password":
-                return "Incorrect password";
-            case "auth/invalid-credential":
-                return "Invalid email or password";
+            case "auth/invalid-action-code":
+                return "This sign-in link is invalid or has expired";
+            case "auth/expired-action-code":
+                return "This sign-in link has expired";
+            case "auth/invalid-continue-uri":
+                return "Invalid configuration. Please contact support";
+            case "auth/unauthorized-continue-uri":
+                return "Unauthorized domain. Please contact support";
+            case "auth/missing-continue-uri":
+                return "Missing configuration. Please contact support";
             case "auth/popup-closed-by-user":
                 return "Sign in was cancelled";
             case "auth/network-request-failed":
