@@ -33,6 +33,7 @@ export interface AdminStats {
     totalUsers: number;
     totalImages: number;
     totalBattles: number;
+    totalPoolImages: number;
     usersByGender: {
         male: number;
         female: number;

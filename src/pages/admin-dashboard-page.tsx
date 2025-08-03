@@ -507,7 +507,7 @@ const AdminDashboardPage = () => {
             <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                 {/* Stats Cards */}
                 {stats && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
                         <div className="bg-white overflow-hidden shadow rounded-lg">
                             <div className="p-5">
                                 <div className="flex items-center">
@@ -538,6 +538,24 @@ const AdminDashboardPage = () => {
                                         <dl>
                                             <dt className="text-sm font-medium text-gray-500 truncate">Total Images</dt>
                                             <dd className="text-lg font-medium text-gray-900">{stats.totalImages}</dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="bg-white overflow-hidden shadow rounded-lg">
+                            <div className="p-5">
+                                <div className="flex items-center">
+                                    <div className="flex-shrink-0">
+                                        <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center">
+                                            <span className="text-white font-bold">P</span>
+                                        </div>
+                                    </div>
+                                    <div className="ml-5 w-0 flex-1">
+                                        <dl>
+                                            <dt className="text-sm font-medium text-gray-500 truncate">Pool Images</dt>
+                                            <dd className="text-lg font-medium text-gray-900">{stats.totalPoolImages}</dd>
                                         </dl>
                                     </div>
                                 </div>
