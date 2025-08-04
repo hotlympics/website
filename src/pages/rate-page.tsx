@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PerformanceMonitor from "../components/performance-monitor";
 import { useAuth } from "../hooks/use-auth";
 import { ImageData, imageService } from "../services/image-service";
 import { ratingService } from "../services/rating-service";
@@ -11,6 +12,10 @@ const RatePage = () => {
     const [imagePair, setImagePair] = useState<ImageData[] | null>(null);
     const [loadingImages, setLoadingImages] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [, setImagesLoaded] = useState({
+        image1: false,
+        image2: false,
+    });
 
     useEffect(() => {
         fetchImagePair();
@@ -27,6 +32,7 @@ const RatePage = () => {
             if (user) {
                 // Fetch user details to get their gender
                 const userDetails = await userService.getCurrentUser();
+
                 if (userDetails && userDetails.gender !== "unknown") {
                     // Show opposite gender
                     gender = userDetails.gender === "male" ? "female" : "male";
@@ -34,7 +40,9 @@ const RatePage = () => {
             }
 
             const pair = await imageService.fetchImagePair(gender);
+
             if (pair) {
+                setImagesLoaded({ image1: false, image2: false });
                 setImagePair(pair);
             } else {
                 setError("No images available for rating at this time.");
@@ -116,9 +124,15 @@ const RatePage = () => {
                             onClick={() => handleImageClick(imagePair[0])}
                         >
                             <img
-                                src={`${import.meta.env.VITE_API_URL || "http://localhost:3000"}${imagePair[0].imageUrl}`}
+                                src={imagePair[0].imageUrl}
                                 alt="Left face"
                                 className="h-96 w-full max-w-md rounded-lg object-cover shadow-lg transition-transform hover:scale-105"
+                                onError={(e) =>
+                                    console.error(
+                                        `[PERF] Image 1 (${imagePair[0].imageId}) failed to load:`,
+                                        e
+                                    )
+                                }
                             />
                         </div>
 
@@ -127,9 +141,15 @@ const RatePage = () => {
                             onClick={() => handleImageClick(imagePair[1])}
                         >
                             <img
-                                src={`${import.meta.env.VITE_API_URL || "http://localhost:3000"}${imagePair[1].imageUrl}`}
+                                src={imagePair[1].imageUrl}
                                 alt="Right face"
                                 className="h-96 w-full max-w-md rounded-lg object-cover shadow-lg transition-transform hover:scale-105"
+                                onError={(e) =>
+                                    console.error(
+                                        `[PERF] Image 2 (${imagePair[1].imageId}) failed to load:`,
+                                        e
+                                    )
+                                }
                             />
                         </div>
                     </div>
@@ -141,6 +161,7 @@ const RatePage = () => {
                     </div>
                 )}
             </div>
+            <PerformanceMonitor />
         </div>
     );
 };

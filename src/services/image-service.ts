@@ -17,6 +17,7 @@ export interface ImageData {
 export interface ImagePairResponse {
     success: boolean;
     images: ImageData[];
+    timestamp?: string;
 }
 
 class ImageService {
@@ -27,6 +28,7 @@ class ImageService {
     ): Promise<ImageData[] | null> {
         try {
             const token = await firebaseAuthService.getIdToken();
+
             const headers: HeadersInit = {
                 "Content-Type": "application/json",
             };
@@ -51,6 +53,7 @@ class ImageService {
             }
 
             const data = (await response.json()) as ImagePairResponse;
+
             return data.success ? data.images : null;
         } catch (error) {
             console.error("Error fetching image pair:", error);
