@@ -5,7 +5,7 @@ import ProfilePage from "./pages/profile-page";
 import RatePage from "./pages/rate-page";
 import SignInPage from "./pages/sign-in-page";
 import AdminLoginPage from "./pages/admin-login-page";
-import AdminDashboardPage from "./pages/admin-dashboard-page";
+import UsersPage from "./admin/users/UsersPage";
 
 const App = () => {
     return (
@@ -17,7 +17,7 @@ const App = () => {
                     <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/auth/verify" element={<AuthVerifyPage />} />
                     <Route path="/admin/login" element={<AdminLoginPage />} />
-                    <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+                    <Route path="/admin/dashboard" element={<UsersPage />} />
                     <Route path="/admin" element={<AdminLoginPage />} />
                 </Routes>
             </Router>
