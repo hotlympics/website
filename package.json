@@ -11,6 +11,7 @@
         "lint:fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
         "format": "prettier --write .",
         "preview": "vite preview",
+        "clean": "npx rimraf dist dist-ssr dev-dist auto-imports.d.ts .vitepress/cache .cache .parcel-cache .next out .nuxt .svelte-kit .docusaurus .serverless .fusebox .dynamodb .firebase .vscode-test .pnp.* .yarn/* !.yarn/patches !.yarn/plugins !.yarn/releases !.yarn/sdks !.yarn/versions vite.config.js.timestamp-* vite.config.ts.timestamp-* *.tsbuildinfo .eslintcache .stylelintcache .node_repl_history *.tgz .yarn-integrity .npm .lock-wscript lib-cov coverage .nyc_output .grunt bower_components web_modules jspm_packages node_modules",
         "prepare": "husky",
         "lint-staged": "lint-staged",
         "deploy": "npm run build && firebase deploy --only hosting",
