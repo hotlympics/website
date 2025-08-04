@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+const API_BASE_URL =
+    import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
 export interface AdminUser {
     id: string;
@@ -49,7 +50,7 @@ export interface UserDetails {
 export interface CreateUserData {
     email: string;
     displayName: string | null;
-    gender: 'male' | 'female';
+    gender: "male" | "female";
     dateOfBirth: string;
     images: File[];
     poolImageIndices?: number[];
@@ -69,7 +70,10 @@ class AdminService {
         return { Authorization: `Bearer ${token}` };
     }
 
-    async login(username: string, password: string): Promise<{ token: string }> {
+    async login(
+        username: string,
+        password: string
+    ): Promise<{ token: string }> {
         const response = await fetch(`${API_BASE_URL}/admin/login`, {
             method: "POST",
             headers: {
@@ -103,7 +107,9 @@ class AdminService {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error?.message || "Failed to fetch users");
+            throw new Error(
+                errorData.error?.message || "Failed to fetch users"
+            );
         }
 
         return response.json();
@@ -116,13 +122,19 @@ class AdminService {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error?.message || "Failed to fetch user details");
+            throw new Error(
+                errorData.error?.message || "Failed to fetch user details"
+            );
         }
 
         return response.json();
     }
 
-    async deleteUser(userId: string): Promise<{ message: string; deletedUserId: string; deletedImageCount: number }> {
+    async deleteUser(userId: string): Promise<{
+        message: string;
+        deletedUserId: string;
+        deletedImageCount: number;
+    }> {
         const response = await fetch(`${API_BASE_URL}/admin/users/${userId}`, {
             method: "DELETE",
             headers: this.getAuthHeaders(),
@@ -130,7 +142,9 @@ class AdminService {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error?.message || "Failed to delete user");
+            throw new Error(
+                errorData.error?.message || "Failed to delete user"
+            );
         }
 
         return response.json();
@@ -143,34 +157,45 @@ class AdminService {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error?.message || "Failed to fetch stats");
+            throw new Error(
+                errorData.error?.message || "Failed to fetch stats"
+            );
         }
 
         return response.json();
     }
 
-    async deletePhoto(imageId: string): Promise<{ message: string; deletedImageId: string; userId: string }> {
-        const response = await fetch(`${API_BASE_URL}/admin/photos/${imageId}`, {
-            method: "DELETE",
-            headers: this.getAuthHeaders(),
-        });
+    async deletePhoto(
+        imageId: string
+    ): Promise<{ message: string; deletedImageId: string; userId: string }> {
+        const response = await fetch(
+            `${API_BASE_URL}/admin/photos/${imageId}`,
+            {
+                method: "DELETE",
+                headers: this.getAuthHeaders(),
+            }
+        );
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error?.message || "Failed to delete photo");
+            throw new Error(
+                errorData.error?.message || "Failed to delete photo"
+            );
         }
 
         return response.json();
     }
 
-    async createUser(userData: CreateUserData): Promise<{ message: string; userId: string; uploadedImages: number }> {
+    async createUser(
+        userData: CreateUserData
+    ): Promise<{ message: string; userId: string; uploadedImages: number }> {
         const formData = new FormData();
-        formData.append('email', userData.email);
-        formData.append('gender', userData.gender);
-        formData.append('dateOfBirth', userData.dateOfBirth);
-        
+        formData.append("email", userData.email);
+        formData.append("gender", userData.gender);
+        formData.append("dateOfBirth", userData.dateOfBirth);
+
         if (userData.displayName) {
-            formData.append('displayName', userData.displayName);
+            formData.append("displayName", userData.displayName);
         }
 
         // Add images to form data
@@ -180,7 +205,10 @@ class AdminService {
 
         // Add pool image indices if any
         if (userData.poolImageIndices && userData.poolImageIndices.length > 0) {
-            formData.append('poolImageIndices', JSON.stringify(userData.poolImageIndices));
+            formData.append(
+                "poolImageIndices",
+                JSON.stringify(userData.poolImageIndices)
+            );
         }
 
         const response = await fetch(`${API_BASE_URL}/admin/users`, {
@@ -191,25 +219,36 @@ class AdminService {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error?.message || "Failed to create user");
+            throw new Error(
+                errorData.error?.message || "Failed to create user"
+            );
         }
 
         return response.json();
     }
 
-    async togglePhotoPool(imageId: string, userId: string, addToPool: boolean): Promise<{ message: string; isInPool: boolean }> {
-        const response = await fetch(`${API_BASE_URL}/admin/photos/${imageId}/pool`, {
-            method: "PUT",
-            headers: {
-                ...this.getAuthHeaders(),
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ userId, addToPool }),
-        });
+    async togglePhotoPool(
+        imageId: string,
+        userId: string,
+        addToPool: boolean
+    ): Promise<{ message: string; isInPool: boolean }> {
+        const response = await fetch(
+            `${API_BASE_URL}/admin/photos/${imageId}/pool`,
+            {
+                method: "PUT",
+                headers: {
+                    ...this.getAuthHeaders(),
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ userId, addToPool }),
+            }
+        );
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error?.message || "Failed to toggle photo pool status");
+            throw new Error(
+                errorData.error?.message || "Failed to toggle photo pool status"
+            );
         }
 
         return response.json();

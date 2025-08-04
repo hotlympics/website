@@ -1,11 +1,11 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import UsersPage from "./admin/users/UsersPage";
 import { AuthProvider } from "./context/auth-context";
+import AdminLoginPage from "./pages/admin-login-page";
 import AuthVerifyPage from "./pages/auth-verify";
 import ProfilePage from "./pages/profile-page";
 import RatePage from "./pages/rate-page";
 import SignInPage from "./pages/sign-in-page";
-import AdminLoginPage from "./pages/admin-login-page";
-import UsersPage from "./admin/users/UsersPage";
 
 const App = () => {
     return (
