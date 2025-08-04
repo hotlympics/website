@@ -8,7 +8,9 @@ interface UploadUrlResponse {
 }
 
 class DirectUploadService {
-    async requestUploadUrl(fileExtension: string = 'jpg'): Promise<UploadUrlResponse> {
+    async requestUploadUrl(
+        fileExtension: string = "jpg"
+    ): Promise<UploadUrlResponse> {
         const token = await this.getAuthToken();
         const response = await fetch(
             `${import.meta.env.VITE_API_URL}/images/request-upload`,

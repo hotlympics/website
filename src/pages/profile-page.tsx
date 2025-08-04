@@ -164,8 +164,9 @@ const ProfilePage = () => {
             if (mimeType === "image/png") extension = "png";
             else if (mimeType === "image/gif") extension = "gif";
             else if (mimeType === "image/webp") extension = "webp";
-            else if (mimeType === "image/jpeg" || mimeType === "image/jpg") extension = "jpg";
-            
+            else if (mimeType === "image/jpeg" || mimeType === "image/jpg")
+                extension = "jpg";
+
             // Request upload URL from server
             setUploadStatus("Requesting upload permission...");
             const { uploadUrl, downloadUrl, imageId, fileName } =
@@ -535,20 +536,6 @@ const ProfilePage = () => {
                         Logout
                     </button>
                 </div>
-
-                {/* Success/Error Messages */}
-                {successMessage && (
-                    <div className="mb-4 rounded-md bg-green-50 p-4">
-                        <p className="text-sm text-green-800">
-                            {successMessage}
-                        </p>
-                    </div>
-                )}
-                {error && (
-                    <div className="mb-4 rounded-md bg-red-50 p-4">
-                        <p className="text-sm text-red-800">{error}</p>
-                    </div>
-                )}
 
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                     {/* Profile Info Card */}
