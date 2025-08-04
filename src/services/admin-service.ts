@@ -55,6 +55,11 @@ export interface CreateUserData {
     poolImageIndices?: number[];
 }
 
+export interface PhotoModalData {
+    imageData: AdminImageData;
+    isInPool: boolean;
+}
+
 class AdminService {
     private getAuthHeaders(): { Authorization: string } {
         const token = localStorage.getItem("adminToken");
