@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/use-auth";
 import { firebaseAuthService } from "../services/firebase-auth";
+import { uploadService } from "../services/upload-service";
 import { compressImage, validateImageFile } from "../utils/image-compression";
 
 interface UploadedPhoto {
@@ -25,6 +26,7 @@ const ProfilePage = () => {
     const [uploadedPhotos, setUploadedPhotos] = useState<UploadedPhoto[]>([]);
     const [isUploading, setIsUploading] = useState(false);
     const [uploadStatus, setUploadStatus] = useState<string>("");
+    const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [isDeleting, setIsDeleting] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -104,19 +106,8 @@ const ProfilePage = () => {
 
             if (response.ok) {
                 const photos = await response.json();
-                const baseUrl =
-                    import.meta.env.VITE_API_URL || "http://localhost:3000";
-                // Convert relative URLs to absolute URLs
-                const photosWithAbsoluteUrls = photos.map(
-                    (photo: UploadedPhoto) => ({
-                        ...photo,
-                        url: photo.url.startsWith("http")
-                            ? photo.url
-                            : `${baseUrl}${photo.url}`,
-                    })
-                );
-
-                setUploadedPhotos(photosWithAbsoluteUrls);
+                // Photos already have signed URLs, no need to modify
+                setUploadedPhotos(photos);
             }
         } catch (err) {
             console.error("Failed to fetch photos:", err);
@@ -155,6 +146,7 @@ const ProfilePage = () => {
 
         setIsUploading(true);
         setError(null);
+        setUploadProgress(0);
         setUploadStatus("Compressing image...");
 
         try {
@@ -165,42 +157,44 @@ const ProfilePage = () => {
                 useWebWorker: true,
             });
 
-            setUploadStatus("Uploading...");
-            const formData = new FormData();
-            formData.append("image", compressedFile);
+            // Direct upload to Firebase Storage
+            // Extract extension from compressed file
+            const mimeType = compressedFile.type;
+            let extension = "jpg"; // default
+            if (mimeType === "image/png") extension = "png";
+            else if (mimeType === "image/gif") extension = "gif";
+            else if (mimeType === "image/webp") extension = "webp";
+            else if (mimeType === "image/jpeg" || mimeType === "image/jpg")
+                extension = "jpg";
 
-            const idToken = await firebaseAuthService.getIdToken();
-            if (!idToken) {
-                throw new Error("Not authenticated");
-            }
+            // Request upload URL from server
+            setUploadStatus("Requesting upload permission...");
+            const { uploadUrl, downloadUrl, imageId, fileName } =
+                await uploadService.requestUploadUrl(extension);
 
-            const response = await fetch(
-                `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/images/upload`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${idToken}`,
-                    },
-                    body: formData,
-                }
+            // Upload directly to Firebase Storage
+            setUploadStatus("Uploading to cloud...");
+            await uploadService.uploadToFirebase(
+                compressedFile,
+                uploadUrl,
+                (progress) => setUploadProgress(progress)
             );
 
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error?.message || "Upload failed");
-            }
+            // Confirm upload with server
+            setUploadStatus("Finalizing upload...");
+            await uploadService.confirmUpload(imageId, fileName);
 
-            const result = await response.json();
-            // Create photo object from server response
-            const baseUrl =
-                import.meta.env.VITE_API_URL || "http://localhost:3000";
+            // Create photo object immediately
             const uploadedPhoto = {
-                id: result.imageId,
-                url: `${baseUrl}${result.imageUrl}`,
+                id: imageId,
+                url: downloadUrl,
                 uploadedAt: new Date().toISOString(),
             };
 
             setUploadedPhotos([uploadedPhoto, ...uploadedPhotos]);
+
+            setSuccessMessage("Photo uploaded successfully!");
+            setTimeout(() => setSuccessMessage(null), 3000);
 
             // Reset file input
             event.target.value = "";
@@ -209,6 +203,7 @@ const ProfilePage = () => {
         } finally {
             setIsUploading(false);
             setUploadStatus("");
+            setUploadProgress(0);
         }
     };
 
@@ -588,6 +583,19 @@ const ProfilePage = () => {
                                 return "Choose Photo";
                             })()}
                         </label>
+                        {isUploading && uploadProgress > 0 && (
+                            <div className="mt-2">
+                                <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                                    <div
+                                        className="h-full bg-blue-600 transition-all duration-300"
+                                        style={{ width: `${uploadProgress}%` }}
+                                    />
+                                </div>
+                                <p className="mt-1 text-center text-xs text-gray-600">
+                                    {Math.round(uploadProgress)}%
+                                </p>
+                            </div>
+                        )}
                     </div>
                 </div>
 

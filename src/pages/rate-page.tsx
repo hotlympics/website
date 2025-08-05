@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PerformanceMonitor from "../components/performance-monitor";
 import { useAuth } from "../hooks/use-auth";
 import { ImageData, imageService } from "../services/image-service";
 import { ratingService } from "../services/rating-service";
@@ -13,6 +14,10 @@ const RatePage = () => {
     const [imagePair, setImagePair] = useState<ImageData[] | null>(null);
     const [loadingImages, setLoadingImages] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [, setImagesLoaded] = useState({
+        image1: false,
+        image2: false,
+    });
 
     useEffect(() => {
         fetchImagePair();
@@ -29,6 +34,7 @@ const RatePage = () => {
             if (user) {
                 // Fetch user details to get their gender
                 const userDetails = await userService.getCurrentUser();
+
                 if (userDetails && userDetails.gender !== "unknown") {
                     // Show opposite gender
                     gender = userDetails.gender === "male" ? "female" : "male";
@@ -36,7 +42,9 @@ const RatePage = () => {
             }
 
             const pair = await imageService.fetchImagePair(gender);
+
             if (pair) {
+                setImagesLoaded({ image1: false, image2: false });
                 setImagePair(pair);
             } else {
                 setError("No images available for rating at this time.");
@@ -124,6 +132,7 @@ const RatePage = () => {
                     </div>
                 )}
             </div>
+            <PerformanceMonitor />
         </div>
     );
 };

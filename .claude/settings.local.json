@@ -5,7 +5,8 @@
             "Bash(npm:*)",
             "Bash(npm run build:*)",
             "Bash(npm run lint)",
-            "Bash(ls:*)"
+            "Bash(ls:*)",
+            "Bash(./run-checks.sh:*)"
         ],
         "deny": []
     }

@@ -35,7 +35,7 @@ const ImageElement = ({ ImagePair, top, onClick }: ImageElementParams) => {
             {/* Wrapper for image with clipping and rounded corners */}
             <div className="overflow-hidden rounded-lg shadow-lg">
                 <img
-                    src={`${import.meta.env.VITE_API_URL || "http://localhost:3000"}${ImageData.imageUrl}`}
+                    src={ImageData.imageUrl}
                     alt="Face"
                     className="h-96 w-full object-cover transition-transform hover:scale-105"
                     onClick={() => onClick(ImageData)}
