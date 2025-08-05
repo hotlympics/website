@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AdminLayout from "../../features/admin/components/admin-layout";
+import AdminLayout from "../../components/admin/admin-layout";
 
 type OperationsTab = "monitoring" | "costs" | "performance";
 

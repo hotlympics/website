@@ -1,4 +1,4 @@
-import { RatingArena } from "../features/rating/components/rating-arena.js";
+import { RatingArena } from "../components/rating/rating-arena.js";
 
 const RatePage = () => {
     return <RatingArena />;

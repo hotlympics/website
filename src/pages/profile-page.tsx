@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import DeleteConfirmationModal from "../features/profile/components/delete-confirmation-modal";
-import PhotoGallery from "../features/profile/components/photo-gallery";
-import PhotoUpload from "../features/profile/components/photo-upload";
-import PoolSelection from "../features/profile/components/pool-selection";
-import ProfileSetup from "../features/profile/components/profile-setup";
-import { usePhotoUpload } from "../features/profile/hooks/use-photo-upload";
-import { usePoolManagement } from "../features/profile/hooks/use-pool-management";
-import { useProfile } from "../features/profile/hooks/use-profile";
+import DeleteConfirmationModal from "../components/profile/delete-confirmation-modal";
+import PhotoGallery from "../components/profile/photo-gallery";
+import PhotoUpload from "../components/profile/photo-upload";
+import PoolSelection from "../components/profile/pool-selection";
+import ProfileSetup from "../components/profile/profile-setup";
+import { usePhotoUpload } from "../hooks/profile/use-photo-upload";
+import { usePoolManagement } from "../hooks/profile/use-pool-management";
+import { useProfile } from "../hooks/profile/use-profile";
 
 interface DeleteConfirmation {
     photoId: string;

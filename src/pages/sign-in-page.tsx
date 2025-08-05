@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { MagicLinkSent } from "../features/auth/components/magic-link-sent.js";
-import { SignInForm } from "../features/auth/components/sign-in-form.js";
+import { MagicLinkSent } from "../components/auth/magic-link-sent.js";
+import { SignInForm } from "../components/auth/sign-in-form.js";
 
 const SignInPage = () => {
     const [searchParams] = useSearchParams();

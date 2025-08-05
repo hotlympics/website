@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { AuthUser } from "../services/firebase-auth";
+import { AuthUser } from "../services/auth/firebase-auth";
 
 export interface AuthContextType {
     user: AuthUser | null;

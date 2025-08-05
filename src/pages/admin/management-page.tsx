@@ -1,36 +1,36 @@
 import { useEffect, useState } from "react";
-import AdminLayout from "../../features/admin/components/admin-layout";
-import LoadingState from "../../features/admin/components/loading-state";
-import Pagination from "../../features/admin/components/pagination";
-import DeletePhotoModal from "../../features/admin/components/shared/delete-photo-modal";
-import PhotoModal from "../../features/admin/components/shared/photo-modal";
-import CreateUserModal from "../../features/admin/components/users/create-user-modal";
-import DeleteUserModal from "../../features/admin/components/users/delete-user-modal";
-import UserTable from "../../features/admin/components/users/user-table";
-import { usePagination } from "../../features/admin/hooks/use-pagination";
-import { usePhotoActions } from "../../features/admin/hooks/use-photo-actions";
-import { useSearch } from "../../features/admin/hooks/use-search";
-import { useUserActions } from "../../features/admin/hooks/use-user-actions";
-import { useUserDetails } from "../../features/admin/hooks/use-user-details";
-import { useUsers } from "../../features/admin/hooks/use-users";
+import AdminLayout from "../../components/admin/admin-layout";
+import LoadingState from "../../components/admin/loading-state";
+import Pagination from "../../components/admin/pagination";
+import DeletePhotoModal from "../../components/admin/shared/delete-photo-modal";
+import PhotoModal from "../../components/admin/shared/photo-modal";
+import CreateUserModal from "../../components/admin/users/create-user-modal";
+import DeleteUserModal from "../../components/admin/users/delete-user-modal";
+import UserTable from "../../components/admin/users/user-table";
+import { usePagination } from "../../hooks/admin/use-pagination";
+import { usePhotoActions } from "../../hooks/admin/use-photo-actions";
+import { useSearch } from "../../hooks/admin/use-search";
+import { useUserActions } from "../../hooks/admin/use-user-actions";
+import { useUserDetails } from "../../hooks/admin/use-user-details";
+import { useUsers } from "../../hooks/admin/use-users";
 import type {
     AdminUser,
     CreateUserData,
     PhotoModalData,
-} from "../../features/admin/types/admin";
+} from "../../utils/types/admin/admin";
 import {
     createPhotoDeleteHandlers,
     createPhotoModalHandlers,
     type PhotoDeleteConfirmation,
     updateStateAfterPhotoDelete,
     updateStateAfterPhotoPoolToggle,
-} from "../../features/admin/utils/photo-utils";
+} from "../../utils/admin/photo-utils";
 import {
     createUserCreationHandlers,
     createUserDeleteHandlers,
     updateStateAfterUserDelete,
     type UserDeleteConfirmation,
-} from "../../features/admin/utils/user-utils";
+} from "../../utils/admin/user-utils";
 
 type ManagementTab = "users" | "moderation" | "battles";
 

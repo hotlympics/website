@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AuthUser, firebaseAuthService } from "../services/firebase-auth";
+import { AuthUser, firebaseAuthService } from "../services/auth/firebase-auth";
 import { AuthContext } from "./auth-context-definition";
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({

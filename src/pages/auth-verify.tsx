@@ -1,4 +1,4 @@
-import { AuthVerify } from "../features/auth/components/auth-verify.js";
+import { AuthVerify } from "../components/auth/auth-verify.js";
 
 const AuthVerifyPage = () => {
     return (

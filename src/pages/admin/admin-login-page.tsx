@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { adminService } from "../../features/admin/services/admin-service";
+import { adminService } from "../../services/admin/admin-service";
 
 const AdminLoginPage = () => {
     const [username, setUsername] = useState("");
