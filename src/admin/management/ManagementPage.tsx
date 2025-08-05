@@ -20,8 +20,11 @@ import { useUserActions } from "./hooks/users/useUserActions";
 import { useUserDetails } from "./hooks/users/useUserDetails";
 import { useUsers } from "./hooks/users/useUsers";
 
+type ManagementTab = "users" | "battles" | "moderation";
+
 const ManagementPage = () => {
-    const { users, setUsers, stats, loading, error, loadData, refreshStats } =
+    const [activeTab, setActiveTab] = useState<ManagementTab>("users");
+    const { users, setUsers, loading, error, loadData, refreshStats } =
         useUsers();
     const {
         userDetails,
@@ -315,33 +318,90 @@ const ManagementPage = () => {
         );
     }
 
+    const tabs: { id: ManagementTab; label: string }[] = [
+        { id: "users", label: "Users" },
+        { id: "battles", label: "Battles" },
+        { id: "moderation", label: "Moderation" },
+    ];
+
+    const renderTabContent = () => {
+        switch (activeTab) {
+            case "users":
+                return (
+                    <>
+                        <UserTable
+                            users={paginatedUsers}
+                            searchTerm={searchTerm}
+                            onSearchChange={setSearchTerm}
+                            expandedUsers={expandedUsers}
+                            loadingDetails={loadingDetails}
+                            userDetails={userDetails}
+                            deleteLoading={deleteLoading}
+                            onToggleExpansion={toggleUserExpansion}
+                            onDeleteUser={handleDeleteUser}
+                            onPhotoClick={openPhotoModal}
+                            onDeletePhoto={handleDeletePhoto}
+                            deletingPhoto={deletingPhoto}
+                            onCreateUser={() => setCreateUserModal(true)}
+                        />
+
+                        {filteredUsers.length > 10 && (
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                totalItems={filteredUsers.length}
+                                itemsPerPage={10}
+                                onPageChange={setCurrentPage}
+                            />
+                        )}
+                    </>
+                );
+            case "battles":
+                return (
+                    <div className="bg-white shadow sm:rounded-md p-6">
+                        <div className="text-center py-12">
+                            <h3 className="text-lg font-medium text-gray-900">Battle Management</h3>
+                            <p className="mt-2 text-sm text-gray-500">Coming soon...</p>
+                        </div>
+                    </div>
+                );
+            case "moderation":
+                return (
+                    <div className="bg-white shadow sm:rounded-md p-6">
+                        <div className="text-center py-12">
+                            <h3 className="text-lg font-medium text-gray-900">Moderation</h3>
+                            <p className="mt-2 text-sm text-gray-500">Coming soon...</p>
+                        </div>
+                    </div>
+                );
+            default:
+                return null;
+        }
+    };
+
     return (
         <AdminLayout title="Management">
-            <UserTable
-                users={paginatedUsers}
-                searchTerm={searchTerm}
-                onSearchChange={setSearchTerm}
-                expandedUsers={expandedUsers}
-                loadingDetails={loadingDetails}
-                userDetails={userDetails}
-                deleteLoading={deleteLoading}
-                onToggleExpansion={toggleUserExpansion}
-                onDeleteUser={handleDeleteUser}
-                onPhotoClick={openPhotoModal}
-                onDeletePhoto={handleDeletePhoto}
-                deletingPhoto={deletingPhoto}
-                onCreateUser={() => setCreateUserModal(true)}
-            />
+            <div className="mb-6">
+                <div className="border-b border-gray-200">
+                    <nav className="-mb-px flex space-x-8">
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                                    activeTab === tab.id
+                                        ? "border-blue-500 text-blue-600"
+                                        : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                }`}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </nav>
+                </div>
+            </div>
 
-            {filteredUsers.length > 10 && (
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    totalItems={filteredUsers.length}
-                    itemsPerPage={10}
-                    onPageChange={setCurrentPage}
-                />
-            )}
+            {renderTabContent()}
 
             <PhotoModal
                 photoModal={photoModal}
