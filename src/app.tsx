@@ -1,24 +1,24 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import UsersPage from "./admin/users/UsersPage";
 import { AuthProvider } from "./context/auth-context";
-import AdminLoginPage from "./pages/admin-login-page";
-import AuthVerifyPage from "./pages/auth-verify";
-import ProfilePage from "./pages/profile-page";
-import RatePage from "./pages/rate-page";
-import SignInPage from "./pages/sign-in-page";
+import ProfilePage from "./pages/profile-page.js";
+import RatePage from "./pages/rate-page.js";
+import SignInPage from "./pages/sign-in-page.js";
+import AdminRoutes from "./routes/admin-routes.js";
+import AuthRoutes from "./routes/auth-routes.js";
 
 const App = () => {
     return (
         <AuthProvider>
             <Router>
                 <Routes>
+                    {/* Top-level routes */}
                     <Route path="/" element={<RatePage />} />
                     <Route path="/signin" element={<SignInPage />} />
                     <Route path="/profile" element={<ProfilePage />} />
-                    <Route path="/auth/verify" element={<AuthVerifyPage />} />
-                    <Route path="/admin/login" element={<AdminLoginPage />} />
-                    <Route path="/admin/dashboard" element={<UsersPage />} />
-                    <Route path="/admin" element={<AdminLoginPage />} />
+
+                    {/* Nested route groups */}
+                    <Route path="/auth/*" element={<AuthRoutes />} />
+                    <Route path="/admin/*" element={<AdminRoutes />} />
                 </Routes>
             </Router>
         </AuthProvider>
