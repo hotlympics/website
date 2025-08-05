@@ -14,34 +14,34 @@ export interface User {
     photoUrl?: string | null;
 }
 
-class UserService {
-    private apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-    async getCurrentUser(): Promise<User | null> {
-        try {
-            const token = await firebaseAuthService.getIdToken();
-            if (!token) {
-                return null;
-            }
-
-            const response = await fetch(`${this.apiUrl}/user`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (!response.ok) {
-                console.error("Failed to fetch user:", response.statusText);
-                return null;
-            }
-
-            const data = await response.json();
-            return data as User;
-        } catch (error) {
-            console.error("Error fetching user:", error);
+const getCurrentUser = async (): Promise<User | null> => {
+    try {
+        const token = await firebaseAuthService.getIdToken();
+        if (!token) {
             return null;
         }
-    }
-}
 
-export const userService = new UserService();
+        const response = await fetch(`${apiUrl}/user`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            console.error("Failed to fetch user:", response.statusText);
+            return null;
+        }
+
+        const data = await response.json();
+        return data as User;
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        return null;
+    }
+};
+
+export const userService = {
+    getCurrentUser,
+};
