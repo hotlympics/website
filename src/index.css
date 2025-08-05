@@ -16,3 +16,33 @@
         display: none;
     }
 }
+
+@keyframes float-up {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-150px) scale(1.5);
+    }
+}
+
+@keyframes float-down {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(150px) scale(1.5);
+    }
+}
+
+.animate-float-up {
+    animation: float-down 1.8s ease-out forwards;
+}
+
+.animate-float-down {
+    animation: float-up 1.8s ease-out forwards;
+}

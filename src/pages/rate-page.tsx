@@ -6,6 +6,8 @@ import { ImageData, imageService } from "../services/image-service";
 import { ratingService } from "../services/rating-service";
 import { userService } from "../services/user-service";
 
+import ImageElement from "./components/select-image"; // Adjust the import path as necessary
+
 const RatePage = () => {
     const navigate = useNavigate();
     const { user, loading } = useAuth();
@@ -118,40 +120,9 @@ const RatePage = () => {
                         </button>
                     </div>
                 ) : imagePair && imagePair.length === 2 ? (
-                    <div className="flex flex-col items-center justify-center gap-8 md:flex-row">
-                        <div
-                            className="cursor-pointer"
-                            onClick={() => handleImageClick(imagePair[0])}
-                        >
-                            <img
-                                src={imagePair[0].imageUrl}
-                                alt="Left face"
-                                className="h-96 w-full max-w-md rounded-lg object-cover shadow-lg transition-transform hover:scale-105"
-                                onError={(e) =>
-                                    console.error(
-                                        `[PERF] Image 1 (${imagePair[0].imageId}) failed to load:`,
-                                        e
-                                    )
-                                }
-                            />
-                        </div>
-
-                        <div
-                            className="cursor-pointer"
-                            onClick={() => handleImageClick(imagePair[1])}
-                        >
-                            <img
-                                src={imagePair[1].imageUrl}
-                                alt="Right face"
-                                className="h-96 w-full max-w-md rounded-lg object-cover shadow-lg transition-transform hover:scale-105"
-                                onError={(e) =>
-                                    console.error(
-                                        `[PERF] Image 2 (${imagePair[1].imageId}) failed to load:`,
-                                        e
-                                    )
-                                }
-                            />
-                        </div>
+                    <div className="flex flex-col items-center justify-center gap-8">
+                        <ImageElement ImagePair={imagePair} top={true} onClick={handleImageClick} />
+                        <ImageElement ImagePair={imagePair} top={false} onClick={handleImageClick} />
                     </div>
                 ) : (
                     <div className="flex items-center justify-center py-32">
