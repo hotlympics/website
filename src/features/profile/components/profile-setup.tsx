@@ -12,7 +12,12 @@ interface ProfileSetupProps {
     error: string | null;
 }
 
-const ProfileSetup = ({ onSubmit, onLogout, isLoading, error }: ProfileSetupProps) => {
+const ProfileSetup = ({
+    onSubmit,
+    onLogout,
+    isLoading,
+    error,
+}: ProfileSetupProps) => {
     const [profileForm, setProfileForm] = useState<ProfileSetupData>({
         gender: "unknown",
         dateOfBirth: "",
@@ -32,7 +37,8 @@ const ProfileSetup = ({ onSubmit, onLogout, isLoading, error }: ProfileSetupProp
 
                 <div className="rounded-lg bg-white p-8 shadow-md">
                     <p className="mb-6 text-center text-gray-600">
-                        Please provide your gender and date of birth to continue.
+                        Please provide your gender and date of birth to
+                        continue.
                     </p>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
@@ -49,7 +55,9 @@ const ProfileSetup = ({ onSubmit, onLogout, isLoading, error }: ProfileSetupProp
                                 onChange={(e) =>
                                     setProfileForm({
                                         ...profileForm,
-                                        gender: e.target.value as "male" | "female",
+                                        gender: e.target.value as
+                                            | "male"
+                                            | "female",
                                     })
                                 }
                                 className="block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"

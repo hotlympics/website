@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { adminService } from "../services/admin-service";
-import AdminHeader from "./AdminHeader";
+import AdminHeader from "./admin-header";
 
 interface AdminLayoutProps {
     children: React.ReactNode;

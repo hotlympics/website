@@ -1,11 +1,7 @@
-import EmptyState from "../EmptyState";
-import SearchInput from "../SearchInput";
-import type {
-    AdminImageData,
-    AdminUser,
-    UserDetails,
-} from "../../types/admin";
-import UserRow from "./UserRow";
+import type { AdminImageData, AdminUser, UserDetails } from "../../types/admin";
+import EmptyState from "../empty-state";
+import SearchInput from "../search-input";
+import UserRow from "./user-row";
 
 interface UserTableProps {
     users: AdminUser[];

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import ProfileSetup from "../features/profile/components/ProfileSetup";
-import PhotoUpload from "../features/profile/components/PhotoUpload";
-import PhotoGallery from "../features/profile/components/PhotoGallery";
-import PoolSelection from "../features/profile/components/PoolSelection";
-import DeleteConfirmationModal from "../features/profile/components/DeleteConfirmationModal";
-import { useProfile } from "../features/profile/hooks/useProfile";
-import { usePhotoUpload } from "../features/profile/hooks/usePhotoUpload";
-import { usePoolManagement } from "../features/profile/hooks/usePoolManagement";
+import DeleteConfirmationModal from "../features/profile/components/delete-confirmation-modal";
+import PhotoGallery from "../features/profile/components/photo-gallery";
+import PhotoUpload from "../features/profile/components/photo-upload";
+import PoolSelection from "../features/profile/components/pool-selection";
+import ProfileSetup from "../features/profile/components/profile-setup";
+import { usePhotoUpload } from "../features/profile/hooks/use-photo-upload";
+import { usePoolManagement } from "../features/profile/hooks/use-pool-management";
+import { useProfile } from "../features/profile/hooks/use-profile";
 
 interface DeleteConfirmation {
     photoId: string;
@@ -47,7 +47,8 @@ const ProfilePage = () => {
         updatePoolOnServer,
     } = usePoolManagement(user);
 
-    const [deleteConfirmation, setDeleteConfirmation] = useState<DeleteConfirmation | null>(null);
+    const [deleteConfirmation, setDeleteConfirmation] =
+        useState<DeleteConfirmation | null>(null);
 
     useEffect(() => {
         if (user) {
@@ -55,7 +56,9 @@ const ProfilePage = () => {
         }
     }, [user, fetchUploadedPhotos]);
 
-    const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileSelect = async (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
         const file = event.target.files?.[0];
         if (!file) return;
 
@@ -142,7 +145,9 @@ const ProfilePage = () => {
                 </button>
 
                 <div className="mb-8 flex items-center justify-between">
-                    <h1 className="text-3xl font-bold text-gray-800">My Account</h1>
+                    <h1 className="text-3xl font-bold text-gray-800">
+                        My Account
+                    </h1>
                     <button
                         onClick={logout}
                         className="rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700"
@@ -151,7 +156,7 @@ const ProfilePage = () => {
                     </button>
                 </div>
 
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-8">
+                <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
                     {/* Profile Info Card */}
                     <div className="rounded-lg bg-white p-6 shadow-md">
                         <h2 className="mb-4 text-xl font-semibold text-gray-700">
@@ -197,7 +202,9 @@ const ProfilePage = () => {
                 )}
                 {successMessage && (
                     <div className="mt-4 rounded-md bg-green-50 p-4">
-                        <p className="text-sm text-green-800">{successMessage}</p>
+                        <p className="text-sm text-green-800">
+                            {successMessage}
+                        </p>
                     </div>
                 )}
             </div>

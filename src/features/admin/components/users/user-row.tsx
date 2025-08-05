@@ -4,7 +4,7 @@ import type {
     UserDetails as UserDetailsType,
 } from "../../types/admin";
 import { formatDate } from "../../utils/formatters";
-import UserDetails from "./UserDetails";
+import UserDetails from "./user-details";
 
 interface UserRowProps {
     user: AdminUser;

@@ -33,7 +33,9 @@ const PhotoGallery = ({
                         {photos.length}/{maxPhotos} photos
                     </span>
                 </div>
-                <p className="text-center text-gray-500">No photos uploaded yet</p>
+                <p className="text-center text-gray-500">
+                    No photos uploaded yet
+                </p>
             </div>
         );
     }

@@ -1,6 +1,9 @@
 import { useCallback, useState } from "react";
 import { uploadService } from "../../../services/upload-service";
-import { compressImage, validateImageFile } from "../../../shared/utils/image-compression";
+import {
+    compressImage,
+    validateImageFile,
+} from "../../../shared/utils/image-compression";
 
 interface UploadedPhoto {
     id: string;
@@ -36,7 +39,11 @@ export const usePhotoUpload = () => {
         }
     }, []);
 
-    const uploadPhoto = async (file: File, onSuccess?: (message: string) => void, onError?: (error: string) => void) => {
+    const uploadPhoto = async (
+        file: File,
+        onSuccess?: (message: string) => void,
+        onError?: (error: string) => void
+    ) => {
         if (uploadedPhotos.length >= 10) {
             onError?.("You've reached the maximum limit of 10 photos");
             return;
@@ -98,7 +105,10 @@ export const usePhotoUpload = () => {
         }
     };
 
-    const deletePhoto = async (photoId: string, onError?: (error: string) => void) => {
+    const deletePhoto = async (
+        photoId: string,
+        onError?: (error: string) => void
+    ) => {
         const previousPhotos = [...uploadedPhotos];
         setUploadedPhotos(
             uploadedPhotos.filter((photo) => photo.id !== photoId)
@@ -151,6 +161,8 @@ export const usePhotoUpload = () => {
 // Helper function to get ID token - this should be moved to a shared location
 const getIdToken = async () => {
     // This will need to import from the appropriate auth service
-    const { firebaseAuthService } = await import("../../../services/firebase-auth");
+    const { firebaseAuthService } = await import(
+        "../../../services/firebase-auth"
+    );
     return firebaseAuthService.getIdToken();
 };

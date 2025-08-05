@@ -1,36 +1,36 @@
 import { useEffect, useState } from "react";
-import AdminLayout from "../../features/admin/components/AdminLayout";
-import LoadingState from "../../features/admin/components/LoadingState";
-import Pagination from "../../features/admin/components/Pagination";
-import { usePagination } from "../../features/admin/hooks/usePagination";
-import { useSearch } from "../../features/admin/hooks/useSearch";
+import AdminLayout from "../../features/admin/components/admin-layout";
+import LoadingState from "../../features/admin/components/loading-state";
+import Pagination from "../../features/admin/components/pagination";
+import DeletePhotoModal from "../../features/admin/components/shared/delete-photo-modal";
+import PhotoModal from "../../features/admin/components/shared/photo-modal";
+import CreateUserModal from "../../features/admin/components/users/create-user-modal";
+import DeleteUserModal from "../../features/admin/components/users/delete-user-modal";
+import UserTable from "../../features/admin/components/users/user-table";
+import { usePagination } from "../../features/admin/hooks/use-pagination";
+import { usePhotoActions } from "../../features/admin/hooks/use-photo-actions";
+import { useSearch } from "../../features/admin/hooks/use-search";
+import { useUserActions } from "../../features/admin/hooks/use-user-actions";
+import { useUserDetails } from "../../features/admin/hooks/use-user-details";
+import { useUsers } from "../../features/admin/hooks/use-users";
 import type {
     AdminUser,
     CreateUserData,
     PhotoModalData,
 } from "../../features/admin/types/admin";
-import DeletePhotoModal from "../../features/admin/components/shared/DeletePhotoModal";
-import PhotoModal from "../../features/admin/components/shared/PhotoModal";
-import CreateUserModal from "../../features/admin/components/users/CreateUserModal";
-import DeleteUserModal from "../../features/admin/components/users/DeleteUserModal";
-import UserTable from "../../features/admin/components/users/UserTable";
-import { usePhotoActions } from "../../features/admin/hooks/usePhotoActions";
-import { useUserActions } from "../../features/admin/hooks/useUserActions";
-import { useUserDetails } from "../../features/admin/hooks/useUserDetails";
-import { useUsers } from "../../features/admin/hooks/useUsers";
 import {
     createPhotoDeleteHandlers,
     createPhotoModalHandlers,
     type PhotoDeleteConfirmation,
     updateStateAfterPhotoDelete,
     updateStateAfterPhotoPoolToggle,
-} from "../../features/admin/utils/photoUtils";
+} from "../../features/admin/utils/photo-utils";
 import {
     createUserCreationHandlers,
     createUserDeleteHandlers,
-    type UserDeleteConfirmation,
     updateStateAfterUserDelete,
-} from "../../features/admin/utils/userUtils";
+    type UserDeleteConfirmation,
+} from "../../features/admin/utils/user-utils";
 
 type ManagementTab = "users" | "moderation" | "battles";
 
@@ -54,8 +54,10 @@ const ManagementPage = () => {
     // Local state for modals and confirmations
     const [photoModal, setPhotoModal] = useState<PhotoModalData | null>(null);
     const [createUserModal, setCreateUserModal] = useState(false);
-    const [deleteConfirmation, setDeleteConfirmation] = useState<PhotoDeleteConfirmation | null>(null);
-    const [userDeleteConfirmation, setUserDeleteConfirmation] = useState<UserDeleteConfirmation | null>(null);
+    const [deleteConfirmation, setDeleteConfirmation] =
+        useState<PhotoDeleteConfirmation | null>(null);
+    const [userDeleteConfirmation, setUserDeleteConfirmation] =
+        useState<UserDeleteConfirmation | null>(null);
 
     // Search functionality
     const {
@@ -84,10 +86,18 @@ const ManagementPage = () => {
     }, [searchTerm, setCurrentPage]);
 
     // Create utility handlers
-    const { openPhotoModal } = createPhotoModalHandlers(userDetails, setPhotoModal);
-    const { handleDeletePhoto } = createPhotoDeleteHandlers(userDetails, setDeleteConfirmation);
-    const { handleDeleteUser, proceedToFinalConfirmation, backToConfirmation } = createUserDeleteHandlers(setUserDeleteConfirmation);
-    const { handleCreateUser: createUserHandler, openCreateUserModal } = createUserCreationHandlers(setCreateUserModal);
+    const { openPhotoModal } = createPhotoModalHandlers(
+        userDetails,
+        setPhotoModal
+    );
+    const { handleDeletePhoto } = createPhotoDeleteHandlers(
+        userDetails,
+        setDeleteConfirmation
+    );
+    const { handleDeleteUser, proceedToFinalConfirmation, backToConfirmation } =
+        createUserDeleteHandlers(setUserDeleteConfirmation);
+    const { handleCreateUser: createUserHandler, openCreateUserModal } =
+        createUserCreationHandlers(setCreateUserModal);
 
     const proceedToFinalConfirmationHandler = () => {
         const updated = proceedToFinalConfirmation(userDeleteConfirmation);
@@ -216,19 +226,27 @@ const ManagementPage = () => {
                 );
             case "moderation":
                 return (
-                    <div className="bg-white shadow sm:rounded-md p-6">
-                        <div className="text-center py-12">
-                            <h3 className="text-lg font-medium text-gray-900">Moderation</h3>
-                            <p className="mt-2 text-sm text-gray-500">Coming soon...</p>
+                    <div className="bg-white p-6 shadow sm:rounded-md">
+                        <div className="py-12 text-center">
+                            <h3 className="text-lg font-medium text-gray-900">
+                                Moderation
+                            </h3>
+                            <p className="mt-2 text-sm text-gray-500">
+                                Coming soon...
+                            </p>
                         </div>
                     </div>
                 );
             case "battles":
                 return (
-                    <div className="bg-white shadow sm:rounded-md p-6">
-                        <div className="text-center py-12">
-                            <h3 className="text-lg font-medium text-gray-900">Battle Management</h3>
-                            <p className="mt-2 text-sm text-gray-500">Coming soon...</p>
+                    <div className="bg-white p-6 shadow sm:rounded-md">
+                        <div className="py-12 text-center">
+                            <h3 className="text-lg font-medium text-gray-900">
+                                Battle Management
+                            </h3>
+                            <p className="mt-2 text-sm text-gray-500">
+                                Coming soon...
+                            </p>
                         </div>
                     </div>
                 );
@@ -246,10 +264,10 @@ const ManagementPage = () => {
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
-                                className={`whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                                className={`border-b-2 px-1 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
                                     activeTab === tab.id
                                         ? "border-blue-500 text-blue-600"
-                                        : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
                                 }`}
                             >
                                 {tab.label}

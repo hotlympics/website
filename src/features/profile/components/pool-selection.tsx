@@ -27,8 +27,8 @@ const PoolSelection = ({
     return (
         <div className="mb-4 flex items-center justify-between">
             <p className="text-sm text-gray-500">
-                Select up to 2 photos for the rating pool ({poolSelections.size}/2
-                selected)
+                Select up to 2 photos for the rating pool ({poolSelections.size}
+                /2 selected)
             </p>
             <button
                 onClick={onUpdatePool}

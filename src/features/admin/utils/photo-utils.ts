@@ -1,8 +1,8 @@
-import type { 
-    AdminImageData, 
-    AdminUser, 
-    PhotoModalData, 
-    UserDetails 
+import type {
+    AdminImageData,
+    AdminUser,
+    PhotoModalData,
+    UserDetails,
 } from "../types/admin";
 
 export interface PhotoDeleteConfirmation {
@@ -41,7 +41,9 @@ export const createPhotoModalHandlers = (
 // Photo deletion utilities
 export const createPhotoDeleteHandlers = (
     userDetails: Record<string, UserDetails>,
-    setDeleteConfirmation: (confirmation: PhotoDeleteConfirmation | null) => void
+    setDeleteConfirmation: (
+        confirmation: PhotoDeleteConfirmation | null
+    ) => void
 ) => {
     const handleDeletePhoto = (
         imageId: string,
@@ -71,7 +73,9 @@ export const createPhotoDeleteHandlers = (
 export const updateStateAfterPhotoDelete = (
     deletedImageId: string,
     affectedUserId: string,
-    setUserDetails: React.Dispatch<React.SetStateAction<Record<string, UserDetails>>>,
+    setUserDetails: React.Dispatch<
+        React.SetStateAction<Record<string, UserDetails>>
+    >,
     setUsers: React.Dispatch<React.SetStateAction<AdminUser[]>>,
     photoModal: PhotoModalData | null,
     setPhotoModal: (modal: PhotoModalData | null) => void
@@ -94,9 +98,7 @@ export const updateStateAfterPhotoDelete = (
                     ),
                     poolImageIds: updated[
                         affectedUserId
-                    ].user.poolImageIds.filter(
-                        (id) => id !== deletedImageId
-                    ),
+                    ].user.poolImageIds.filter((id) => id !== deletedImageId),
                 },
             };
         }
@@ -130,17 +132,16 @@ export const updateStateAfterPhotoPoolToggle = (
     toggledImageId: string,
     affectedUserId: string,
     isInPool: boolean,
-    setUserDetails: React.Dispatch<React.SetStateAction<Record<string, UserDetails>>>,
+    setUserDetails: React.Dispatch<
+        React.SetStateAction<Record<string, UserDetails>>
+    >,
     setUsers: React.Dispatch<React.SetStateAction<AdminUser[]>>,
     users: AdminUser[],
     photoModal: PhotoModalData | null,
     setPhotoModal: (modal: PhotoModalData | null) => void
 ) => {
     // Update local state - photo modal
-    if (
-        photoModal &&
-        photoModal.imageData.imageId === toggledImageId
-    ) {
+    if (photoModal && photoModal.imageData.imageId === toggledImageId) {
         setPhotoModal({
             ...photoModal,
             isInPool: isInPool,
@@ -164,17 +165,14 @@ export const updateStateAfterPhotoPoolToggle = (
                               ),
                               toggledImageId,
                           ]
-                        : updated[
-                              affectedUserId
-                          ].user.poolImageIds.filter(
+                        : updated[affectedUserId].user.poolImageIds.filter(
                               (id) => id !== toggledImageId
                           ),
                 },
-                imageData: updated[affectedUserId].imageData.map(
-                    (img) =>
-                        img.imageId === toggledImageId
-                            ? { ...img, inPool: isInPool }
-                            : img
+                imageData: updated[affectedUserId].imageData.map((img) =>
+                    img.imageId === toggledImageId
+                        ? { ...img, inPool: isInPool }
+                        : img
                 ),
             };
         }

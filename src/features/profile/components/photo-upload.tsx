@@ -41,8 +41,8 @@ const PhotoUpload = ({
                 {isUploading
                     ? uploadStatus || "Uploading..."
                     : isAtLimit
-                    ? "Upload Limit Reached"
-                    : "Choose Photo"}
+                      ? "Upload Limit Reached"
+                      : "Choose Photo"}
             </label>
             {isUploading && uploadProgress > 0 && (
                 <div className="mt-2">

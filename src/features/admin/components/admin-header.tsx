@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { adminService } from "../services/admin-service";
-import AdminNavigation from "./AdminNavigation";
+import AdminNavigation from "./admin-navigation";
 
 interface AdminHeaderProps {
     title?: string;

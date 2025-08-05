@@ -8,7 +8,9 @@ export interface UserDeleteConfirmation {
 
 // User deletion utilities
 export const createUserDeleteHandlers = (
-    setUserDeleteConfirmation: (confirmation: UserDeleteConfirmation | null) => void
+    setUserDeleteConfirmation: (
+        confirmation: UserDeleteConfirmation | null
+    ) => void
 ) => {
     const handleDeleteUser = (userId: string, userEmail: string) => {
         setUserDeleteConfirmation({
@@ -18,7 +20,9 @@ export const createUserDeleteHandlers = (
         });
     };
 
-    const proceedToFinalConfirmation = (currentConfirmation: UserDeleteConfirmation | null) => {
+    const proceedToFinalConfirmation = (
+        currentConfirmation: UserDeleteConfirmation | null
+    ) => {
         if (!currentConfirmation) return null;
         return {
             ...currentConfirmation,
@@ -26,7 +30,9 @@ export const createUserDeleteHandlers = (
         };
     };
 
-    const backToConfirmation = (currentConfirmation: UserDeleteConfirmation | null) => {
+    const backToConfirmation = (
+        currentConfirmation: UserDeleteConfirmation | null
+    ) => {
         if (!currentConfirmation) return null;
         return {
             ...currentConfirmation,
@@ -47,7 +53,10 @@ export const createUserCreationHandlers = (
 ) => {
     const handleCreateUser = (
         userData: CreateUserData,
-        createUser: (data: CreateUserData, callback: () => void) => Promise<void>,
+        createUser: (
+            data: CreateUserData,
+            callback: () => void
+        ) => Promise<void>,
         loadData: () => void
     ) => {
         return createUser(userData, () => {
@@ -73,7 +82,9 @@ export const updateStateAfterUserDelete = (
     users: AdminUser[],
     removeUserDetails: (userId: string) => void,
     refreshStats: () => void,
-    setUserDeleteConfirmation: (confirmation: UserDeleteConfirmation | null) => void
+    setUserDeleteConfirmation: (
+        confirmation: UserDeleteConfirmation | null
+    ) => void
 ) => {
     // Remove user from local state
     setUsers(users.filter((user) => user.id !== deletedUserId));

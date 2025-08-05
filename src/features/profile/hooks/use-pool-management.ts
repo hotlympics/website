@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { firebaseAuthService } from "../../../services/firebase-auth";
 
 interface UserInfo {
@@ -9,7 +9,9 @@ interface UserInfo {
 }
 
 export const usePoolManagement = (user: UserInfo | null) => {
-    const [poolSelections, setPoolSelections] = useState<Set<string>>(new Set());
+    const [poolSelections, setPoolSelections] = useState<Set<string>>(
+        new Set()
+    );
     const [isUpdatingPool, setIsUpdatingPool] = useState(false);
 
     // Initialize pool selections from user's poolImageIds
@@ -19,7 +21,10 @@ export const usePoolManagement = (user: UserInfo | null) => {
         }
     }, [user]);
 
-    const togglePoolSelection = (photoId: string, onError?: (error: string) => void) => {
+    const togglePoolSelection = (
+        photoId: string,
+        onError?: (error: string) => void
+    ) => {
         const newSelections = new Set(poolSelections);
 
         if (newSelections.has(photoId)) {
