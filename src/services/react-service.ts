@@ -9,6 +9,7 @@ class ReactionService {
     private apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
     async submitReaction(imageId: string, reactionEmoji: string): Promise<boolean> {
+        console.log("Submitting reaction:", { imageId, reactionEmoji });
         try {
             const token = await firebaseAuthService.getIdToken();
             const headers: HeadersInit = {
