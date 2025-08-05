@@ -1,5 +1,6 @@
 import { ImageData } from "../../services/image-service";
 
+import { useState } from "react";
 import { Plus, Minus} from "lucide-react"; // or any icon lib you 
 
 interface ImageElementParams {
