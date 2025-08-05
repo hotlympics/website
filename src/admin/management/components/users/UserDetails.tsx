@@ -1,7 +1,7 @@
 import type {
     AdminImageData,
     UserDetails as UserDetailsType,
-} from "../../types/admin";
+} from "../../../types/admin";
 import UserPhotoGallery from "./UserPhotoGallery";
 
 interface UserDetailsProps {

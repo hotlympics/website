@@ -10,18 +10,17 @@ import type {
     CreateUserData,
     PhotoModalData,
 } from "../types/admin";
-import CreateUserModal from "./components/CreateUserModal";
-import DeletePhotoModal from "./components/DeletePhotoModal";
-import DeleteUserModal from "./components/DeleteUserModal";
-import PhotoModal from "./components/PhotoModal";
-import StatsOverview from "./components/StatsOverview";
-import UserTable from "./components/UserTable";
-import { usePhotoActions } from "./hooks/usePhotoActions";
-import { useUserActions } from "./hooks/useUserActions";
-import { useUserDetails } from "./hooks/useUserDetails";
-import { useUsers } from "./hooks/useUsers";
+import DeletePhotoModal from "./components/shared/DeletePhotoModal";
+import PhotoModal from "./components/shared/PhotoModal";
+import CreateUserModal from "./components/users/CreateUserModal";
+import DeleteUserModal from "./components/users/DeleteUserModal";
+import UserTable from "./components/users/UserTable";
+import { usePhotoActions } from "./hooks/users/usePhotoActions";
+import { useUserActions } from "./hooks/users/useUserActions";
+import { useUserDetails } from "./hooks/users/useUserDetails";
+import { useUsers } from "./hooks/users/useUsers";
 
-const UsersPage = () => {
+const ManagementPage = () => {
     const { users, setUsers, stats, loading, error, loadData, refreshStats } =
         useUsers();
     const {
@@ -308,7 +307,7 @@ const UsersPage = () => {
 
     if (error) {
         return (
-            <AdminLayout title="Users">
+            <AdminLayout title="Management">
                 <div className="py-8 text-center">
                     <div className="text-lg text-red-600">Error: {error}</div>
                 </div>
@@ -317,9 +316,7 @@ const UsersPage = () => {
     }
 
     return (
-        <AdminLayout title="Users">
-            <StatsOverview stats={stats} />
-
+        <AdminLayout title="Management">
             <UserTable
                 users={paginatedUsers}
                 searchTerm={searchTerm}
@@ -382,4 +379,4 @@ const UsersPage = () => {
     );
 };
 
-export default UsersPage;
+export default ManagementPage;

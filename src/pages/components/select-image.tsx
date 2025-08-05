@@ -1,7 +1,7 @@
 import { ImageData } from "../../services/image-service";
 
+import { Minus, Plus } from "lucide-react"; // or any icon lib you
 import { useState } from "react";
-import { Plus, Minus} from "lucide-react"; // or any icon lib you 
 
 interface ImageElementParams {
     ImagePair: ImageData[];
@@ -31,7 +31,7 @@ const ImageElement = ({ ImagePair, top, onClick }: ImageElementParams) => {
     const buttonPosition = top ? "bottom-2" : "top-2";
 
     return (
-        <div className="relative cursor-pointer w-full max-w-md overflow-visible rounded-lg">
+        <div className="relative w-full max-w-md cursor-pointer overflow-visible rounded-lg">
             {/* Wrapper for image with clipping and rounded corners */}
             <div className="overflow-hidden rounded-lg shadow-lg">
                 <img
@@ -46,7 +46,7 @@ const ImageElement = ({ ImagePair, top, onClick }: ImageElementParams) => {
             {floatingEmojis.map(({ id, emoji }) => (
                 <span
                     key={id}
-                    className={`absolute text-3xl pointer-events-none animate-${
+                    className={`pointer-events-none absolute text-3xl animate-${
                         top ? "float-down" : "float-up"
                     }`}
                     style={{
@@ -64,14 +64,14 @@ const ImageElement = ({ ImagePair, top, onClick }: ImageElementParams) => {
                     e.stopPropagation();
                     setShowInfo((prev) => !prev);
                 }}
-                className={`absolute ${buttonPosition} left-3 z-20 rounded-full bg-black bg-opacity-60 px-3 py-2 text-white text-sm hover:bg-opacity-80 transition-all duration-300`}
+                className={`absolute ${buttonPosition} bg-opacity-60 hover:bg-opacity-80 left-3 z-20 rounded-full bg-black px-3 py-2 text-sm text-white transition-all duration-300`}
             >
                 ❤️ React
             </button>
 
             {/* Animated emoji bar */}
             <div
-                className={`absolute ${barPosition} rounded-lg left-0 w-full overflow-hidden backdrop-blur-sm transition-all duration-300 ease-in-out z-10 ${
+                className={`absolute ${barPosition} left-0 z-10 w-full overflow-hidden rounded-lg backdrop-blur-sm transition-all duration-300 ease-in-out ${
                     showInfo ? "max-h-24 opacity-100" : "max-h-0 opacity-0"
                 }`}
                 style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
@@ -84,7 +84,7 @@ const ImageElement = ({ ImagePair, top, onClick }: ImageElementParams) => {
                                 e.stopPropagation();
                                 handleEmojiClick(emoji);
                             }}
-                            className="hover:scale-125 transition-transform"
+                            className="transition-transform hover:scale-125"
                         >
                             {emoji}
                         </button>
@@ -97,17 +97,17 @@ const ImageElement = ({ ImagePair, top, onClick }: ImageElementParams) => {
                                 e.stopPropagation();
                                 setEmojiPickerVisible((prev) => !prev);
                             }}
-                            className="rounded-full w-8 h-8 flex items-center justify-center border border-gray-300 hover:bg-gray-100 transition-transform hover:scale-110"
+                            className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 transition-transform hover:scale-110 hover:bg-gray-100"
                             aria-label="Toggle emoji picker"
                         >
                             {!emojiPickerVisible ? (
-                                <Plus className="w-5 h-5" />
+                                <Plus className="h-5 w-5" />
                             ) : (
-                                <Minus className="w-5 h-5" />
+                                <Minus className="h-5 w-5" />
                             )}
                         </button>
 
-                        {emojiPickerVisible && (<></>)}
+                        {emojiPickerVisible && <></>}
                     </div>
                 </div>
             </div>

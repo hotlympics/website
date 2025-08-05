@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
-import { adminService } from "../../../services/admin-service";
-import type { AdminStats, AdminUser } from "../../types/admin";
+import { adminService } from "../../../../services/admin-service";
+import type { AdminStats, AdminUser } from "../../../types/admin";
 
 export const useUsers = () => {
     const [users, setUsers] = useState<AdminUser[]>([]);

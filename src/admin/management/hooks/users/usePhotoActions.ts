@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { adminService } from "../../../services/admin-service";
+import { adminService } from "../../../../services/admin-service";
 
 export const usePhotoActions = () => {
     const [deletingPhoto, setDeletingPhoto] = useState<string | null>(null);

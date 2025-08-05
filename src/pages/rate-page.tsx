@@ -121,8 +121,16 @@ const RatePage = () => {
                     </div>
                 ) : imagePair && imagePair.length === 2 ? (
                     <div className="flex flex-col items-center justify-center gap-8">
-                        <ImageElement ImagePair={imagePair} top={true} onClick={handleImageClick} />
-                        <ImageElement ImagePair={imagePair} top={false} onClick={handleImageClick} />
+                        <ImageElement
+                            ImagePair={imagePair}
+                            top={true}
+                            onClick={handleImageClick}
+                        />
+                        <ImageElement
+                            ImagePair={imagePair}
+                            top={false}
+                            onClick={handleImageClick}
+                        />
                     </div>
                 ) : (
                     <div className="flex items-center justify-center py-32">

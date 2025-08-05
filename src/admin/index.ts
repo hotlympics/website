@@ -12,7 +12,12 @@ export { default as SearchInput } from "./components/ui/SearchInput";
 export { default as StatCard } from "./components/ui/StatCard";
 
 // User Management
-export { default as UsersPage } from "./users/UsersPage";
+export { default as ManagementPage } from "./management/ManagementPage";
+
+// Main Admin Pages
+export { default as AdvancedPage } from "./advanced/AdvancedPage";
+export { default as AnalyticsPage } from "./analytics/AnalyticsPage";
+export { default as OperationsPage } from "./operations/OperationsPage";
 
 // Types
 export * from "./types/admin";

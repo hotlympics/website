@@ -2,8 +2,8 @@ import { useState } from "react";
 import {
     compressImage,
     validateImageFile,
-} from "../../../utils/image-compression";
-import type { CreateUserData } from "../../types/admin";
+} from "../../../../utils/image-compression";
+import type { CreateUserData } from "../../../types/admin";
 
 interface CreateUserModalProps {
     isOpen: boolean;

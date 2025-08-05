@@ -1,5 +1,5 @@
-import type { AdminImageData } from "../../types/admin";
-import { getImageUrl } from "../../utils/formatters";
+import type { AdminImageData } from "../../../types/admin";
+import { getImageUrl } from "../../../utils/formatters";
 
 interface UserPhotoGalleryProps {
     imageData: AdminImageData[];
