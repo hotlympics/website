@@ -4,10 +4,10 @@ import {
     BrowserRouter as Router,
     Routes,
 } from "react-router-dom";
-import AdvancedPage from "./admin/advanced/AdvancedPage";
-import AnalyticsPage from "./admin/analytics/AnalyticsPage";
-import ManagementPage from "./admin/management/ManagementPage";
-import OperationsPage from "./admin/operations/OperationsPage";
+import AdvancedPage from "./admin/pages/advanced/AdvancedPage";
+import AnalyticsPage from "./admin/pages/analytics/AnalyticsPage";
+import ManagementPage from "./admin/pages/management/ManagementPage";
+import OperationsPage from "./admin/pages/operations/OperationsPage";
 import { AuthProvider } from "./context/auth-context";
 import AdminLoginPage from "./pages/admin-login-page";
 import AuthVerifyPage from "./pages/auth-verify";

@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
-import { adminService } from "../../../../services/admin-service";
-import type { UserDetails } from "../../../types/admin";
+import { adminService } from "../../../../../services/admin-service";
+import type { UserDetails } from "../../../../types/admin";
 
 export const useUserDetails = () => {
     const [userDetails, setUserDetails] = useState<Record<string, UserDetails>>(

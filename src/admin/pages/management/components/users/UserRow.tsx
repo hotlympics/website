@@ -2,8 +2,8 @@ import type {
     AdminImageData,
     AdminUser,
     UserDetails as UserDetailsType,
-} from "../../../types/admin";
-import { formatDate } from "../../../utils/formatters";
+} from "../../../../types/admin";
+import { formatDate } from "../../../../utils/formatters";
 import UserDetails from "./UserDetails";
 
 interface UserRowProps {

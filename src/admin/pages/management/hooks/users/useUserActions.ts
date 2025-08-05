@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
-import { adminService } from "../../../../services/admin-service";
-import type { CreateUserData } from "../../../types/admin";
+import { adminService } from "../../../../../services/admin-service";
+import type { CreateUserData } from "../../../../types/admin";
 
 export const useUserActions = () => {
     const [deleteLoading, setDeleteLoading] = useState<string | null>(null);

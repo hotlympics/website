@@ -1,10 +1,10 @@
-import EmptyState from "../../../components/ui/EmptyState";
-import SearchInput from "../../../components/ui/SearchInput";
+import EmptyState from "../../../../components/ui/EmptyState";
+import SearchInput from "../../../../components/ui/SearchInput";
 import type {
     AdminImageData,
     AdminUser,
     UserDetails,
-} from "../../../types/admin";
+} from "../../../../types/admin";
 import UserRow from "./UserRow";
 
 interface UserTableProps {

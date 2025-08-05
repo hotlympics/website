@@ -11,13 +11,11 @@ export { default as Pagination } from "./components/ui/Pagination";
 export { default as SearchInput } from "./components/ui/SearchInput";
 export { default as StatCard } from "./components/ui/StatCard";
 
-// User Management
-export { default as ManagementPage } from "./management/ManagementPage";
-
 // Main Admin Pages
-export { default as AdvancedPage } from "./advanced/AdvancedPage";
-export { default as AnalyticsPage } from "./analytics/AnalyticsPage";
-export { default as OperationsPage } from "./operations/OperationsPage";
+export { default as ManagementPage } from "./pages/management/ManagementPage";
+export { default as AdvancedPage } from "./pages/advanced/AdvancedPage";
+export { default as AnalyticsPage } from "./pages/analytics/AnalyticsPage";
+export { default as OperationsPage } from "./pages/operations/OperationsPage";
 
 // Types
 export * from "./types/admin";
