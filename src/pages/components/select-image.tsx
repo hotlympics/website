@@ -1,4 +1,7 @@
+import { useAuth } from "../../hooks/use-auth";
+
 import { ImageData } from "../../services/image-service";
+import { reactingService } from "../../services/react-service";
 
 import { useState } from "react";
 import { Plus, Minus} from "lucide-react"; // or any icon lib you 
@@ -10,6 +13,8 @@ interface ImageElementParams {
 }
 
 const ImageElement = ({ ImagePair, top, onClick }: ImageElementParams) => {
+    const { user, loading } = useAuth();
+
     const ImageData = top ? ImagePair[0] : ImagePair[1];
     const [showInfo, setShowInfo] = useState(false);
     const [floatingEmojis, setFloatingEmojis] = useState<
@@ -19,12 +24,18 @@ const ImageElement = ({ ImagePair, top, onClick }: ImageElementParams) => {
 
     const suggestedEmojis = ["😀", "😂", "🍒"];
 
-    const handleEmojiClick = (emoji: string) => {
+    const handleEmojiClick = async (emoji: string) => {
         const id = Date.now() + Math.random();
         setFloatingEmojis((prev) => [...prev, { id, emoji }]);
         setTimeout(() => {
             setFloatingEmojis((prev) => prev.filter((e) => e.id !== id));
         }, 2000);
+        
+        await reactingService.submitReaction(
+            ImageData.imageId,
+            user?.uid || "null",
+            emoji
+        );
     };
 
     const barPosition = top ? "bottom-0" : "top-0";
