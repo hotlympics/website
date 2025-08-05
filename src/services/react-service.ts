@@ -8,7 +8,7 @@ export interface ReactionResponse {
 class ReactionService {
     private apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-    async submitReaction(imageId: string, userId: string, reactionEmoji: string): Promise<boolean> {
+    async submitReaction(imageId: string, reactionEmoji: string): Promise<boolean> {
         try {
             const token = await firebaseAuthService.getIdToken();
             const headers: HeadersInit = {
@@ -22,7 +22,7 @@ class ReactionService {
             const response = await fetch(`${this.apiUrl}/reactions`, {
                 method: "POST",
                 headers,
-                body: JSON.stringify({ imageId, userId, reactionEmoji }),
+                body: JSON.stringify({ imageId, reactionEmoji }),
             });
 
             if (!response.ok) {
