@@ -11,6 +11,7 @@ export interface ImageData {
     losses: number;
     draws: number;
     eloScore: number;
+    reactions?: Record<string, number>;
     inPool: boolean;
 }
 

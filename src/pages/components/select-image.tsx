@@ -1,7 +1,8 @@
 import { ImageData } from "../../services/image-service";
+import { reactingService } from "../../services/react-service";
 
 import { useState } from "react";
-import { Plus, Minus} from "lucide-react"; // or any icon lib you 
+import { Plus, Minus } from "lucide-react"; // or any icon lib you
 
 interface ImageElementParams {
     ImagePair: ImageData[];
@@ -17,14 +18,34 @@ const ImageElement = ({ ImagePair, top, onClick }: ImageElementParams) => {
     >([]);
     const [emojiPickerVisible, setEmojiPickerVisible] = useState(false);
 
-    const suggestedEmojis = ["😀", "😂", "🍒"];
+    const defaultEmojis = ["😀", "😂", "🍒"];
 
-    const handleEmojiClick = (emoji: string) => {
+    const reactionEntries = Object.entries(ImageData.reactions || {}) as [string, number][];
+
+    // Sort by count descending
+    reactionEntries.sort((a, b) => b[1] - a[1]);
+
+    // Extract top emojis (keys)
+    const topEmojis = reactionEntries.slice(0, 3).map(([emoji]) => emoji);
+
+    // Fill with defaults if less than 3
+    const suggestedEmojis = [...topEmojis];
+
+    for (const emoji of defaultEmojis) {
+        if (suggestedEmojis.length >= 3) break;
+        if (!suggestedEmojis.includes(emoji)) suggestedEmojis.push(emoji);
+    }
+
+    // suggestedEmojis now always has length 3
+
+    const handleEmojiClick = async (emoji: string) => {
         const id = Date.now() + Math.random();
         setFloatingEmojis((prev) => [...prev, { id, emoji }]);
         setTimeout(() => {
             setFloatingEmojis((prev) => prev.filter((e) => e.id !== id));
         }, 2000);
+
+        await reactingService.submitReaction(ImageData.imageId, emoji);
     };
 
     const barPosition = top ? "bottom-0" : "top-0";
@@ -33,13 +54,27 @@ const ImageElement = ({ ImagePair, top, onClick }: ImageElementParams) => {
     return (
         <div className="relative cursor-pointer w-full max-w-md overflow-visible rounded-lg">
             {/* Wrapper for image with clipping and rounded corners */}
-            <div className="overflow-hidden rounded-lg shadow-lg">
+            <div className="overflow-hidden rounded-lg shadow-lg relative">{/* <-- Make this relative */}
                 <img
                     src={ImageData.imageUrl}
                     alt="Face"
                     className="h-96 w-full object-cover transition-transform hover:scale-105"
                     onClick={() => onClick(ImageData)}
                 />
+
+                {/* EmojiPicker rendered inside the image wrapper */}
+                {emojiPickerVisible && (
+                    <div className="absolute inset-0 flex justify-center items-center z-30 pointer-events-none">
+                        <div className="pointer-events-auto">
+                            <EmojiPicker
+                                onEmojiSelect={(emoji) => {
+                                    handleEmojiClick(emoji);
+                                    setEmojiPickerVisible(false);
+                                }}
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Floating/Falling Emojis */}
@@ -106,8 +141,6 @@ const ImageElement = ({ ImagePair, top, onClick }: ImageElementParams) => {
                                 <Minus className="w-5 h-5" />
                             )}
                         </button>
-
-                        {emojiPickerVisible && (<></>)}
                     </div>
                 </div>
             </div>
@@ -116,3 +149,23 @@ const ImageElement = ({ ImagePair, top, onClick }: ImageElementParams) => {
 };
 
 export default ImageElement;
+
+const EmojiPicker = ({ onEmojiSelect }: { onEmojiSelect: (emoji: string) => void }) => {
+    const emojis = ["😀", "😂", "😍", "😎", "🤔", "😢", "😡", "🎉", "👍", "👎"];
+
+    return (
+        <div className="w-full backdrop-blur-sm rounded-lg p-4 z-20">
+            <div className="grid grid-cols-5 gap-2">
+                {emojis.map((emoji) => (
+                    <button
+                        key={emoji}
+                        onClick={() => onEmojiSelect(emoji)}
+                        className="text-3xl hover:scale-110 transition-transform"
+                    >
+                        {emoji}
+                    </button>
+                ))}
+            </div>
+        </div>
+    );
+};

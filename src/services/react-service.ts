@@ -1,14 +1,15 @@
 import { firebaseAuthService } from "./firebase-auth";
 
-export interface RatingResponse {
+export interface ReactionResponse {
     success: boolean;
     message?: string;
 }
 
-class RatingService {
+class ReactionService {
     private apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-    async submitRating(winnerId: string, loserId: string): Promise<boolean> {
+    async submitReaction(imageId: string, reactionEmoji: string): Promise<boolean> {
+        console.log("Submitting reaction:", { imageId, reactionEmoji });
         try {
             const token = await firebaseAuthService.getIdToken();
             const headers: HeadersInit = {
@@ -19,24 +20,24 @@ class RatingService {
                 headers["Authorization"] = `Bearer ${token}`;
             }
 
-            const response = await fetch(`${this.apiUrl}/ratings`, {
+            const response = await fetch(`${this.apiUrl}/reactions`, {
                 method: "POST",
                 headers,
-                body: JSON.stringify({ winnerId, loserId }),
+                body: JSON.stringify({ imageId, reactionEmoji }),
             });
 
             if (!response.ok) {
-                console.error("Failed to submit rating:", response.statusText);
+                console.error("Failed to submit reaction:", response.statusText);
                 return false;
             }
 
-            const data = (await response.json()) as RatingResponse;
+            const data = (await response.json()) as ReactionResponse;
             return data.success;
         } catch (error) {
-            console.error("Error submitting rating:", error);
+            console.error("Error submitting reaction:", error);
             return false;
         }
     }
 }
 
-export const ratingService = new RatingService();
+export const reactingService = new ReactionService();
