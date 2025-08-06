@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ImageCropModal from "../../shared/image-crop-modal";
 import {
     compressImage,
     validateImageFile,
@@ -27,64 +28,66 @@ const CreateUserModal = ({
         poolImageIndices: new Set<number>(),
     });
     const [imageUploadStatus, setImageUploadStatus] = useState<string>("");
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [showCropModal, setShowCropModal] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     if (!isOpen) return null;
 
-    const handleImageUpload = async (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const files = event.target.files;
-        if (!files) return;
+    const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            setSelectedFile(file);
+            setShowCropModal(true);
+        }
+        // Reset input value to allow selecting the same file again
+        event.target.value = "";
+    };
 
-        const newFiles = Array.from(files);
-        const validFiles: File[] = [];
-        const errors: string[] = [];
+    const handleCropComplete = async (croppedFile: File) => {
+        setIsProcessing(true);
+        try {
+            await processAndAddImage(croppedFile);
+            setShowCropModal(false);
+            setSelectedFile(null);
+        } catch (error) {
+            console.error("Error processing cropped image:", error);
+            alert("Failed to process image. Please try again.");
+        } finally {
+            setIsProcessing(false);
+        }
+    };
 
-        setImageUploadStatus("Validating and compressing images...");
+    const handleCropCancel = () => {
+        setShowCropModal(false);
+        setSelectedFile(null);
+    };
+
+    const processAndAddImage = async (file: File) => {
+        setImageUploadStatus("Validating and compressing image...");
 
         try {
-            for (const file of newFiles) {
-                const validation = validateImageFile(file);
-                if (!validation.valid) {
-                    errors.push(`${file.name}: ${validation.error}`);
-                    continue;
-                }
-
-                try {
-                    const compressedFile = await compressImage(file, {
-                        maxSizeMB: 0.5,
-                        maxWidthOrHeight: 1280,
-                        useWebWorker: true,
-                    });
-
-                    validFiles.push(compressedFile);
-                } catch (compressionError) {
-                    console.error(
-                        `Failed to compress ${file.name}:`,
-                        compressionError
-                    );
-                    errors.push(`${file.name}: Failed to compress image`);
-                }
+            const validation = validateImageFile(file);
+            if (!validation.valid) {
+                alert(`${file.name}: ${validation.error}`);
+                return;
             }
 
-            if (errors.length > 0) {
-                alert(
-                    `Some files could not be processed:\n${errors.join("\n")}`
-                );
-            }
+            const compressedFile = await compressImage(file, {
+                maxSizeMB: 0.5,
+                maxWidthOrHeight: 1280,
+                useWebWorker: true,
+            });
 
-            if (validFiles.length > 0) {
-                setCreateUserForm((prev) => ({
-                    ...prev,
-                    images: [...prev.images, ...validFiles],
-                }));
-            }
+            setCreateUserForm((prev) => ({
+                ...prev,
+                images: [...prev.images, compressedFile],
+            }));
         } catch (error) {
-            console.error("Image upload error:", error);
-            alert("Failed to process images. Please try again.");
+            console.error("Image processing error:", error);
+            alert("Failed to process image. Please try again.");
         } finally {
             setImageUploadStatus("");
-            event.target.value = "";
         }
     };
 
@@ -140,6 +143,9 @@ const CreateUserModal = ({
             poolImageIndices: new Set<number>(),
         });
         setImageUploadStatus("");
+        setSelectedFile(null);
+        setShowCropModal(false);
+        setIsProcessing(false);
     };
 
     const handleClose = () => {
@@ -286,30 +292,32 @@ const CreateUserModal = ({
                     {/* Image Upload */}
                     <div className="rounded-md border border-green-200 bg-green-50 p-4">
                         <h4 className="mb-3 font-medium text-green-900">
-                            Upload Images
+                            Upload Photos (Optional)
                         </h4>
                         <div className="space-y-4">
                             <div>
-                                <label
-                                    htmlFor="images"
-                                    className="mb-2 block text-sm font-medium text-gray-700"
-                                >
-                                    Add Photos (Optional)
-                                </label>
                                 <input
                                     type="file"
-                                    id="images"
-                                    multiple
                                     accept="image/*"
-                                    onChange={handleImageUpload}
-                                    disabled={!!imageUploadStatus}
-                                    className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-green-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-green-700 hover:file:bg-green-100 disabled:cursor-not-allowed disabled:opacity-50"
+                                    className="hidden"
+                                    id="image-upload"
+                                    onChange={handleFileSelect}
+                                    disabled={isProcessing || !!imageUploadStatus}
                                 />
-                                <p className="mt-1 text-xs text-gray-500">
-                                    Select multiple images to upload for this
-                                    user. Images will be automatically
-                                    compressed to WebP format.
-                                </p>
+                                <label
+                                    htmlFor="image-upload"
+                                    className={`inline-block w-1/2 cursor-pointer rounded-md px-4 py-2 text-center text-white ${
+                                        isProcessing || !!imageUploadStatus
+                                            ? "cursor-not-allowed bg-gray-400"
+                                            : "bg-blue-600 hover:bg-blue-700"
+                                    }`}
+                                >
+                                    {isProcessing
+                                        ? "Processing..."
+                                        : imageUploadStatus
+                                          ? imageUploadStatus
+                                          : "Choose Photo"}
+                                </label>
                                 {imageUploadStatus && (
                                     <div className="mt-2 flex items-center space-x-2 text-sm text-blue-600">
                                         <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></div>
@@ -321,21 +329,6 @@ const CreateUserModal = ({
                             {/* Image Previews */}
                             {createUserForm.images.length > 0 && (
                                 <div>
-                                    <p className="mb-2 text-sm font-medium text-gray-700">
-                                        Selected Images (
-                                        {createUserForm.images.length})
-                                        {createUserForm.poolImageIndices.size >
-                                            0 && (
-                                            <span className="ml-2 text-blue-600">
-                                                •{" "}
-                                                {
-                                                    createUserForm
-                                                        .poolImageIndices.size
-                                                }{" "}
-                                                will be added to pool
-                                            </span>
-                                        )}
-                                    </p>
                                     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                                         {createUserForm.images.map(
                                             (image, index) => {
@@ -442,6 +435,14 @@ const CreateUserModal = ({
                         </button>
                     </div>
                 </form>
+
+                <ImageCropModal
+                    isOpen={showCropModal}
+                    onClose={handleCropCancel}
+                    onCropComplete={handleCropComplete}
+                    imageFile={selectedFile}
+                    isLoading={isProcessing}
+                />
             </div>
         </div>
     );
