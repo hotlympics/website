@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/auth/use-auth.js";
 import PerformanceMonitor from "../shared/performance-monitor.js";
 import { useRating } from "../../hooks/rating/use-rating.js";
-import { ImageElement } from "./image-element.js";
+import ImagesCard from "./images-card.js";
 
 export const RatingArena = () => {
     const navigate = useNavigate();
@@ -37,7 +37,6 @@ export const RatingArena = () => {
                     <h1 className="mb-6 text-4xl font-bold text-gray-800">
                         Hotlympics Rating Arena
                     </h1>
-                    <p className="text-xl text-gray-600">Pick who you prefer</p>
                 </div>
 
                 {loadingImages ? (
@@ -57,18 +56,7 @@ export const RatingArena = () => {
                         </button>
                     </div>
                 ) : imagePair && imagePair.length === 2 ? (
-                    <div className="flex flex-col items-center justify-center gap-8">
-                        <ImageElement
-                            ImagePair={imagePair}
-                            top={true}
-                            onClick={handleImageClick}
-                        />
-                        <ImageElement
-                            ImagePair={imagePair}
-                            top={false}
-                            onClick={handleImageClick}
-                        />
-                    </div>
+                    <ImagesCard ImagePair={imagePair} handleImageClick={handleImageClick} />
                 ) : (
                     <div className="flex items-center justify-center py-32">
                         <p className="text-xl text-gray-600">
