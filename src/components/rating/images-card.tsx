@@ -78,7 +78,7 @@ const ImagesCard: React.FC = () => {
         <>
             {loadingImages ? (
                 <div className="flex items-center justify-center py-32">
-                    <div className="text-xl text-gray-600">Loading images...</div>
+                    <div className="text-xl text-gray-600">{/*Loading images...*/}</div>
                 </div>
             ) : error ? (
                 <div className="flex flex-col items-center justify-center py-32">
