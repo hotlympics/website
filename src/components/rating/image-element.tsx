@@ -5,13 +5,11 @@ import { ImageData } from "../../services/core/image-service.js";
 interface ImageElementProps {
     ImagePair: ImageData[];
     top: boolean;
-    onClick: (value: ImageData) => void;
 }
 
 export const ImageElement = ({
     ImagePair,
     top,
-    onClick,
 }: ImageElementProps) => {
     const ImageData = top ? ImagePair[0] : ImagePair[1];
     const [showInfo, setShowInfo] = useState(false);
@@ -36,12 +34,11 @@ export const ImageElement = ({
     return (
         <div className="relative w-full max-w-md cursor-pointer overflow-visible rounded-lg">
             {/* Wrapper for image with clipping and rounded corners */}
-            <div className="overflow-hidden rounded-lg shadow-lg">
+            <div className="w-full aspect-square rounded-lg shadow-lg overflow-hidden pointer-events-none">
                 <img
                     src={ImageData.imageUrl}
                     alt="Face"
-                    className="h-96 w-full object-cover transition-transform hover:scale-105"
-                    onClick={() => onClick(ImageData)}
+                    className="w-full h-full object-cover transition-transform hover:scale-105"
                 />
             </div>
 
