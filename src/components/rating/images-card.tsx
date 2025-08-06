@@ -49,9 +49,7 @@ const ImagesCard: React.FC = () => {
     );
 
     const handleDragEnd = async (
-        event: MouseEvent | TouchEvent,
         info: PanInfo,
-        pair: ImageData[]
     ) => {
         const offsetY = info.offset.y;
 
@@ -100,7 +98,7 @@ const ImagesCard: React.FC = () => {
                                 drag="y"
                                 dragElastic={0.5}
                                 onDragEnd={(e, info) => {
-                                    handleDragEnd(e, info, cards[cards.length - 1]);
+                                    handleDragEnd(info);
                                 }}
                                 initial={{ y: 0, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
