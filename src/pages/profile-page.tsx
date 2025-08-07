@@ -56,22 +56,15 @@ const ProfilePage = () => {
         }
     }, [user, fetchUploadedPhotos]);
 
-    const handleFileSelect = async (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const file = event.target.files?.[0];
-        if (!file) return;
-
+    const handleFileSelect = async (croppedFile: File) => {
         await uploadPhoto(
-            file,
+            croppedFile,
             (message) => showSuccessMessage(message),
             (errorMessage) => {
                 // Handle upload error
                 console.error("Upload error:", errorMessage);
             }
         );
-
-        event.target.value = "";
     };
 
     const handleDeletePhoto = (photoId: string) => {
