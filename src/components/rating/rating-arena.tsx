@@ -4,16 +4,16 @@ import MenuBar from "./menu.js";
 
 export const RatingArena = () => {
     return (
-        <div className="h-screen overflow-hidden bg-gray-100 flex flex-col items-center justify-between relative">
+        <div className="relative flex h-screen flex-col items-center justify-between overflow-hidden bg-gray-100">
             {/* Centered content with bottom margin */}
-            <div className="flex-grow flex flex-col items-center justify-center pb-28 w-full mt-4">
+            <div className="mt-4 flex w-full flex-grow flex-col items-center justify-center pb-28">
                 <div className="w-full max-w-3xl">
                     <ImagesCard />
                 </div>
             </div>
 
             {/* MenuBar pinned to bottom, same width as ImagesCard */}
-            <div className="absolute bottom-0 w-full flex justify-center mb-4">
+            <div className="absolute bottom-0 mb-4 flex w-full justify-center">
                 <div className="w-full max-w-3xl">
                     <MenuBar />
                 </div>

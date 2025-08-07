@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { firebaseAuthService } from "../../services/auth/firebase-auth.js";
 import { syncUserWithBackend } from "../../services/auth/auth-sync.js";
+import { firebaseAuthService } from "../../services/auth/firebase-auth.js";
 
 interface SignInFormProps {
     redirect: string;

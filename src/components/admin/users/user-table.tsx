@@ -1,4 +1,8 @@
-import type { AdminImageData, AdminUser, UserDetails } from "../../../utils/types/admin/admin";
+import type {
+    AdminImageData,
+    AdminUser,
+    UserDetails,
+} from "../../../utils/types/admin/admin";
 import EmptyState from "../empty-state";
 import SearchInput from "../search-input";
 import UserRow from "./user-row";

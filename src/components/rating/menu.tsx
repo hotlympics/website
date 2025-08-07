@@ -6,7 +6,7 @@ const MenuBar = () => {
     const { user, loading } = useAuth();
 
     return (
-        <div className="bg-gray-100 p-6 rounded-2xl shadow-md w-full flex items-center justify-end">
+        <div className="flex w-full items-center justify-end rounded-2xl bg-gray-100 p-6 shadow-md">
             <button
                 onClick={() => {
                     if (user) {

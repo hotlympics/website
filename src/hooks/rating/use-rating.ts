@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../auth/use-auth.js";
 import { ImageData, imageService } from "../../services/core/image-service.js";
 import { ratingService } from "../../services/core/rating-service.js";
 import { userService } from "../../services/core/user-service.js";
+import { useAuth } from "../auth/use-auth.js";
 
 export const useRating = () => {
     const { user } = useAuth();

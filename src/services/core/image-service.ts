@@ -36,18 +36,12 @@ const fetchImagePair = async (
             headers["Authorization"] = `Bearer ${token}`;
         }
 
-        const response = await fetch(
-            `${apiUrl}/images/pairs/${gender}`,
-            {
-                headers,
-            }
-        );
+        const response = await fetch(`${apiUrl}/images/pairs/${gender}`, {
+            headers,
+        });
 
         if (!response.ok) {
-            console.error(
-                "Failed to fetch image pair:",
-                response.statusText
-            );
+            console.error("Failed to fetch image pair:", response.statusText);
             return null;
         }
 

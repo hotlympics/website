@@ -13,11 +13,6 @@ import { useSearch } from "../../hooks/admin/use-search";
 import { useUserActions } from "../../hooks/admin/use-user-actions";
 import { useUserDetails } from "../../hooks/admin/use-user-details";
 import { useUsers } from "../../hooks/admin/use-users";
-import type {
-    AdminUser,
-    CreateUserData,
-    PhotoModalData,
-} from "../../utils/types/admin/admin";
 import {
     createPhotoDeleteHandlers,
     createPhotoModalHandlers,
@@ -31,6 +26,11 @@ import {
     updateStateAfterUserDelete,
     type UserDeleteConfirmation,
 } from "../../utils/admin/user-utils";
+import type {
+    AdminUser,
+    CreateUserData,
+    PhotoModalData,
+} from "../../utils/types/admin/admin";
 
 type ManagementTab = "users" | "moderation" | "battles";
 

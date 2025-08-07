@@ -106,9 +106,7 @@ const getUsers = async (): Promise<{ users: AdminUser[] }> => {
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-            errorData.error?.message || "Failed to fetch users"
-        );
+        throw new Error(errorData.error?.message || "Failed to fetch users");
     }
 
     return response.json();
@@ -129,7 +127,9 @@ const getUserDetails = async (userId: string): Promise<UserDetails> => {
     return response.json();
 };
 
-const deleteUser = async (userId: string): Promise<{
+const deleteUser = async (
+    userId: string
+): Promise<{
     message: string;
     deletedUserId: string;
     deletedImageCount: number;
@@ -141,9 +141,7 @@ const deleteUser = async (userId: string): Promise<{
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-            errorData.error?.message || "Failed to delete user"
-        );
+        throw new Error(errorData.error?.message || "Failed to delete user");
     }
 
     return response.json();
@@ -156,9 +154,7 @@ const getStats = async (): Promise<AdminStats> => {
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-            errorData.error?.message || "Failed to fetch stats"
-        );
+        throw new Error(errorData.error?.message || "Failed to fetch stats");
     }
 
     return response.json();
@@ -167,19 +163,14 @@ const getStats = async (): Promise<AdminStats> => {
 const deletePhoto = async (
     imageId: string
 ): Promise<{ message: string; deletedImageId: string; userId: string }> => {
-    const response = await fetch(
-        `${API_BASE_URL}/admin/photos/${imageId}`,
-        {
-            method: "DELETE",
-            headers: getAuthHeaders(),
-        }
-    );
+    const response = await fetch(`${API_BASE_URL}/admin/photos/${imageId}`, {
+        method: "DELETE",
+        headers: getAuthHeaders(),
+    });
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-            errorData.error?.message || "Failed to delete photo"
-        );
+        throw new Error(errorData.error?.message || "Failed to delete photo");
     }
 
     return response.json();
@@ -218,9 +209,7 @@ const createUser = async (
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-            errorData.error?.message || "Failed to create user"
-        );
+        throw new Error(errorData.error?.message || "Failed to create user");
     }
 
     return response.json();

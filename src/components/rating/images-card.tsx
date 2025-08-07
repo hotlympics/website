@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence, PanInfo } from "framer-motion";
-import { ImageElement } from "./image-element.js";
-import { ImageData } from "../../services/core/image-service.js";
+import { AnimatePresence, motion, PanInfo } from "framer-motion";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRating } from "../../hooks/rating/use-rating.js";
+import { ImageData } from "../../services/core/image-service.js";
+import { ImageElement } from "./image-element.js";
 
 const ImagesCard: React.FC = () => {
     const {
@@ -48,9 +48,7 @@ const ImagesCard: React.FC = () => {
         [cards, handleImageClick]
     );
 
-    const handleDragEnd = async (
-        info: PanInfo,
-    ) => {
+    const handleDragEnd = async (info: PanInfo) => {
         const offsetY = info.offset.y;
 
         if (offsetY < -100) {
@@ -76,7 +74,9 @@ const ImagesCard: React.FC = () => {
         <>
             {loadingImages ? (
                 <div className="flex items-center justify-center py-32">
-                    <div className="text-xl text-gray-600">{/*Loading images...*/}</div>
+                    <div className="text-xl text-gray-600">
+                        {/*Loading images...*/}
+                    </div>
                 </div>
             ) : error ? (
                 <div className="flex flex-col items-center justify-center py-32">
@@ -89,8 +89,8 @@ const ImagesCard: React.FC = () => {
                     </button>
                 </div>
             ) : cards.length > 0 ? (
-                <div className="overflow-hidden h-[90svh]">
-                    <div className="relative w-full max-w-md h-96 mx-auto">
+                <div className="h-[90svh] overflow-hidden">
+                    <div className="relative mx-auto h-96 w-full max-w-md">
                         <AnimatePresence>
                             <motion.div
                                 key={cards.length}
@@ -103,22 +103,30 @@ const ImagesCard: React.FC = () => {
                                 initial={{ y: 0, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                                transition={{
+                                    type: "spring",
+                                    stiffness: 300,
+                                    damping: 25,
+                                }}
                             >
-                                <div className="bg-gray-100 p-6 rounded-2xl shadow-md w-full">
+                                <div className="w-full rounded-2xl bg-gray-100 p-6 shadow-md">
                                     <div className="flex flex-col items-center justify-center">
                                         <div>
                                             <ImageElement
-                                                ImagePair={cards[cards.length - 1]}
+                                                ImagePair={
+                                                    cards[cards.length - 1]
+                                                }
                                                 top={true}
                                             />
                                         </div>
-                                        <p className="text-xl text-gray-600 my-4">
+                                        <p className="my-4 text-xl text-gray-600">
                                             Swipe up or down
                                         </p>
                                         <div>
                                             <ImageElement
-                                                ImagePair={cards[cards.length - 1]}
+                                                ImagePair={
+                                                    cards[cards.length - 1]
+                                                }
                                                 top={false}
                                             />
                                         </div>

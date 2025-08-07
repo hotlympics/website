@@ -7,10 +7,7 @@ interface ImageElementProps {
     top: boolean;
 }
 
-export const ImageElement = ({
-    ImagePair,
-    top,
-}: ImageElementProps) => {
+export const ImageElement = ({ ImagePair, top }: ImageElementProps) => {
     const ImageData = top ? ImagePair[0] : ImagePair[1];
     const [showInfo, setShowInfo] = useState(false);
     const [floatingEmojis, setFloatingEmojis] = useState<
@@ -34,11 +31,11 @@ export const ImageElement = ({
     return (
         <div className="relative w-full max-w-md cursor-pointer overflow-visible rounded-lg">
             {/* Wrapper for image with clipping and rounded corners */}
-            <div className="w-full aspect-square rounded-lg shadow-lg overflow-hidden pointer-events-none">
+            <div className="pointer-events-none aspect-square w-full overflow-hidden rounded-lg shadow-lg">
                 <img
                     src={ImageData.imageUrl}
                     alt="Face"
-                    className="w-full h-full object-cover transition-transform hover:scale-105"
+                    className="h-full w-full object-cover transition-transform hover:scale-105"
                 />
             </div>
 
