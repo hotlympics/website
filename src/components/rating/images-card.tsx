@@ -75,7 +75,7 @@ const ImagesCard: React.FC = () => {
             {loadingImages ? (
                 <div className="flex items-center justify-center py-32">
                     <div className="text-xl text-gray-600">
-                        {/*Loading images...*/}
+                        Loading images...
                     </div>
                 </div>
             ) : error ? (
@@ -97,7 +97,7 @@ const ImagesCard: React.FC = () => {
                                 className="absolute top-0 left-0 w-full"
                                 drag="y"
                                 dragElastic={0.5}
-                                onDragEnd={(e, info) => {
+                                onDragEnd={(_, info) => {
                                     handleDragEnd(info);
                                 }}
                                 initial={{ y: 0, opacity: 0 }}
