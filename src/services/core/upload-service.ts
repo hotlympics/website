@@ -34,9 +34,7 @@ const requestUploadUrl = async (
 
     if (!response.ok) {
         const error = await response.json();
-        throw new Error(
-            error.error?.message || "Failed to request upload URL"
-        );
+        throw new Error(error.error?.message || "Failed to request upload URL");
     }
 
     return response.json();
@@ -61,9 +59,7 @@ const uploadToFirebase = async (
             if (xhr.status === 200) {
                 resolve();
             } else {
-                reject(
-                    new Error(`Upload failed with status ${xhr.status}`)
-                );
+                reject(new Error(`Upload failed with status ${xhr.status}`));
             }
         });
 

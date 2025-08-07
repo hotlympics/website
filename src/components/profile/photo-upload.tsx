@@ -21,7 +21,7 @@ const PhotoUpload = ({
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [showCropModal, setShowCropModal] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
-    
+
     const isAtLimit = uploadedPhotosCount >= maxPhotos;
 
     const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +95,7 @@ const PhotoUpload = ({
                     </p>
                 </div>
             )}
-            
+
             <ImageCropModal
                 isOpen={showCropModal}
                 onClose={handleCropCancel}

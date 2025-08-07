@@ -1,5 +1,8 @@
-import type { PhotoModalData, UserDetails } from "../../../utils/types/admin/admin";
 import { formatDate, getImageUrl } from "../../../utils/admin/formatters";
+import type {
+    PhotoModalData,
+    UserDetails,
+} from "../../../utils/types/admin/admin";
 
 interface PhotoModalProps {
     photoModal: PhotoModalData | null;

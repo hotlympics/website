@@ -1,10 +1,10 @@
 import { useState } from "react";
-import ImageCropModal from "../../shared/image-crop-modal";
 import {
     compressImage,
     validateImageFile,
 } from "../../../utils/shared/image-compression";
 import type { CreateUserData } from "../../../utils/types/admin/admin";
+import ImageCropModal from "../../shared/image-crop-modal";
 
 interface CreateUserModalProps {
     isOpen: boolean;
@@ -302,7 +302,9 @@ const CreateUserModal = ({
                                     className="hidden"
                                     id="image-upload"
                                     onChange={handleFileSelect}
-                                    disabled={isProcessing || !!imageUploadStatus}
+                                    disabled={
+                                        isProcessing || !!imageUploadStatus
+                                    }
                                 />
                                 <label
                                     htmlFor="image-upload"
