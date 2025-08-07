@@ -1,5 +1,5 @@
 import "cropperjs/dist/cropper.css";
-import React, { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import Cropper, { ReactCropperElement } from "react-cropper";
 
 interface ImageCropModalProps {
@@ -21,7 +21,7 @@ const ImageCropModal = ({
     const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     // Create image URL when file changes
-    React.useEffect(() => {
+    useEffect(() => {
         if (imageFile) {
             const url = URL.createObjectURL(imageFile);
             setImageUrl(url);
