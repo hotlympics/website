@@ -1,19 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/auth/use-auth.js";
-import PerformanceMonitor from "../shared/performance-monitor.js";
-import { useRating } from "../../hooks/rating/use-rating.js";
+import { useRatingQueue } from "../../hooks/rating/use-rating-queue.js";
 import { ImageElement } from "./image-element.js";
 
 export const RatingArena = () => {
     const navigate = useNavigate();
     const { user, loading } = useAuth();
-    const {
-        imagePair,
-        loadingImages,
-        error,
-        fetchImagePair,
-        handleImageClick,
-    } = useRating();
+    const { imagePair, loadingImages, error, handleImageClick } =
+        useRatingQueue();
 
     return (
         <div className="min-h-screen bg-gray-100 p-4">
@@ -49,12 +43,7 @@ export const RatingArena = () => {
                 ) : error ? (
                     <div className="flex flex-col items-center justify-center py-32">
                         <p className="mb-4 text-xl text-red-600">{error}</p>
-                        <button
-                            onClick={fetchImagePair}
-                            className="rounded-lg bg-blue-600 px-4 py-2 text-white shadow-md transition-colors hover:bg-blue-700"
-                        >
-                            Try Again
-                        </button>
+                        We encountered an error. Please refresh the page
                     </div>
                 ) : imagePair && imagePair.length === 2 ? (
                     <div className="flex flex-col items-center justify-center gap-8">
@@ -77,7 +66,6 @@ export const RatingArena = () => {
                     </div>
                 )}
             </div>
-            <PerformanceMonitor />
         </div>
     );
 };

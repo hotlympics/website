@@ -1,6 +1,6 @@
 import { Minus, Plus } from "lucide-react";
 import { useState } from "react";
-import { ImageData } from "../../services/core/image-service.js";
+import { ImageData } from "../../services/core/image-queue-service";
 
 interface ImageElementProps {
     ImagePair: ImageData[];

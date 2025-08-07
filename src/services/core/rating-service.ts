@@ -12,7 +12,10 @@ export interface RatingResponse {
 
 const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-const submitRating = async (winnerId: string, loserId: string): Promise<boolean> => {
+const submitRating = async (
+    winnerId: string,
+    loserId: string
+): Promise<boolean> => {
     try {
         const token = await firebaseAuthService.getIdToken();
         const headers: HeadersInit = {

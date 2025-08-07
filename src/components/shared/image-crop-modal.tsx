@@ -1,5 +1,5 @@
 import "cropperjs/dist/cropper.css";
-import { useCallback, useRef, useState, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Cropper, { ReactCropperElement } from "react-cropper";
 
 interface ImageCropModalProps {

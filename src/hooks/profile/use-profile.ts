@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/use-auth";
 import { firebaseAuthService } from "../../services/auth/firebase-auth";
+import { useAuth } from "../auth/use-auth";
 
 interface UserInfo {
     email: string;
