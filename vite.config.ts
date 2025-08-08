@@ -39,10 +39,7 @@ export default defineConfig({
                 target: "http://127.0.0.1:3000",
                 changeOrigin: true,
                 secure: false,
-                rewrite: (path) =>
-                    path.startsWith("/api/admin")
-                        ? path
-                        : path.replace(/^\/api/, ""),
+                rewrite: (path) => path.replace(/^\/api/, ""),
             },
         },
     },
