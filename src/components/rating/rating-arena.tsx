@@ -54,47 +54,22 @@ export const RatingArena = () => {
                                 maxWidth: "min(24rem, calc((100vh - 140px)/2))",
                             }}
                         >
-                            <div className="relative aspect-[1/2] w-full">
+                            {/* Fixed shadow frame that does not move with cards */}
+                            <div className="relative aspect-[1/2] w-full overflow-hidden rounded-2xl bg-white shadow-[0_18px_60px_rgba(0,0,0,0.55)] ring-1 ring-black/10">
                                 {/* Background next pair, visible from start of swipe */}
                                 {(() => {
                                     const nextPair =
                                         imageQueueService.peekNextPair();
                                     if (!nextPair || nextPair.length !== 2) {
-                                        return (
-                                            <div className="absolute inset-0 rounded-2xl bg-gray-200" />
-                                        );
+                                        return null;
                                     }
                                     return (
-                                        <div className="absolute inset-0 z-0 overflow-hidden rounded-2xl bg-white shadow-2xl">
-                                            <div className="flex w-full flex-col">
-                                                <div className="relative w-full">
-                                                    <div className="aspect-square w-full">
-                                                        <img
-                                                            src={
-                                                                nextPair[0]
-                                                                    .imageUrl
-                                                            }
-                                                            alt="Upcoming top"
-                                                            className="h-full w-full object-cover"
-                                                            draggable={false}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="h-px w-full bg-gray-200" />
-                                                <div className="relative w-full">
-                                                    <div className="aspect-square w-full">
-                                                        <img
-                                                            src={
-                                                                nextPair[1]
-                                                                    .imageUrl
-                                                            }
-                                                            alt="Upcoming bottom"
-                                                            className="h-full w-full object-cover"
-                                                            draggable={false}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div className="absolute inset-0 z-0">
+                                            <SwipeCard
+                                                pair={nextPair}
+                                                readOnly
+                                                bare
+                                            />
                                         </div>
                                     );
                                 })()}
@@ -105,7 +80,18 @@ export const RatingArena = () => {
                                         key={`${imagePair[0].imageId}-${imagePair[1].imageId}`}
                                         pair={imagePair}
                                         onComplete={handleImageClick}
+                                        bare
                                     />
+                                </div>
+
+                                {/* Static instruction overlay to avoid per-card visual shifts */}
+                                <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-between p-3">
+                                    <div className="rounded-full bg-black/40 px-3 py-1 text-xs font-medium text-white">
+                                        Swipe up = choose top
+                                    </div>
+                                    <div className="rounded-full bg-black/40 px-3 py-1 text-xs font-medium text-white">
+                                        Swipe down = choose bottom
+                                    </div>
                                 </div>
                             </div>
                         </div>

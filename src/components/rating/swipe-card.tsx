@@ -4,10 +4,17 @@ import type { ImageData } from "../../services/core/image-queue-service";
 
 interface SwipeCardProps {
     pair: ImageData[];
-    onComplete: (winner: ImageData) => void;
+    onComplete?: (winner: ImageData) => void;
+    readOnly?: boolean;
+    bare?: boolean; // Render content without its own rounded/bg/shadow
 }
 
-export const SwipeCard = ({ pair, onComplete }: SwipeCardProps) => {
+export const SwipeCard = ({
+    pair,
+    onComplete,
+    readOnly = false,
+    bare = false,
+}: SwipeCardProps) => {
     const topImage = pair[0];
     const bottomImage = pair[1];
 
@@ -80,9 +87,9 @@ export const SwipeCard = ({ pair, onComplete }: SwipeCardProps) => {
     return (
         <motion.div
             ref={ref}
-            className="relative z-10 w-full overflow-hidden rounded-2xl bg-white shadow-2xl"
+            className="relative z-10 h-full w-full"
             style={{ touchAction: "none" }}
-            drag={exitingDir === null ? "y" : false}
+            drag={readOnly ? false : exitingDir === null ? "y" : false}
             dragElastic={0.2}
             dragMomentum={false}
             onDragEnd={handleDragEnd}
@@ -103,11 +110,18 @@ export const SwipeCard = ({ pair, onComplete }: SwipeCardProps) => {
                 // Only trigger on exit animations
                 if (exitingDir && winner && !completedRef.current) {
                     completedRef.current = true;
-                    onComplete(winner);
+                    onComplete?.(winner);
                 }
             }}
         >
-            <div className="flex flex-col">
+            {/* Card content; optionally bare (no own chrome) when parent provides frame */}
+            <div
+                className={
+                    bare
+                        ? "flex h-full w-full flex-col"
+                        : "flex h-full w-full flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+                }
+            >
                 <button
                     type="button"
                     className="relative w-full overflow-hidden"
@@ -139,16 +153,6 @@ export const SwipeCard = ({ pair, onComplete }: SwipeCardProps) => {
                         />
                     </div>
                 </button>
-            </div>
-
-            {/* Direction labels (optional subtle hint) */}
-            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-between p-4">
-                <div className="rounded-full bg-black/40 px-3 py-1 text-xs font-medium text-white">
-                    Swipe up = choose top
-                </div>
-                <div className="rounded-full bg-black/40 px-3 py-1 text-xs font-medium text-white">
-                    Swipe down = choose bottom
-                </div>
             </div>
         </motion.div>
     );
