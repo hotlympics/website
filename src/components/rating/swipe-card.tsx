@@ -158,7 +158,18 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
                 drag={readOnly ? false : exitingDir === null ? "y" : false}
                 dragElastic={0.2}
                 dragMomentum={false}
+                dragSnapToOrigin
+                dragTransition={{
+                    // Consistent, smooth snap-back spring when not accepted
+                    bounceStiffness: 600,
+                    bounceDamping: 28,
+                    power: 0.2,
+                    timeConstant: 250,
+                }}
                 onDragEnd={handleDragEnd}
+                onPointerCancel={() => {
+                    // Let Motion handle snap-back via dragSnapToOrigin to avoid conflicts
+                }}
                 whileDrag={{ scale: 0.995 }}
                 initial={{ y: 0, rotate: 0, scale: 1 }}
                 animate={{
@@ -172,7 +183,12 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
                         exitingDir === null ? 0 : exitingDir === "up" ? -3 : 3,
                     scale: exitingDir === null ? 1 : 0.98,
                 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                transition={{
+                    // Use a spring for exit/snap-to-animate transitions; drag snap uses dragTransition
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
+                }}
                 onAnimationComplete={() => {
                     // Only trigger on exit animations
                     if (exitingDir && winner && !completedRef.current) {
