@@ -197,8 +197,29 @@ const getCurrentPair = (): ImageData[] | null => {
     ];
 };
 
+const peekNextPair = (): ImageData[] | null => {
+    const queue = getQueue();
+
+    const nextIndex = queue.currentIndex + 2;
+
+    if (queue.activeBlock.length < 2) {
+        return null;
+    }
+
+    if (nextIndex >= queue.activeBlock.length - 1) {
+        // Would rotate to buffer block
+        if (queue.bufferBlock && queue.bufferBlock.length >= 2) {
+            return [queue.bufferBlock[0], queue.bufferBlock[1]];
+        }
+        return null;
+    }
+
+    return [queue.activeBlock[nextIndex], queue.activeBlock[nextIndex + 1]];
+};
+
 export const imageQueueService = {
     initialize,
     getNextPair,
     getCurrentPair,
+    peekNextPair,
 };

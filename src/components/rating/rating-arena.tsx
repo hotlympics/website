@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/auth/use-auth.js";
 import { useRatingQueue } from "../../hooks/rating/use-rating-queue.js";
-import { ImageElement } from "./image-element.js";
+import { imageQueueService } from "../../services/core/image-queue-service.js";
+import { SwipeCard } from "./swipe-card.js";
 
 export const RatingArena = () => {
     const navigate = useNavigate();
@@ -10,9 +11,9 @@ export const RatingArena = () => {
         useRatingQueue();
 
     return (
-        <div className="min-h-screen bg-gray-100 p-4">
+        <div className="min-h-screen overflow-hidden bg-gray-100 p-3">
             <div className="mx-auto max-w-7xl">
-                <div className="absolute top-4 right-4">
+                <div className="absolute top-3 right-3">
                     <button
                         onClick={() => {
                             if (user) {
@@ -27,11 +28,11 @@ export const RatingArena = () => {
                         Add your photo
                     </button>
                 </div>
-                <div className="mb-6 text-center">
-                    <h1 className="mb-6 text-4xl font-bold text-gray-800">
-                        Hotlympics Rating Arena
+                <div className="mb-3 text-center">
+                    <h1 className="mb-2 text-2xl font-bold text-gray-800">
+                        Hotlympics
                     </h1>
-                    <p className="text-xl text-gray-600">Pick who you prefer</p>
+                    <p className="text-sm text-gray-600">Pick who you prefer</p>
                 </div>
 
                 {loadingImages ? (
@@ -46,17 +47,68 @@ export const RatingArena = () => {
                         We encountered an error. Please refresh the page
                     </div>
                 ) : imagePair && imagePair.length === 2 ? (
-                    <div className="flex flex-col items-center justify-center gap-8">
-                        <ImageElement
-                            ImagePair={imagePair}
-                            top={true}
-                            onClick={handleImageClick}
-                        />
-                        <ImageElement
-                            ImagePair={imagePair}
-                            top={false}
-                            onClick={handleImageClick}
-                        />
+                    <div className="flex items-center justify-center py-2">
+                        <div
+                            className="relative w-full"
+                            style={{
+                                maxWidth: "min(24rem, calc((100vh - 140px)/2))",
+                            }}
+                        >
+                            <div className="relative aspect-[1/2] w-full">
+                                {/* Background next pair, visible from start of swipe */}
+                                {(() => {
+                                    const nextPair =
+                                        imageQueueService.peekNextPair();
+                                    if (!nextPair || nextPair.length !== 2) {
+                                        return (
+                                            <div className="absolute inset-0 rounded-2xl bg-gray-200" />
+                                        );
+                                    }
+                                    return (
+                                        <div className="absolute inset-0 z-0 overflow-hidden rounded-2xl bg-white shadow-2xl">
+                                            <div className="flex w-full flex-col">
+                                                <div className="relative w-full">
+                                                    <div className="aspect-square w-full">
+                                                        <img
+                                                            src={
+                                                                nextPair[0]
+                                                                    .imageUrl
+                                                            }
+                                                            alt="Upcoming top"
+                                                            className="h-full w-full object-cover"
+                                                            draggable={false}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="h-px w-full bg-gray-200" />
+                                                <div className="relative w-full">
+                                                    <div className="aspect-square w-full">
+                                                        <img
+                                                            src={
+                                                                nextPair[1]
+                                                                    .imageUrl
+                                                            }
+                                                            alt="Upcoming bottom"
+                                                            className="h-full w-full object-cover"
+                                                            draggable={false}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })()}
+
+                                {/* Top swipeable card */}
+                                <div className="absolute inset-0 z-10">
+                                    <SwipeCard
+                                        key={`${imagePair[0].imageId}-${imagePair[1].imageId}`}
+                                        pair={imagePair}
+                                        onComplete={handleImageClick}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 ) : (
                     <div className="flex items-center justify-center py-32">
