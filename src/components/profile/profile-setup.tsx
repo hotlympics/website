@@ -29,7 +29,7 @@ const ProfileSetup = ({
     };
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen">
             <div className="mx-auto max-w-md px-4 py-8">
                 <h1 className="mb-8 text-center text-3xl font-bold text-gray-800">
                     Complete Your Profile

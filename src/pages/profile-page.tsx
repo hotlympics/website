@@ -105,7 +105,7 @@ const ProfilePage = () => {
     // Loading state
     if (authLoading || !user) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-gray-100">
+            <div className="flex min-h-screen items-center justify-center">
                 <div className="text-center">
                     <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600"></div>
                     <p className="text-gray-600">Loading...</p>
@@ -128,7 +128,7 @@ const ProfilePage = () => {
 
     // Main profile page
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen">
             <div className="mx-auto max-w-6xl px-4 py-8">
                 <button
                     onClick={navigateToHome}
