@@ -17,7 +17,6 @@ const MenuBar = () => {
             label: "Leaderboard",
             onClick: () => {
                 // TODO: Implement leaderboard navigation
-                console.log("Leaderboard clicked");
             },
         },
         {
@@ -36,7 +35,6 @@ const MenuBar = () => {
             label: "Settings",
             onClick: () => {
                 // TODO: Implement settings navigation
-                console.log("Settings clicked");
             },
         },
         {
