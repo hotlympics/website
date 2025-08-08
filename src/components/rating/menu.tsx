@@ -6,7 +6,7 @@ const MenuBar = () => {
     const { user, loading } = useAuth();
 
     return (
-        <div className="flex w-full items-center justify-end rounded-2xl bg-gray-100 p-2 shadow-md sm:p-4">
+        <div className="mx-3 flex w-[calc(100%-1.5rem)] items-center justify-end rounded-2xl bg-white/80 p-3 shadow-md backdrop-blur-sm sm:mx-4 sm:w-[calc(100%-2rem)] sm:p-5">
             <button
                 onClick={() => {
                     if (user) {
@@ -16,7 +16,7 @@ const MenuBar = () => {
                     }
                 }}
                 disabled={loading}
-                className="rounded-lg bg-blue-600 px-2 py-1 text-sm text-white shadow-md transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-base"
+                className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white shadow-md transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-base"
             >
                 {user ? "Profile" : "Sign In"}
             </button>

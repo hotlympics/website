@@ -21,7 +21,7 @@ const SignInPage = () => {
 
     if (magicLinkSent) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+            <div className="flex min-h-screen items-center justify-center p-4">
                 <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
                     <MagicLinkSent
                         email={email}
@@ -33,7 +33,7 @@ const SignInPage = () => {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+        <div className="flex min-h-screen items-center justify-center p-4">
             <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
                 <SignInForm
                     redirect={redirect}

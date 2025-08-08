@@ -27,7 +27,7 @@ export const RatingArena = () => {
     }, [imagePair]);
 
     return (
-        <div className="relative flex min-h-[100dvh] flex-col items-center justify-between overflow-hidden bg-gray-100">
+        <div className="relative flex min-h-[100dvh] flex-col items-center justify-between overflow-hidden">
             {/* Centered content with bottom margin for MenuBar */}
             <div
                 className="mt-4 flex w-full flex-grow flex-col items-center justify-center pb-24"

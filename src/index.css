@@ -9,7 +9,7 @@
     body,
     #root {
         min-height: 100dvh;
-        background-color: #f3f4f6; /* tailwind bg-gray-100 */
+        background-color: #e6f0ff; /* light blue */
     }
 }
 
