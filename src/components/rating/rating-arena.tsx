@@ -84,16 +84,6 @@ export const RatingArena = () => {
                                             bare
                                         />
                                     </div>
-
-                                    {/* Static instruction overlay to avoid per-card visual shifts */}
-                                    <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-between p-3">
-                                        <div className="rounded-full bg-black/40 px-3 py-1 text-xs font-medium text-white">
-                                            Swipe up = choose top
-                                        </div>
-                                        <div className="rounded-full bg-black/40 px-3 py-1 text-xs font-medium text-white">
-                                            Swipe down = choose bottom
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
