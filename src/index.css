@@ -4,6 +4,13 @@
     html {
         font-family: "Inter", sans-serif;
     }
+    /* Ensure body spans dynamic viewport height and respects safe areas */
+    html,
+    body,
+    #root {
+        min-height: 100dvh;
+        background-color: #f3f4f6; /* tailwind bg-gray-100 */
+    }
 }
 
 @layer components {
@@ -40,9 +47,9 @@
 }
 
 .animate-float-up {
-    animation: float-down 1.8s ease-out forwards;
+    animation: float-up 1.8s ease-out forwards;
 }
 
 .animate-float-down {
-    animation: float-up 1.8s ease-out forwards;
+    animation: float-down 1.8s ease-out forwards;
 }

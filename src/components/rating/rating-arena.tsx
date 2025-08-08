@@ -27,9 +27,14 @@ export const RatingArena = () => {
     }, [imagePair]);
 
     return (
-        <div className="relative flex h-screen flex-col items-center justify-between overflow-hidden bg-gray-100">
+        <div className="relative flex min-h-[100dvh] flex-col items-center justify-between overflow-hidden bg-gray-100">
             {/* Centered content with bottom margin for MenuBar */}
-            <div className="mt-4 flex w-full flex-grow flex-col items-center justify-center pb-28">
+            <div
+                className="mt-4 flex w-full flex-grow flex-col items-center justify-center pb-24"
+                style={{
+                    paddingBottom: "calc(6rem + env(safe-area-inset-bottom))",
+                }}
+            >
                 <div className="mx-auto w-full max-w-7xl px-3">
                     {loadingImages ? (
                         <div className="flex items-center justify-center py-32">
@@ -48,7 +53,7 @@ export const RatingArena = () => {
                                 className="relative w-full"
                                 style={{
                                     maxWidth:
-                                        "min(24rem, calc((100vh - 140px)/2))",
+                                        "min(24rem, calc((100dvh - 140px)/2))",
                                 }}
                             >
                                 {/* Fixed shadow frame that does not move with cards */}
@@ -98,7 +103,14 @@ export const RatingArena = () => {
             </div>
 
             {/* MenuBar pinned to bottom */}
-            <div className="absolute bottom-0 mb-4 flex w-full justify-center px-3">
+            <div
+                className="fixed right-0 bottom-0 left-0 z-20 flex w-full justify-center px-3 pb-4"
+                style={{
+                    paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
+                    paddingLeft: "env(safe-area-inset-left)",
+                    paddingRight: "env(safe-area-inset-right)",
+                }}
+            >
                 <div className="w-full max-w-7xl">
                     <MenuBar />
                 </div>
