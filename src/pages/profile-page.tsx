@@ -130,13 +130,6 @@ const ProfilePage = () => {
     return (
         <div className="min-h-screen">
             <div className="mx-auto max-w-6xl px-4 py-8">
-                <button
-                    onClick={navigateToHome}
-                    className="mb-4 text-gray-600 hover:text-gray-800"
-                >
-                    ← Back to rating arena
-                </button>
-
                 <div className="mb-8 flex items-center justify-between">
                     <h1 className="text-3xl font-bold text-gray-800">
                         My Account
