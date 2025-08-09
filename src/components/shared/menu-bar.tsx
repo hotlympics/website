@@ -1,4 +1,4 @@
-import { ChartColumnIncreasing, House, ImagePlus, Settings, UserPen } from "lucide-react";
+import { ChartColumnIncreasing, House, Images, Plus, UserPen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/auth/use-auth.js";
 
@@ -20,7 +20,7 @@ const MenuBar = () => {
             },
         },
         {
-            icon: ImagePlus,
+            icon: Plus,
             label: "Add",
             onClick: () => {
                 if (user) {
@@ -31,10 +31,14 @@ const MenuBar = () => {
             },
         },
         {
-            icon: Settings,
-            label: "Settings",
+            icon: Images,
+            label: "My Photos",
             onClick: () => {
-                // TODO: Implement settings navigation
+                if (user) {
+                    navigate("/my-photos");
+                } else {
+                    navigate("/signin?redirect=/my-photos");
+                }
             },
         },
         {
