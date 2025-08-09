@@ -4,6 +4,7 @@ import PhotoGallery from "../components/profile/photo-gallery";
 import PhotoUpload from "../components/profile/photo-upload";
 import PoolSelection from "../components/profile/pool-selection";
 import ProfileSetup from "../components/profile/profile-setup";
+import MenuBar from "../components/shared/menu-bar";
 import { usePhotoUpload } from "../hooks/profile/use-photo-upload";
 import { usePoolManagement } from "../hooks/profile/use-pool-management";
 import { useProfile } from "../hooks/profile/use-profile";
@@ -129,7 +130,7 @@ const ProfilePage = () => {
     // Main profile page
     return (
         <div className="min-h-screen">
-            <div className="mx-auto max-w-6xl px-4 py-8">
+            <div className="mx-auto max-w-6xl px-4 py-8 pb-32">
                 <button
                     onClick={navigateToHome}
                     className="mb-4 text-gray-600 hover:text-gray-800"
@@ -214,6 +215,20 @@ const ProfilePage = () => {
                 }
                 warningMessage="Are you sure you want to proceed?"
             />
+
+            {/* MenuBar pinned to bottom */}
+            <div
+                className="fixed right-0 bottom-0 left-0 z-20 flex w-full justify-center px-3 pb-4"
+                style={{
+                    paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
+                    paddingLeft: "env(safe-area-inset-left)",
+                    paddingRight: "env(safe-area-inset-right)",
+                }}
+            >
+                <div className="w-full max-w-7xl">
+                    <MenuBar />
+                </div>
+            </div>
         </div>
     );
 };
