@@ -68,9 +68,6 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
             (dir: "up" | "down") => {
                 if (exitingDir) return;
                 setExitingDir(dir);
-                // We don't immediately disable dragging so that Motion can resolve
-                // any residual pointer state without locking out the user.
-                // Drag will be effectively ignored because animate takes control.
             },
             [exitingDir]
         );
@@ -95,7 +92,6 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
                     Math.abs(offsetY) > threshold ||
                     Math.abs(velocityY) > velocityThreshold;
                 if (!shouldAccept) {
-                    // Snap back by resetting exitingDir (no-op) and keep drag enabled
                     setExitingDir(null);
                     return;
                 }
@@ -147,8 +143,8 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
             exitingDir === "up"
                 ? topImage
                 : exitingDir === "down"
-                  ? bottomImage
-                  : null;
+                    ? bottomImage
+                    : null;
 
         return (
             <motion.div
@@ -158,7 +154,16 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
                 drag={readOnly ? false : exitingDir === null ? "y" : false}
                 dragElastic={0.2}
                 dragMomentum={false}
+                dragSnapToOrigin
+                dragTransition={{
+                    bounceStiffness: 600,
+                    bounceDamping: 28,
+                    power: 0.2,
+                    timeConstant: 250,
+                }}
                 onDragEnd={handleDragEnd}
+                onPointerCancel={() => {
+                }}
                 whileDrag={{ scale: 0.995 }}
                 initial={{ y: 0, rotate: 0, scale: 1 }}
                 animate={{
@@ -166,15 +171,18 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
                         exitingDir === "up"
                             ? -yOffscreen
                             : exitingDir === "down"
-                              ? yOffscreen
-                              : 0,
+                                ? yOffscreen
+                                : 0,
                     rotate:
                         exitingDir === null ? 0 : exitingDir === "up" ? -3 : 3,
                     scale: exitingDir === null ? 1 : 0.98,
                 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
+                }}
                 onAnimationComplete={() => {
-                    // Only trigger on exit animations
                     if (exitingDir && winner && !completedRef.current) {
                         completedRef.current = true;
                         onComplete?.(winner);
@@ -233,11 +241,10 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
 
                         {/* Emoji bar for top anchored at bottom (near middle boundary) */}
                         <div
-                            className={`absolute bottom-0 left-0 z-10 w-full overflow-hidden rounded-lg backdrop-blur-sm transition-all duration-300 ease-in-out ${
-                                topShowBar
-                                    ? "max-h-24 opacity-100"
-                                    : "max-h-0 opacity-0"
-                            }`}
+                            className={`absolute bottom-0 left-0 z-10 w-full overflow-hidden rounded-lg backdrop-blur-sm transition-all duration-300 ease-in-out ${topShowBar
+                                ? "max-h-24 opacity-100"
+                                : "max-h-0 opacity-0"
+                                }`}
                             style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
                         >
                             <div className="flex items-center justify-center gap-4 px-4 py-3 text-2xl">
@@ -349,11 +356,10 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
 
                         {/* Emoji bar for bottom anchored at top (near middle boundary) */}
                         <div
-                            className={`absolute top-0 left-0 z-10 w-full overflow-hidden rounded-lg backdrop-blur-sm transition-all duration-300 ease-in-out ${
-                                bottomShowBar
-                                    ? "max-h-24 opacity-100"
-                                    : "max-h-0 opacity-0"
-                            }`}
+                            className={`absolute top-0 left-0 z-10 w-full overflow-hidden rounded-lg backdrop-blur-sm transition-all duration-300 ease-in-out ${bottomShowBar
+                                ? "max-h-24 opacity-100"
+                                : "max-h-0 opacity-0"
+                                }`}
                             style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
                         >
                             <div className="flex items-center justify-center gap-4 px-4 py-3 text-2xl">

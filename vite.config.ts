@@ -31,6 +31,18 @@ export default defineConfig({
             "@": path.resolve(__dirname, "./src"),
         },
     },
+    server: {
+        host: true,
+        port: 5173,
+        proxy: {
+            "/api": {
+                target: "http://127.0.0.1:3000",
+                changeOrigin: true,
+                secure: false,
+                rewrite: (path) => path.replace(/^\/api/, ""),
+            },
+        },
+    },
     define: {
         __SERVER_ENV__: JSON.stringify(process.env.SERVER_ENV || "remote"),
     },
