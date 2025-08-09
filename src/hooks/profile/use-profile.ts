@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { CURRENT_TOS_VERSION } from "../../config/tos-config";
 import { firebaseAuthService } from "../../services/auth/firebase-auth";
 import { useAuth } from "../auth/use-auth";
-import { CURRENT_TOS_VERSION } from "../../config/tos-config";
 
 interface UserInfo {
     email: string;
@@ -133,20 +133,28 @@ export const useProfile = () => {
 
     const isProfileComplete = () => {
         return (
-            user && 
-            user.gender && 
-            user.gender !== "unknown" && 
+            user &&
+            user.gender &&
+            user.gender !== "unknown" &&
             user.dateOfBirth &&
             user.tosVersion === CURRENT_TOS_VERSION
         );
     };
 
     const needsGenderAndDob = () => {
-        return !user || !user.gender || user.gender === "unknown" || !user.dateOfBirth;
+        return (
+            !user ||
+            !user.gender ||
+            user.gender === "unknown" ||
+            !user.dateOfBirth
+        );
     };
 
     const needsTosAcceptance = () => {
-        return !!user && (!user.tosVersion || user.tosVersion !== CURRENT_TOS_VERSION);
+        return (
+            !!user &&
+            (!user.tosVersion || user.tosVersion !== CURRENT_TOS_VERSION)
+        );
     };
 
     const acceptTos = async () => {
@@ -185,7 +193,9 @@ export const useProfile = () => {
             return true;
         } catch (err) {
             setError(
-                err instanceof Error ? err.message : "Failed to accept Terms of Service"
+                err instanceof Error
+                    ? err.message
+                    : "Failed to accept Terms of Service"
             );
             return false;
         }

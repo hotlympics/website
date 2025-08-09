@@ -9,16 +9,18 @@
  *
  */
 
+export const CURRENT_TOS_VERSION = "1.0";
 
-export const CURRENT_TOS_VERSION = "1.0"
-
-export const TOS_VERSIONS: Record<string, { file: string; effectiveDate: string }> = {
+export const TOS_VERSIONS: Record<
+    string,
+    { file: string; effectiveDate: string }
+> = {
     "1.0": {
         file: "/legal/tos-v1.0.md",
-        effectiveDate: "09.08.2025" // dd.mm.yyyy
+        effectiveDate: "09.08.2025", // dd.mm.yyyy
     },
-}
+};
 
 export const getCurrentTosFile = () => {
-    return TOS_VERSIONS[CURRENT_TOS_VERSION]?.file || "/legal/tos-v1.0.md"
-}
+    return TOS_VERSIONS[CURRENT_TOS_VERSION]?.file || "/legal/tos-v1.0.md";
+};

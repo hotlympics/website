@@ -1,21 +1,21 @@
-import { useState } from "react"
-import { TermsOfService } from "./terms-of-service"
+import { useState } from "react";
+import { TermsOfService } from "./terms-of-service";
 
 interface ProfileSetupData {
-    gender: "unknown" | "male" | "female"
-    dateOfBirth: string
+    gender: "unknown" | "male" | "female";
+    dateOfBirth: string;
 }
 
 interface ProfileSetupSequentialProps {
-    needsGenderAndDob: boolean
-    needsTosAcceptance: boolean
-    onSubmitProfile: (data: ProfileSetupData) => Promise<void>
-    onAcceptTos: () => Promise<boolean>
-    onLogout: () => void
-    isLoading: boolean
-    error: string | null
-    initialGender?: "unknown" | "male" | "female"
-    initialDateOfBirth?: string | null
+    needsGenderAndDob: boolean;
+    needsTosAcceptance: boolean;
+    onSubmitProfile: (data: ProfileSetupData) => Promise<void>;
+    onAcceptTos: () => Promise<boolean>;
+    onLogout: () => void;
+    isLoading: boolean;
+    error: string | null;
+    initialGender?: "unknown" | "male" | "female";
+    initialDateOfBirth?: string | null;
 }
 
 const ProfileSetupSequential = ({
@@ -32,27 +32,27 @@ const ProfileSetupSequential = ({
     const [profileForm, setProfileForm] = useState<ProfileSetupData>({
         gender: initialGender,
         dateOfBirth: initialDateOfBirth || "",
-    })
-    const [isProcessingTos, setIsProcessingTos] = useState(false)
+    });
+    const [isProcessingTos, setIsProcessingTos] = useState(false);
 
     const handleProfileSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        await onSubmitProfile(profileForm)
-    }
+        e.preventDefault();
+        await onSubmitProfile(profileForm);
+    };
 
     const handleAcceptTos = async () => {
-        setIsProcessingTos(true)
-        const success = await onAcceptTos()
-        setIsProcessingTos(false)
+        setIsProcessingTos(true);
+        const success = await onAcceptTos();
+        setIsProcessingTos(false);
         if (!success) {
             // Error is handled by the parent component
         }
-    }
+    };
 
     const handleDeclineTos = () => {
         // User declined TOS, log them out
-        onLogout()
-    }
+        onLogout();
+    };
 
     // Show gender/DOB form if needed
     if (needsGenderAndDob) {
@@ -69,7 +69,10 @@ const ProfileSetupSequential = ({
                             continue.
                         </p>
 
-                        <form onSubmit={handleProfileSubmit} className="space-y-6">
+                        <form
+                            onSubmit={handleProfileSubmit}
+                            className="space-y-6"
+                        >
                             <div>
                                 <label
                                     htmlFor="gender"
@@ -124,7 +127,9 @@ const ProfileSetupSequential = ({
 
                             {error && (
                                 <div className="rounded-md bg-red-50 p-4">
-                                    <p className="text-sm text-red-800">{error}</p>
+                                    <p className="text-sm text-red-800">
+                                        {error}
+                                    </p>
                                 </div>
                             )}
 
@@ -159,7 +164,7 @@ const ProfileSetupSequential = ({
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 
     // Show TOS acceptance if needed
@@ -169,13 +174,13 @@ const ProfileSetupSequential = ({
                 <div className="mx-auto max-w-2xl px-4 py-8">
                     <div className="rounded-lg bg-white p-8 shadow-md">
                         {error && (
-                            <div className="rounded-md bg-red-50 p-4 mb-4">
+                            <div className="mb-4 rounded-md bg-red-50 p-4">
                                 <p className="text-sm text-red-800">{error}</p>
                             </div>
                         )}
 
                         {isProcessingTos ? (
-                            <div className="text-center py-8">
+                            <div className="py-8 text-center">
                                 <p className="text-gray-600">Processing...</p>
                             </div>
                         ) : (
@@ -187,11 +192,11 @@ const ProfileSetupSequential = ({
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 
     // This shouldn't happen, but just in case
-    return null
-}
+    return null;
+};
 
-export default ProfileSetupSequential
+export default ProfileSetupSequential;
