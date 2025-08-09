@@ -10,7 +10,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     const location = useLocation();
     
     // Determine which pages should show the menu bar
-    const showMenuBar = ["/", "/profile", "/my-photos"].includes(location.pathname);
+    const showMenuBar = ["/", "/profile", "/my-photos", "/leaderboard"].includes(location.pathname);
     
     // Check if we're on the rating page (which should not scroll)
     const isRatingPage = location.pathname === "/";

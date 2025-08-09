@@ -15,9 +15,7 @@ const MenuBar = () => {
         {
             icon: ChartColumnIncreasing,
             label: "Leaderboard",
-            onClick: () => {
-                // TODO: Implement leaderboard navigation
-            },
+            onClick: () => navigate("/leaderboard"),
         },
         {
             icon: Plus,
