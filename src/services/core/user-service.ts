@@ -7,6 +7,8 @@ export interface User {
     googleId: string | null;
     gender: "unknown" | "male" | "female";
     dateOfBirth: Date | null;
+    tosVersion: string | null;
+    tosAcceptedAt: Date | null;
     rateCount: number;
     uploadedImageIds: string[];
     poolImageIds: string[];
