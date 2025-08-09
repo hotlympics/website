@@ -1,4 +1,5 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import AppLayout from "./components/layout/app-layout.js";
 import { AuthProvider } from "./context/auth-context";
 import ProfilePage from "./pages/profile-page.js";
 import RatePage from "./pages/rate-page.js";
@@ -10,16 +11,18 @@ const App = () => {
     return (
         <AuthProvider>
             <Router>
-                <Routes>
-                    {/* Top-level routes */}
-                    <Route path="/" element={<RatePage />} />
-                    <Route path="/signin" element={<SignInPage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
+                <AppLayout>
+                    <Routes>
+                        {/* Top-level routes */}
+                        <Route path="/" element={<RatePage />} />
+                        <Route path="/signin" element={<SignInPage />} />
+                        <Route path="/profile" element={<ProfilePage />} />
 
-                    {/* Nested route groups */}
-                    <Route path="/auth/*" element={<AuthRoutes />} />
-                    <Route path="/admin/*" element={<AdminRoutes />} />
-                </Routes>
+                        {/* Nested route groups */}
+                        <Route path="/auth/*" element={<AuthRoutes />} />
+                        <Route path="/admin/*" element={<AdminRoutes />} />
+                    </Routes>
+                </AppLayout>
             </Router>
         </AuthProvider>
     );

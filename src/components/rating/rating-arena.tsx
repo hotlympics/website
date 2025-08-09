@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useRatingQueue } from "../../hooks/rating/use-rating-queue.js";
 import { imageQueueService } from "../../services/core/image-queue-service.js";
-import MenuBar from "../shared/menu-bar.js";
 import { SwipeCard, type SwipeCardHandle } from "./swipe-card.js";
 
 export const RatingArena = () => {
@@ -99,20 +98,6 @@ export const RatingArena = () => {
                             </p>
                         </div>
                     )}
-                </div>
-            </div>
-
-            {/* MenuBar pinned to bottom */}
-            <div
-                className="fixed right-0 bottom-0 left-0 z-20 flex w-full justify-center px-3 pb-4"
-                style={{
-                    paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
-                    paddingLeft: "env(safe-area-inset-left)",
-                    paddingRight: "env(safe-area-inset-right)",
-                }}
-            >
-                <div className="w-full max-w-7xl">
-                    <MenuBar />
                 </div>
             </div>
         </div>
