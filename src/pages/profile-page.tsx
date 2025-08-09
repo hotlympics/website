@@ -22,7 +22,6 @@ const ProfilePage = () => {
         successMessage,
         updateProfile,
         logout,
-        navigateToHome,
         showSuccessMessage,
         isProfileComplete,
         refreshUserInfo,
