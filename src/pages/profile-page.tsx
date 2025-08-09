@@ -3,7 +3,7 @@ import DeleteConfirmationModal from "../components/profile/delete-confirmation-m
 import PhotoGallery from "../components/profile/photo-gallery";
 import PhotoUpload from "../components/profile/photo-upload";
 import PoolSelection from "../components/profile/pool-selection";
-import ProfileSetup from "../components/profile/profile-setup";
+import ProfileSetupSequential from "../components/profile/profile-setup-sequential";
 import { usePhotoUpload } from "../hooks/profile/use-photo-upload";
 import { usePoolManagement } from "../hooks/profile/use-pool-management";
 import { useProfile } from "../hooks/profile/use-profile";
@@ -21,10 +21,13 @@ const ProfilePage = () => {
         error,
         successMessage,
         updateProfile,
+        acceptTos,
         logout,
         navigateToHome,
         showSuccessMessage,
         isProfileComplete,
+        needsGenderAndDob,
+        needsTosAcceptance,
         refreshUserInfo,
     } = useProfile();
 
@@ -114,14 +117,19 @@ const ProfilePage = () => {
         );
     }
 
-    // Profile setup screen
+    // Profile setup screen (gender/DOB and/or TOS)
     if (!isProfileComplete) {
         return (
-            <ProfileSetup
-                onSubmit={updateProfile}
+            <ProfileSetupSequential
+                needsGenderAndDob={needsGenderAndDob}
+                needsTosAcceptance={needsTosAcceptance}
+                onSubmitProfile={updateProfile}
+                onAcceptTos={acceptTos}
                 onLogout={logout}
                 isLoading={isUpdatingProfile}
                 error={error}
+                initialGender={user?.gender}
+                initialDateOfBirth={user?.dateOfBirth ?? undefined}
             />
         );
     }

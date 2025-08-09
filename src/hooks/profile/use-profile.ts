@@ -2,11 +2,14 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { firebaseAuthService } from "../../services/auth/firebase-auth";
 import { useAuth } from "../auth/use-auth";
+import { CURRENT_TOS_VERSION } from "../../config/tos-config";
 
 interface UserInfo {
     email: string;
     gender?: "unknown" | "male" | "female";
     dateOfBirth?: string | null;
+    tosVersion?: string | null;
+    tosAcceptedAt?: string | null;
     poolImageIds?: string[];
 }
 
@@ -130,8 +133,62 @@ export const useProfile = () => {
 
     const isProfileComplete = () => {
         return (
-            user && user.gender && user.gender !== "unknown" && user.dateOfBirth
+            user && 
+            user.gender && 
+            user.gender !== "unknown" && 
+            user.dateOfBirth &&
+            user.tosVersion === CURRENT_TOS_VERSION
         );
+    };
+
+    const needsGenderAndDob = () => {
+        return !user || !user.gender || user.gender === "unknown" || !user.dateOfBirth;
+    };
+
+    const needsTosAcceptance = () => {
+        return !!user && (!user.tosVersion || user.tosVersion !== CURRENT_TOS_VERSION);
+    };
+
+    const acceptTos = async () => {
+        setError(null);
+        try {
+            const idToken = await firebaseAuthService.getIdToken();
+            if (!idToken) {
+                throw new Error("Not authenticated");
+            }
+
+            const response = await fetch(
+                `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/user/accept-tos`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${idToken}`,
+                    },
+                    body: JSON.stringify({
+                        tosVersion: CURRENT_TOS_VERSION,
+                    }),
+                }
+            );
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(
+                    error.error?.message || "Failed to accept Terms of Service"
+                );
+            }
+
+            const result = await response.json();
+            if (result.user) {
+                setUser(result.user);
+            }
+            return true;
+        } catch (err) {
+            setError(
+                err instanceof Error ? err.message : "Failed to accept Terms of Service"
+            );
+            return false;
+        }
     };
 
     return {
@@ -141,11 +198,14 @@ export const useProfile = () => {
         error,
         successMessage,
         updateProfile,
+        acceptTos,
         logout,
         navigateToHome,
         showSuccessMessage,
         clearError,
         isProfileComplete: isProfileComplete(),
+        needsGenderAndDob: needsGenderAndDob(),
+        needsTosAcceptance: needsTosAcceptance(),
         refreshUserInfo: fetchUserInfo,
     };
 };
