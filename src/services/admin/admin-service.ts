@@ -26,7 +26,8 @@ export interface AdminImageData {
     wins: number;
     losses: number;
     draws: number;
-    eloScore: number;
+    rating: number;
+    rd: number;
     inPool: boolean;
 }
 
