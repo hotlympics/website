@@ -1,4 +1,4 @@
-import type { StatCardProps } from "../../utils/types/admin/common";
+import type { StatCardProps } from "../../../utils/types/admin/common";
 
 const StatCard = ({ title, value, icon, className = "" }: StatCardProps) => {
     return (

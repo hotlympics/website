@@ -1,4 +1,4 @@
-import type { PaginationProps } from "../../utils/types/admin/common";
+import type { PaginationProps } from "../../../utils/types/admin/common";
 
 const Pagination = ({
     currentPage,

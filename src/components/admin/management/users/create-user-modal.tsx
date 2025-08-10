@@ -2,9 +2,9 @@ import { useState } from "react";
 import {
     compressImage,
     validateImageFile,
-} from "../../../utils/shared/image-compression";
-import type { CreateUserData } from "../../../utils/types/admin/admin";
-import ImageCropModal from "../../shared/image-crop-modal";
+} from "../../../../utils/shared/image-compression";
+import type { CreateUserData } from "../../../../utils/types/admin/admin";
+import ImageCropModal from "../../../shared/image-crop-modal";
 
 interface CreateUserModalProps {
     isOpen: boolean;

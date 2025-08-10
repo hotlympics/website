@@ -1,9 +1,9 @@
-import { formatDate } from "../../../utils/admin/formatters";
+import { formatDate } from "../../../../utils/admin/formatters";
 import type {
     AdminImageData,
     AdminUser,
     UserDetails as UserDetailsType,
-} from "../../../utils/types/admin/admin";
+} from "../../../../utils/types/admin/admin";
 import UserDetails from "./user-details";
 
 interface UserRowProps {

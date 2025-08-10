@@ -1,4 +1,4 @@
-import type { SearchInputProps } from "../../utils/types/admin/common";
+import type { SearchInputProps } from "../../../utils/types/admin/common";
 
 const SearchInput = ({
     value,
