@@ -26,8 +26,8 @@ export interface AdminImageData {
     wins: number;
     losses: number;
     draws: number;
-    rating: number; // Glicko-2 rating
-    rd: number; // Glicko-2 rating deviation  
+    rating: number;
+    rd: number;
     inPool: boolean;
 }
 
