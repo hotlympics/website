@@ -56,9 +56,29 @@ export interface CreateUserData {
     poolImageIndices?: number[];
 }
 
-export interface PhotoModalData {
-    imageData: AdminImageData;
-    isInPool: boolean;
+export interface AdminBattle {
+    battleId: string;
+    winnerImageId: string;
+    loserImageId: string;
+    winnerUserId: string;
+    loserUserId: string;
+    winnerRatingBefore: number;
+    winnerRdBefore: number;
+    loserRatingBefore: number;
+    loserRdBefore: number;
+    winnerRatingAfter: number;
+    winnerRdAfter: number;
+    loserRatingAfter: number;
+    loserRdAfter: number;
+    voterId?: string;
+    timestamp: string;
+    systemVersion: number;
+}
+
+export interface BattleSearchResult {
+    battles: AdminBattle[];
+    totalCount: number;
+    searchTerm: string;
 }
 
 const getAuthHeaders = (): { Authorization: string } => {
@@ -242,6 +262,19 @@ const togglePhotoPool = async (
     return response.json();
 };
 
+const searchBattles = async (imageId: string, limit: number = 50): Promise<BattleSearchResult> => {
+    const response = await fetch(`${API_BASE_URL}/admin/battles/search?imageId=${encodeURIComponent(imageId)}&limit=${limit}`, {
+        headers: getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || "Failed to search battles");
+    }
+
+    return response.json();
+};
+
 export const adminService = {
     login,
     logout,
@@ -253,4 +286,5 @@ export const adminService = {
     deletePhoto,
     createUser,
     togglePhotoPool,
+    searchBattles,
 };
