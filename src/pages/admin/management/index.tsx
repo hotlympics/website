@@ -1,0 +1,80 @@
+import { useState } from "react";
+import AdminLayout from "../../../components/admin/admin-layout";
+import { type PhotoDeleteConfirmation } from "../../../utils/admin/photo-utils";
+import { type UserDeleteConfirmation } from "../../../utils/admin/user-utils";
+import type { PhotoModalData } from "../../../utils/types/admin/admin";
+import BattlesTab from "./battles";
+import ModerationTab from "./moderation";
+import UsersTab from "./users";
+
+type ManagementTab = "users" | "moderation" | "battles";
+
+const ManagementPage = () => {
+    const [activeTab, setActiveTab] = useState<ManagementTab>("users");
+
+    // Local state for modals and confirmations shared across tabs
+    const [photoModal, setPhotoModal] = useState<PhotoModalData | null>(null);
+    const [createUserModal, setCreateUserModal] = useState(false);
+    const [deleteConfirmation, setDeleteConfirmation] =
+        useState<PhotoDeleteConfirmation | null>(null);
+    const [userDeleteConfirmation, setUserDeleteConfirmation] =
+        useState<UserDeleteConfirmation | null>(null);
+
+    const tabs: { id: ManagementTab; label: string }[] = [
+        { id: "users", label: "Users" },
+        { id: "moderation", label: "Moderation" },
+        { id: "battles", label: "Battles" },
+    ];
+
+    const renderTabContent = () => {
+        switch (activeTab) {
+            case "users":
+                return (
+                    <UsersTab
+                        photoModal={photoModal}
+                        setPhotoModal={setPhotoModal}
+                        createUserModal={createUserModal}
+                        setCreateUserModal={setCreateUserModal}
+                        deleteConfirmation={deleteConfirmation}
+                        setDeleteConfirmation={setDeleteConfirmation}
+                        userDeleteConfirmation={userDeleteConfirmation}
+                        setUserDeleteConfirmation={setUserDeleteConfirmation}
+                    />
+                );
+            case "moderation":
+                return <ModerationTab />;
+            case "battles":
+                return <BattlesTab />;
+            default:
+                return null;
+        }
+    };
+
+    return (
+        <AdminLayout title="Management">
+            <div className="mb-6">
+                <div className="border-b border-gray-200">
+                    <nav className="-mb-px flex space-x-8">
+                        {tabs.map((tab) => (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`border-b-2 px-1 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+                                    activeTab === tab.id
+                                        ? "border-blue-500 text-blue-600"
+                                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                                }`}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </nav>
+                </div>
+            </div>
+
+            {renderTabContent()}
+        </AdminLayout>
+    );
+};
+
+export default ManagementPage;

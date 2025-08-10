@@ -204,14 +204,16 @@ const PhotoModal = ({
                                     Rating
                                 </h4>
                                 <div className="rounded-lg bg-purple-50 p-4">
-                                     <div className="text-3xl font-bold text-purple-600">
-                                         {photoModal.imageData.rating}
-                                         {photoModal.imageData.rd && (
-                                             <span className="text-sm font-normal text-purple-800">
-                                                 {' '}± {photoModal.imageData.rd}
-                                             </span>
-                                         )}
-                                     </div>                                </div>
+                                    <div className="text-3xl font-bold text-purple-600">
+                                        {photoModal.imageData.rating}
+                                        {photoModal.imageData.rd && (
+                                            <span className="text-sm font-normal text-purple-800">
+                                                {" "}
+                                                ± {photoModal.imageData.rd}
+                                            </span>
+                                        )}
+                                    </div>{" "}
+                                </div>
                             </div>
 
                             <div>

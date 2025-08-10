@@ -143,8 +143,8 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
             exitingDir === "up"
                 ? topImage
                 : exitingDir === "down"
-                    ? bottomImage
-                    : null;
+                  ? bottomImage
+                  : null;
 
         return (
             <motion.div
@@ -162,8 +162,7 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
                     timeConstant: 250,
                 }}
                 onDragEnd={handleDragEnd}
-                onPointerCancel={() => {
-                }}
+                onPointerCancel={() => {}}
                 whileDrag={{ scale: 0.995 }}
                 initial={{ y: 0, rotate: 0, scale: 1 }}
                 animate={{
@@ -171,8 +170,8 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
                         exitingDir === "up"
                             ? -yOffscreen
                             : exitingDir === "down"
-                                ? yOffscreen
-                                : 0,
+                              ? yOffscreen
+                              : 0,
                     rotate:
                         exitingDir === null ? 0 : exitingDir === "up" ? -3 : 3,
                     scale: exitingDir === null ? 1 : 0.98,
@@ -241,10 +240,11 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
 
                         {/* Emoji bar for top anchored at bottom (near middle boundary) */}
                         <div
-                            className={`absolute bottom-0 left-0 z-10 w-full overflow-hidden rounded-lg backdrop-blur-sm transition-all duration-300 ease-in-out ${topShowBar
-                                ? "max-h-24 opacity-100"
-                                : "max-h-0 opacity-0"
-                                }`}
+                            className={`absolute bottom-0 left-0 z-10 w-full overflow-hidden rounded-lg backdrop-blur-sm transition-all duration-300 ease-in-out ${
+                                topShowBar
+                                    ? "max-h-24 opacity-100"
+                                    : "max-h-0 opacity-0"
+                            }`}
                             style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
                         >
                             <div className="flex items-center justify-center gap-4 px-4 py-3 text-2xl">
@@ -356,10 +356,11 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
 
                         {/* Emoji bar for bottom anchored at top (near middle boundary) */}
                         <div
-                            className={`absolute top-0 left-0 z-10 w-full overflow-hidden rounded-lg backdrop-blur-sm transition-all duration-300 ease-in-out ${bottomShowBar
-                                ? "max-h-24 opacity-100"
-                                : "max-h-0 opacity-0"
-                                }`}
+                            className={`absolute top-0 left-0 z-10 w-full overflow-hidden rounded-lg backdrop-blur-sm transition-all duration-300 ease-in-out ${
+                                bottomShowBar
+                                    ? "max-h-24 opacity-100"
+                                    : "max-h-0 opacity-0"
+                            }`}
                             style={{ backgroundColor: "rgba(0, 0, 0, 0.4)" }}
                         >
                             <div className="flex items-center justify-center gap-4 px-4 py-3 text-2xl">

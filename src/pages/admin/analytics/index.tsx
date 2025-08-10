@@ -1,5 +1,8 @@
 import { useState } from "react";
-import AdminLayout from "../../components/admin/admin-layout";
+import AdminLayout from "../../../components/admin/admin-layout";
+import BattlesTab from "./battles";
+import OverviewTab from "./overview";
+import UsersTab from "./users";
 
 type AnalyticsTab = "overview" | "users" | "battles";
 
@@ -15,44 +18,11 @@ const AnalyticsPage = () => {
     const renderTabContent = () => {
         switch (activeTab) {
             case "overview":
-                return (
-                    <div className="bg-white p-6 shadow sm:rounded-md">
-                        <div className="py-12 text-center">
-                            <h3 className="text-lg font-medium text-gray-900">
-                                Analytics Overview
-                            </h3>
-                            <p className="mt-2 text-sm text-gray-500">
-                                Coming soon...
-                            </p>
-                        </div>
-                    </div>
-                );
+                return <OverviewTab />;
             case "users":
-                return (
-                    <div className="bg-white p-6 shadow sm:rounded-md">
-                        <div className="py-12 text-center">
-                            <h3 className="text-lg font-medium text-gray-900">
-                                User Analytics
-                            </h3>
-                            <p className="mt-2 text-sm text-gray-500">
-                                Coming soon...
-                            </p>
-                        </div>
-                    </div>
-                );
+                return <UsersTab />;
             case "battles":
-                return (
-                    <div className="bg-white p-6 shadow sm:rounded-md">
-                        <div className="py-12 text-center">
-                            <h3 className="text-lg font-medium text-gray-900">
-                                Battle Analytics
-                            </h3>
-                            <p className="mt-2 text-sm text-gray-500">
-                                Coming soon...
-                            </p>
-                        </div>
-                    </div>
-                );
+                return <BattlesTab />;
             default:
                 return null;
         }

@@ -1,9 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import AdminLoginPage from "../pages/admin/admin-login-page.js";
-import AdvancedPage from "../pages/admin/advanced-page.js";
-import AnalyticsPage from "../pages/admin/analytics-page.js";
-import ManagementPage from "../pages/admin/management-page.js";
-import OperationsPage from "../pages/admin/operations-page.js";
+import AdvancedPage from "../pages/admin/advanced/index.js";
+import AnalyticsPage from "../pages/admin/analytics/index.js";
+import ManagementPage from "../pages/admin/management/index.js";
+import OperationsPage from "../pages/admin/operations/index.js";
 
 const AdminRoutes = () => {
     return (

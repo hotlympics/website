@@ -58,7 +58,7 @@ const MenuBar = () => {
                             className={`flex h-10 w-10 items-center justify-center rounded-lg shadow-md transition-colors sm:h-12 sm:w-12 ${
                                 item.functional
                                     ? "bg-blue-600 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-                                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                    : "cursor-not-allowed bg-gray-300 text-gray-500"
                             }`}
                             title={item.label}
                         >

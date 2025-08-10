@@ -8,27 +8,34 @@ interface AppLayoutProps {
 
 const AppLayout = ({ children }: AppLayoutProps) => {
     const location = useLocation();
-    
+
     // Determine which pages should show the menu bar
-    const showMenuBar = ["/", "/profile", "/my-photos", "/leaderboard"].includes(location.pathname);
-    
+    const showMenuBar = [
+        "/",
+        "/profile",
+        "/my-photos",
+        "/leaderboard",
+    ].includes(location.pathname);
+
     // Check if we're on the rating page (which should not scroll)
     const isRatingPage = location.pathname === "/";
-    
+
     // Reset scroll position when navigating to rating page
     useEffect(() => {
         if (isRatingPage) {
             window.scrollTo(0, 0);
         }
     }, [isRatingPage]);
-    
+
     return (
-        <div className={`min-h-screen ${isRatingPage ? "overflow-hidden" : ""}`}>
+        <div
+            className={`min-h-screen ${isRatingPage ? "overflow-hidden" : ""}`}
+        >
             {/* Main content area with conditional bottom padding */}
             <div className={showMenuBar && !isRatingPage ? "pb-32" : ""}>
                 {children}
             </div>
-            
+
             {/* Persistent MenuBar - only shown on specific pages */}
             {showMenuBar && (
                 <div
