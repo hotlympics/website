@@ -26,7 +26,8 @@ export interface AdminImageData {
     wins: number;
     losses: number;
     draws: number;
-    eloScore: number;
+    rating: number; // Glicko-2 rating
+    rd: number; // Glicko-2 rating deviation  
     inPool: boolean;
 }
 

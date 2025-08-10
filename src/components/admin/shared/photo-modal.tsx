@@ -201,16 +201,17 @@ const PhotoModal = ({
 
                             <div>
                                 <h4 className="mb-3 text-lg font-medium text-gray-900">
-                                    ELO Rating
+                                    Rating
                                 </h4>
                                 <div className="rounded-lg bg-purple-50 p-4">
-                                    <div className="text-3xl font-bold text-purple-600">
-                                        {photoModal.imageData.eloScore}
-                                    </div>
-                                    <div className="text-sm text-purple-800">
-                                        Current Rating
-                                    </div>
-                                </div>
+                                     <div className="text-3xl font-bold text-purple-600">
+                                         {photoModal.imageData.rating}
+                                         {photoModal.imageData.rd && (
+                                             <span className="text-sm font-normal text-purple-800">
+                                                 {' '}± {photoModal.imageData.rd}
+                                             </span>
+                                         )}
+                                     </div>                                </div>
                             </div>
 
                             <div>

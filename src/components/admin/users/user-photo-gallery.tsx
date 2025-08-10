@@ -116,7 +116,10 @@ const UserPhotoGallery = ({
                                 </div>
                             )}
                             <div className="bg-opacity-60 absolute right-0 bottom-0 left-0 bg-black p-1 text-xs text-white">
-                                <div>ELO: {imageItem.eloScore}</div>
+                                <div>
+                                    Rating: {imageItem.rating}
+                                    {imageItem.rd && ` (± ${imageItem.rd})`}
+                                </div>
                                 <div>{imageItem.battles} battles</div>
                             </div>
                         </div>
