@@ -1,5 +1,8 @@
 import { useState } from "react";
-import AdminLayout from "../../components/admin/admin-layout";
+import AdminLayout from "../../../components/admin/admin-layout";
+import NotificationsTab from "./notifications";
+import ReportsTab from "./reports";
+import TestingTab from "./testing";
 
 type AdvancedTab = "testing" | "notifications" | "reports";
 
@@ -15,44 +18,11 @@ const AdvancedPage = () => {
     const renderTabContent = () => {
         switch (activeTab) {
             case "testing":
-                return (
-                    <div className="bg-white p-6 shadow sm:rounded-md">
-                        <div className="py-12 text-center">
-                            <h3 className="text-lg font-medium text-gray-900">
-                                A/B Testing
-                            </h3>
-                            <p className="mt-2 text-sm text-gray-500">
-                                Coming soon...
-                            </p>
-                        </div>
-                    </div>
-                );
+                return <TestingTab />;
             case "notifications":
-                return (
-                    <div className="bg-white p-6 shadow sm:rounded-md">
-                        <div className="py-12 text-center">
-                            <h3 className="text-lg font-medium text-gray-900">
-                                Push Notifications
-                            </h3>
-                            <p className="mt-2 text-sm text-gray-500">
-                                Coming soon...
-                            </p>
-                        </div>
-                    </div>
-                );
+                return <NotificationsTab />;
             case "reports":
-                return (
-                    <div className="bg-white p-6 shadow sm:rounded-md">
-                        <div className="py-12 text-center">
-                            <h3 className="text-lg font-medium text-gray-900">
-                                Custom Reports
-                            </h3>
-                            <p className="mt-2 text-sm text-gray-500">
-                                Coming soon...
-                            </p>
-                        </div>
-                    </div>
-                );
+                return <ReportsTab />;
             default:
                 return null;
         }

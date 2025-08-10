@@ -5,12 +5,12 @@ const BLOCK_SIZE = 10; // ALWAYS DIVISIBLE BY 2
 const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export interface GlickoState {
-    rating: number;        // Display rating R
-    rd: number;           // Display rating deviation RD
-    volatility: number;   // σ (sigma)
-    mu: number;          // Internal rating μ
-    phi: number;         // Internal deviation ϕ
-    lastUpdateAt: Date;  // For future inactivity logic
+    rating: number; // Display rating R
+    rd: number; // Display rating deviation RD
+    volatility: number; // σ (sigma)
+    mu: number; // Internal rating μ
+    phi: number; // Internal deviation ϕ
+    lastUpdateAt: Date; // For future inactivity logic
     systemVersion: 2;
 }
 

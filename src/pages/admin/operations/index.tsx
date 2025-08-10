@@ -1,5 +1,8 @@
 import { useState } from "react";
-import AdminLayout from "../../components/admin/admin-layout";
+import AdminLayout from "../../../components/admin/admin-layout";
+import CostsTab from "./costs";
+import MonitoringTab from "./monitoring";
+import PerformanceTab from "./performance";
 
 type OperationsTab = "monitoring" | "costs" | "performance";
 
@@ -15,44 +18,11 @@ const OperationsPage = () => {
     const renderTabContent = () => {
         switch (activeTab) {
             case "monitoring":
-                return (
-                    <div className="bg-white p-6 shadow sm:rounded-md">
-                        <div className="py-12 text-center">
-                            <h3 className="text-lg font-medium text-gray-900">
-                                System Monitoring
-                            </h3>
-                            <p className="mt-2 text-sm text-gray-500">
-                                Coming soon...
-                            </p>
-                        </div>
-                    </div>
-                );
+                return <MonitoringTab />;
             case "costs":
-                return (
-                    <div className="bg-white p-6 shadow sm:rounded-md">
-                        <div className="py-12 text-center">
-                            <h3 className="text-lg font-medium text-gray-900">
-                                Cloud Costs
-                            </h3>
-                            <p className="mt-2 text-sm text-gray-500">
-                                Coming soon...
-                            </p>
-                        </div>
-                    </div>
-                );
+                return <CostsTab />;
             case "performance":
-                return (
-                    <div className="bg-white p-6 shadow sm:rounded-md">
-                        <div className="py-12 text-center">
-                            <h3 className="text-lg font-medium text-gray-900">
-                                Performance Metrics
-                            </h3>
-                            <p className="mt-2 text-sm text-gray-500">
-                                Coming soon...
-                            </p>
-                        </div>
-                    </div>
-                );
+                return <PerformanceTab />;
             default:
                 return null;
         }
