@@ -14,7 +14,6 @@ export interface ImageData {
     wins: number;
     losses: number;
     draws: number;
-    eloScore: number;
     inPool: boolean;
 }
 
