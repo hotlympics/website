@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import SearchInput from "../../../components/admin/shared/search-input";
 import Pagination from "../../../components/admin/shared/pagination";
 import BattleTable from "../../../components/admin/management/battles/battle-table";
@@ -23,15 +23,7 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
         paginatedItems: paginatedBattles,
     } = usePagination(battles, 10);
 
-    // Handle initial search term from navigation
-    useEffect(() => {
-        if (initialSearchTerm && initialSearchTerm.trim()) {
-            setSearchTerm(initialSearchTerm.trim());
-            performSearch(initialSearchTerm.trim());
-        }
-    }, [initialSearchTerm]);
-
-    const performSearch = async (searchValue: string) => {
+    const performSearch = useCallback(async (searchValue: string) => {
         if (!searchValue.trim()) {
             setError("Please enter an image ID to search");
             return;
@@ -60,7 +52,15 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
         } finally {
             setLoading(false);
         }
-    };
+    }, [setCurrentPage]);
+
+    // Handle initial search term from navigation
+    useEffect(() => {
+        if (initialSearchTerm && initialSearchTerm.trim()) {
+            setSearchTerm(initialSearchTerm.trim());
+            performSearch(initialSearchTerm.trim());
+        }
+    }, [initialSearchTerm, performSearch]);
 
     const handleSearch = async () => {
         await performSearch(searchTerm.trim());

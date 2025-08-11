@@ -114,6 +114,7 @@ const UsersTab = ({
             // Clear the userToExpand state after using it to prevent loops
             onClearUserToExpand();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userToExpand]); // Remove toggleUserExpansion from dependencies to prevent loop
 
     // Create utility handlers
