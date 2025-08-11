@@ -30,17 +30,7 @@ export interface AdminImageData {
     inPool: boolean;
 }
 
-export interface AdminStats {
-    totalUsers: number;
-    totalImages: number;
-    totalBattles: number;
-    totalPoolImages: number;
-    usersByGender: {
-        male: number;
-        female: number;
-        unknown: number;
-    };
-}
+
 
 export interface UserDetails {
     user: AdminUser;
@@ -170,18 +160,7 @@ const deleteUser = async (
     return response.json();
 };
 
-const getStats = async (): Promise<AdminStats> => {
-    const response = await fetch(`${API_BASE_URL}/admin/stats`, {
-        headers: getAuthHeaders(),
-    });
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error?.message || "Failed to fetch stats");
-    }
-
-    return response.json();
-};
 
 const deletePhoto = async (
     imageId: string
@@ -311,7 +290,6 @@ export const adminService = {
     getUsers,
     getUserDetails,
     deleteUser,
-    getStats,
     deletePhoto,
     createUser,
     togglePhotoPool,

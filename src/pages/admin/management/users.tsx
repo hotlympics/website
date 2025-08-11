@@ -59,7 +59,7 @@ const UsersTab = ({
     userToExpand,
     onClearUserToExpand,
 }: UsersTabProps) => {
-    const { users, setUsers, loading, error, loadData, refreshStats } =
+    const { users, setUsers, loading, error, loadData } =
         useUsers();
     const {
         userDetails,
@@ -151,7 +151,6 @@ const UsersTab = ({
                 setUsers,
                 users,
                 removeUserDetails,
-                refreshStats,
                 setUserDeleteConfirmation
             );
         });
