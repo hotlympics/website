@@ -27,16 +27,10 @@ const BattleTable = ({
                             Time
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-                            Winner
+                            Users
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-                            Loser
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-                            Winner Rating
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-                            Loser Rating
+                            Rating
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
                             Voter
@@ -56,7 +50,7 @@ const BattleTable = ({
                         ))
                     ) : (
                         <tr>
-                            <td colSpan={7}>
+                            <td colSpan={5}>
                                 <EmptyState
                                     title="No battles found"
                                     description={

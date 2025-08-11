@@ -66,24 +66,20 @@ const BattleCard = ({ battle, isExpanded, searchedImageId, onToggleExpansion }: 
                     </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
+                    <div className="mb-1 rounded-md bg-green-100 px-2 py-1 text-sm text-gray-900">
                         {battle.winnerEmail || battle.winnerUserId.slice(-8)}
                     </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
+                    <div className="rounded-md bg-red-100 px-2 py-1 text-sm text-gray-900">
                         {battle.loserEmail || battle.loserUserId.slice(-8)}
                     </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
+                    <div className="mb-1 text-sm text-gray-900">
                         {Math.round(battle.winnerRatingBefore)} → {Math.round(battle.winnerRatingAfter)}
                         <span className={`ml-2 ${ratingChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                             ({ratingChange >= 0 ? '+' : ''}{Math.round(ratingChange)})
                         </span>
                     </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
                         {Math.round(battle.loserRatingBefore)} → {Math.round(battle.loserRatingAfter)}
                         <span className={`ml-2 ${loserRatingChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
@@ -105,7 +101,7 @@ const BattleCard = ({ battle, isExpanded, searchedImageId, onToggleExpansion }: 
             </tr>
             {isExpanded && (
                 <tr>
-                    <td colSpan={7} className={`px-6 py-4 ${isWinner ? 'bg-green-50' : isLoser ? 'bg-red-50' : 'bg-gray-50'}`}>
+                    <td colSpan={5} className={`px-6 py-4 ${isWinner ? 'bg-green-50' : isLoser ? 'bg-red-50' : 'bg-gray-50'}`}>
                         <div className="text-sm text-gray-500">
                             Expanded battle details will go here...
                         </div>
