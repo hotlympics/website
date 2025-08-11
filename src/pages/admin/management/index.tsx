@@ -11,6 +11,7 @@ type ManagementTab = "users" | "moderation" | "battles";
 
 const ManagementPage = () => {
     const [activeTab, setActiveTab] = useState<ManagementTab>("users");
+    const [battleSearchTerm, setBattleSearchTerm] = useState("");
 
     // Local state for modals and confirmations shared across tabs
     const [photoModal, setPhotoModal] = useState<PhotoModalData | null>(null);
@@ -19,6 +20,12 @@ const ManagementPage = () => {
         useState<PhotoDeleteConfirmation | null>(null);
     const [userDeleteConfirmation, setUserDeleteConfirmation] =
         useState<UserDeleteConfirmation | null>(null);
+
+    const navigateToBattles = (imageId: string) => {
+        setBattleSearchTerm(imageId);
+        setActiveTab("battles");
+        setPhotoModal(null); // Close the modal
+    };
 
     const tabs: { id: ManagementTab; label: string }[] = [
         { id: "users", label: "Users" },
@@ -39,12 +46,13 @@ const ManagementPage = () => {
                         setDeleteConfirmation={setDeleteConfirmation}
                         userDeleteConfirmation={userDeleteConfirmation}
                         setUserDeleteConfirmation={setUserDeleteConfirmation}
+                        onNavigateToBattles={navigateToBattles}
                     />
                 );
             case "moderation":
                 return <ModerationTab />;
             case "battles":
-                return <BattlesTab />;
+                return <BattlesTab initialSearchTerm={battleSearchTerm} />;
             default:
                 return null;
         }

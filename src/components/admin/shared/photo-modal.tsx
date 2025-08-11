@@ -13,6 +13,7 @@ interface PhotoModalProps {
         currentlyInPool: boolean
     ) => void;
     onDeletePhoto: (imageId: string, userId: string) => void;
+    onNavigateToBattles: (imageId: string) => void;
     togglingPool: string | null;
     deletingPhoto: string | null;
     userDetails: Record<string, UserDetails>;
@@ -23,6 +24,7 @@ const PhotoModal = ({
     onClose,
     onTogglePool,
     onDeletePhoto,
+    onNavigateToBattles,
     togglingPool,
     deletingPhoto,
     userDetails,
@@ -113,46 +115,54 @@ const PhotoModal = ({
                             </div>
 
                             {/* Action buttons */}
-                            <div className="flex items-center space-x-3">
-                                <button
-                                    onClick={handleTogglePool}
-                                    disabled={
-                                        togglingPool ===
+                            <div className="space-y-3">
+                                <div className="flex items-center space-x-3">
+                                    <button
+                                        onClick={handleTogglePool}
+                                        disabled={
+                                            togglingPool ===
+                                            photoModal.imageData.imageId
+                                        }
+                                        className={`flex-1 rounded px-4 py-2 text-sm font-medium transition-colors ${
+                                            togglingPool ===
+                                            photoModal.imageData.imageId
+                                                ? "cursor-not-allowed bg-gray-400 text-white"
+                                                : photoModal.isInPool
+                                                  ? "bg-orange-600 text-white hover:bg-orange-700"
+                                                  : "bg-blue-600 text-white hover:bg-blue-700"
+                                        }`}
+                                    >
+                                        {togglingPool ===
                                         photoModal.imageData.imageId
-                                    }
-                                    className={`flex-1 rounded px-4 py-2 text-sm font-medium transition-colors ${
-                                        togglingPool ===
-                                        photoModal.imageData.imageId
-                                            ? "cursor-not-allowed bg-gray-400 text-white"
+                                            ? "Updating..."
                                             : photoModal.isInPool
-                                              ? "bg-orange-600 text-white hover:bg-orange-700"
-                                              : "bg-blue-600 text-white hover:bg-blue-700"
-                                    }`}
-                                >
-                                    {togglingPool ===
-                                    photoModal.imageData.imageId
-                                        ? "Updating..."
-                                        : photoModal.isInPool
-                                          ? "Remove from Pool"
-                                          : "Add to Pool"}
-                                </button>
+                                              ? "Remove from Pool"
+                                              : "Add to Pool"}
+                                    </button>
+                                    <button
+                                        onClick={handleDeletePhoto}
+                                        disabled={
+                                            deletingPhoto ===
+                                            photoModal.imageData.imageId
+                                        }
+                                        className={`flex-1 rounded px-4 py-2 text-sm font-medium transition-colors ${
+                                            deletingPhoto ===
+                                            photoModal.imageData.imageId
+                                                ? "cursor-not-allowed bg-gray-400 text-white"
+                                                : "bg-red-600 text-white hover:bg-red-700"
+                                        }`}
+                                    >
+                                        {deletingPhoto ===
+                                        photoModal.imageData.imageId
+                                            ? "Deleting..."
+                                            : "Delete Photo"}
+                                    </button>
+                                </div>
                                 <button
-                                    onClick={handleDeletePhoto}
-                                    disabled={
-                                        deletingPhoto ===
-                                        photoModal.imageData.imageId
-                                    }
-                                    className={`flex-1 rounded px-4 py-2 text-sm font-medium transition-colors ${
-                                        deletingPhoto ===
-                                        photoModal.imageData.imageId
-                                            ? "cursor-not-allowed bg-gray-400 text-white"
-                                            : "bg-red-600 text-white hover:bg-red-700"
-                                    }`}
+                                    onClick={() => onNavigateToBattles(photoModal.imageData.imageId)}
+                                    className="w-full rounded px-4 py-2 text-sm font-medium bg-purple-600 text-white hover:bg-purple-700 transition-colors"
                                 >
-                                    {deletingPhoto ===
-                                    photoModal.imageData.imageId
-                                        ? "Deleting..."
-                                        : "Delete Photo"}
+                                    View Battles
                                 </button>
                             </div>
                         </div>

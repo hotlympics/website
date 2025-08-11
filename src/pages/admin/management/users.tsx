@@ -39,6 +39,7 @@ interface UsersTabProps {
     setDeleteConfirmation: (data: PhotoDeleteConfirmation | null) => void;
     userDeleteConfirmation: UserDeleteConfirmation | null;
     setUserDeleteConfirmation: (data: UserDeleteConfirmation | null) => void;
+    onNavigateToBattles: (imageId: string) => void;
 }
 
 const UsersTab = ({
@@ -50,6 +51,7 @@ const UsersTab = ({
     setDeleteConfirmation,
     userDeleteConfirmation,
     setUserDeleteConfirmation,
+    onNavigateToBattles,
 }: UsersTabProps) => {
     const { users, setUsers, loading, error, loadData, refreshStats } =
         useUsers();
@@ -228,6 +230,7 @@ const UsersTab = ({
                 onClose={() => setPhotoModal(null)}
                 onTogglePool={handleTogglePhotoPool}
                 onDeletePhoto={handleDeletePhoto}
+                onNavigateToBattles={onNavigateToBattles}
                 togglingPool={togglingPool}
                 deletingPhoto={deletingPhoto}
                 userDetails={userDetails}

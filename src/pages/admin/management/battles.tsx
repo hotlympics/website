@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchInput from "../../../components/admin/shared/search-input";
 import Pagination from "../../../components/admin/shared/pagination";
 import BattleTable from "../../../components/admin/management/battles/battle-table";
 import { adminService, type AdminBattle } from "../../../services/admin/admin-service";
 import { usePagination } from "../../../hooks/admin/use-pagination";
 
-const BattlesTab = () => {
+const BattlesTab = ({ initialSearchTerm }: { initialSearchTerm?: string }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [battles, setBattles] = useState<AdminBattle[]>([]);
     const [loading, setLoading] = useState(false);
@@ -23,8 +23,16 @@ const BattlesTab = () => {
         paginatedItems: paginatedBattles,
     } = usePagination(battles, 10);
 
-    const handleSearch = async () => {
-        if (!searchTerm.trim()) {
+    // Handle initial search term from navigation
+    useEffect(() => {
+        if (initialSearchTerm && initialSearchTerm.trim()) {
+            setSearchTerm(initialSearchTerm.trim());
+            performSearch(initialSearchTerm.trim());
+        }
+    }, [initialSearchTerm]);
+
+    const performSearch = async (searchValue: string) => {
+        if (!searchValue.trim()) {
             setError("Please enter an image ID to search");
             return;
         }
@@ -34,13 +42,13 @@ const BattlesTab = () => {
         setHasSearched(true);
 
         try {
-            const result = await adminService.searchBattlesWithEmails(searchTerm.trim(), 50);
+            const result = await adminService.searchBattlesWithEmails(searchValue, 50);
             setBattles(result.battles);
             setCurrentPage(1); // Reset to first page when new search is performed
             
             // Fetch the image URL for the searched image
             try {
-                const imageResult = await adminService.getImageUrl(searchTerm.trim());
+                const imageResult = await adminService.getImageUrl(searchValue);
                 setSearchedImageUrl(imageResult.imageUrl);
             } catch (imageError) {
                 console.error("Failed to fetch image URL:", imageError);
@@ -54,6 +62,10 @@ const BattlesTab = () => {
         }
     };
 
+    const handleSearch = async () => {
+        await performSearch(searchTerm.trim());
+    };
+
     const handleBattleClick = async (battle: AdminBattle) => {
         setSelectedBattle(battle);
         setOtherImageUrl("");
@@ -61,16 +73,13 @@ const BattlesTab = () => {
         // Determine which image is different from the searched one
         const searchedImageId = searchTerm.trim();
         let otherImageId: string;
-        let isWinner: boolean;
         
         if (battle.winnerImageId === searchedImageId) {
             // Searched image is the winner, show the loser
             otherImageId = battle.loserImageId;
-            isWinner = false;
         } else {
             // Searched image is the loser (or not involved), show the winner
             otherImageId = battle.winnerImageId;
-            isWinner = true;
         }
         
         try {
