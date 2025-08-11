@@ -46,6 +46,17 @@ const ManagementPage = () => {
         { id: "battles", label: "Battles" },
     ];
 
+    const handleTabClick = (tabId: ManagementTab) => {
+        setActiveTab(tabId);
+        // Clear search terms when manually switching tabs
+        if (tabId === "users") {
+            setUserSearchTerm("");
+            setUserToExpand(null);
+        } else if (tabId === "battles") {
+            setBattleSearchTerm("");
+        }
+    };
+
     const renderTabContent = () => {
         switch (activeTab) {
             case "users":
@@ -82,7 +93,7 @@ const ManagementPage = () => {
                         {tabs.map((tab) => (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
+                                onClick={() => handleTabClick(tab.id)}
                                 className={`border-b-2 px-1 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
                                     activeTab === tab.id
                                         ? "border-blue-500 text-blue-600"

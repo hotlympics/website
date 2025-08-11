@@ -66,6 +66,28 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
         await performSearch(searchTerm.trim());
     };
 
+    const handleOtherImageClick = () => {
+        if (selectedBattle) {
+            // Determine which image is the "other" one
+            const searchedImageId = searchTerm.trim();
+            let otherImageId: string;
+            
+            if (selectedBattle.winnerImageId === searchedImageId) {
+                // Searched image is the winner, the other is the loser
+                otherImageId = selectedBattle.loserImageId;
+            } else {
+                // Searched image is the loser (or not involved), the other is the winner
+                otherImageId = selectedBattle.winnerImageId;
+            }
+            
+            // Perform new search with the other image ID
+            setSearchTerm(otherImageId);
+            performSearch(otherImageId);
+            setSelectedBattle(null); // Clear selection
+            setOtherImageUrl(""); // Clear the other image
+        }
+    };
+
     const handleBattleClick = async (battle: AdminBattle) => {
         setSelectedBattle(battle);
         setOtherImageUrl("");
@@ -204,7 +226,10 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
                             {selectedBattle && (
                                 <div className="space-y-3">
                                     <div className="text-center">
-                                        <div className="aspect-square w-full overflow-hidden rounded-lg shadow-sm">
+                                        <div 
+                                            className="aspect-square w-full overflow-hidden rounded-lg shadow-sm cursor-pointer hover:scale-105 transition-all duration-200"
+                                            onClick={handleOtherImageClick}
+                                        >
                                             {otherImageUrl ? (
                                                 <img
                                                     src={otherImageUrl}
