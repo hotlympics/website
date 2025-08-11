@@ -5,11 +5,8 @@ import BattleTable from "../../../components/admin/management/battles/battle-tab
 import { adminService, type AdminBattle } from "../../../services/admin/admin-service";
 import { usePagination } from "../../../hooks/admin/use-pagination";
 
-type SearchType = "email" | "imageId";
-
 const BattlesTab = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [searchType, setSearchType] = useState<SearchType>("imageId");
     const [battles, setBattles] = useState<AdminBattle[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -27,11 +24,6 @@ const BattlesTab = () => {
     } = usePagination(battles, 10);
 
     const handleSearch = async () => {
-        if (searchType !== "imageId") {
-            setError("Only image ID search is currently supported");
-            return;
-        }
-
         if (!searchTerm.trim()) {
             setError("Please enter an image ID to search");
             return;
@@ -104,39 +96,10 @@ const BattlesTab = () => {
                         </p>
                     </div>
                     <div className="flex items-center space-x-3">
-                        <div className="flex items-center space-x-2">
-                            <span className="text-sm text-gray-700">Search by:</span>
-                            <div className="flex rounded-md border border-gray-300 bg-white">
-                                <button
-                                    type="button"
-                                    onClick={() => setSearchType("email")}
-                                    disabled={true}
-                                    className={`px-3 py-1 text-sm font-medium rounded-l-md transition-colors ${
-                                        searchType === "email"
-                                            ? "bg-blue-600 text-white"
-                                            : "bg-gray-100 text-gray-400 cursor-not-allowed"
-                                    }`}
-                                    title="Email search coming soon"
-                                >
-                                    Email
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setSearchType("imageId")}
-                                    className={`px-3 py-1 text-sm font-medium rounded-r-md border-l transition-colors ${
-                                        searchType === "imageId"
-                                            ? "bg-blue-600 text-white border-blue-600"
-                                            : "bg-white text-gray-700 hover:bg-gray-50 border-gray-300"
-                                    }`}
-                                >
-                                    Image ID
-                                </button>
-                            </div>
-                        </div>
                         <SearchInput
                             value={searchTerm}
                             onChange={setSearchTerm}
-                            placeholder={`Search by ${searchType === "email" ? "email" : "image ID"}...`}
+                            placeholder="Search by image ID..."
                         />
                         <button
                             type="button"
