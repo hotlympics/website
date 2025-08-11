@@ -40,6 +40,9 @@ interface UsersTabProps {
     userDeleteConfirmation: UserDeleteConfirmation | null;
     setUserDeleteConfirmation: (data: UserDeleteConfirmation | null) => void;
     onNavigateToBattles: (imageId: string) => void;
+    initialSearchTerm?: string;
+    userToExpand?: string | null;
+    onClearUserToExpand: () => void;
 }
 
 const UsersTab = ({
@@ -52,6 +55,9 @@ const UsersTab = ({
     userDeleteConfirmation,
     setUserDeleteConfirmation,
     onNavigateToBattles,
+    initialSearchTerm,
+    userToExpand,
+    onClearUserToExpand,
 }: UsersTabProps) => {
     const { users, setUsers, loading, error, loadData, refreshStats } =
         useUsers();
@@ -93,6 +99,22 @@ const UsersTab = ({
     useEffect(() => {
         setCurrentPage(1);
     }, [searchTerm, setCurrentPage]);
+
+    // Handle initial search term from navigation
+    useEffect(() => {
+        if (initialSearchTerm && initialSearchTerm.trim()) {
+            setSearchTerm(initialSearchTerm.trim());
+        }
+    }, [initialSearchTerm, setSearchTerm]);
+
+    // Handle user expansion from navigation
+    useEffect(() => {
+        if (userToExpand) {
+            toggleUserExpansion(userToExpand);
+            // Clear the userToExpand state after using it to prevent loops
+            onClearUserToExpand();
+        }
+    }, [userToExpand]); // Remove toggleUserExpansion from dependencies to prevent loop
 
     // Create utility handlers
     const { openPhotoModal } = createPhotoModalHandlers(

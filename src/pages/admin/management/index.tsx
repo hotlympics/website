@@ -12,6 +12,8 @@ type ManagementTab = "users" | "moderation" | "battles";
 const ManagementPage = () => {
     const [activeTab, setActiveTab] = useState<ManagementTab>("users");
     const [battleSearchTerm, setBattleSearchTerm] = useState("");
+    const [userSearchTerm, setUserSearchTerm] = useState("");
+    const [userToExpand, setUserToExpand] = useState<string | null>(null);
 
     // Local state for modals and confirmations shared across tabs
     const [photoModal, setPhotoModal] = useState<PhotoModalData | null>(null);
@@ -25,6 +27,17 @@ const ManagementPage = () => {
         setBattleSearchTerm(imageId);
         setActiveTab("battles");
         setPhotoModal(null); // Close the modal
+    };
+
+    const navigateToUsers = (email: string, userId?: string) => {
+        setUserSearchTerm(email);
+        setUserToExpand(userId || null);
+        setActiveTab("users");
+    };
+
+    // Clear userToExpand after it's been used to prevent loops
+    const clearUserToExpand = () => {
+        setUserToExpand(null);
     };
 
     const tabs: { id: ManagementTab; label: string }[] = [
@@ -47,12 +60,15 @@ const ManagementPage = () => {
                         userDeleteConfirmation={userDeleteConfirmation}
                         setUserDeleteConfirmation={setUserDeleteConfirmation}
                         onNavigateToBattles={navigateToBattles}
+                        initialSearchTerm={userSearchTerm}
+                        userToExpand={userToExpand}
+                        onClearUserToExpand={clearUserToExpand}
                     />
                 );
             case "moderation":
                 return <ModerationTab />;
             case "battles":
-                return <BattlesTab initialSearchTerm={battleSearchTerm} />;
+                return <BattlesTab initialSearchTerm={battleSearchTerm} onNavigateToUsers={navigateToUsers} />;
             default:
                 return null;
         }

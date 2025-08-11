@@ -5,7 +5,7 @@ import BattleTable from "../../../components/admin/management/battles/battle-tab
 import { adminService, type AdminBattle } from "../../../services/admin/admin-service";
 import { usePagination } from "../../../hooks/admin/use-pagination";
 
-const BattlesTab = ({ initialSearchTerm }: { initialSearchTerm?: string }) => {
+const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTerm?: string; onNavigateToUsers?: (email: string, userId?: string) => void }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [battles, setBattles] = useState<AdminBattle[]>([]);
     const [loading, setLoading] = useState(false);
@@ -158,6 +158,7 @@ const BattlesTab = ({ initialSearchTerm }: { initialSearchTerm?: string }) => {
                                 searchedImageId={searchTerm}
                                 selectedBattle={selectedBattle}
                                 onBattleClick={handleBattleClick}
+                                onNavigateToUsers={onNavigateToUsers}
                             />
 
                             {battles.length > 10 && (

@@ -8,6 +8,7 @@ interface BattleTableProps {
     searchedImageId: string;
     selectedBattle: AdminBattle | null;
     onBattleClick: (battle: AdminBattle) => void;
+    onNavigateToUsers?: (email: string, userId?: string) => void;
 }
 
 const BattleTable = ({
@@ -16,6 +17,7 @@ const BattleTable = ({
     searchedImageId,
     selectedBattle,
     onBattleClick,
+    onNavigateToUsers,
 }: BattleTableProps) => {
     return (
         <div className="overflow-x-auto">
@@ -45,6 +47,7 @@ const BattleTable = ({
                                 searchedImageId={searchedImageId}
                                 isSelected={selectedBattle?.battleId === battle.battleId}
                                 onBattleClick={onBattleClick}
+                                onNavigateToUsers={onNavigateToUsers}
                             />
                         ))
                     ) : (
