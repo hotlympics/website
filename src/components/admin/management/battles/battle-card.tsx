@@ -8,13 +8,21 @@ interface BattleCardProps {
     onToggleExpansion: (battleId: string) => void;
 }
 
+const formatTime = (dateString: string) => {
+    return new Date(dateString).toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+};
+
 const BattleCard = ({ battle, isExpanded, searchedImageId, onToggleExpansion }: BattleCardProps) => {
     const ratingChange = battle.winnerRatingAfter - battle.winnerRatingBefore;
     const loserRatingChange = battle.loserRatingAfter - battle.loserRatingBefore;
-    
+
     const isWinner = battle.winnerImageId === searchedImageId;
     const isLoser = battle.loserImageId === searchedImageId;
-    
+
     const getRowClasses = () => {
         let baseClasses = "transition-colors";
         if (isWinner) {
@@ -34,9 +42,8 @@ const BattleCard = ({ battle, isExpanded, searchedImageId, onToggleExpansion }: 
                         className="rounded-md p-2 text-gray-400 transition-transform duration-200 hover:bg-white hover:bg-opacity-50 hover:text-gray-600"
                     >
                         <svg
-                            className={`h-5 w-5 transition-transform duration-200 ${
-                                isExpanded ? "rotate-90" : ""
-                            }`}
+                            className={`h-5 w-5 transition-transform duration-200 ${isExpanded ? "rotate-90" : ""
+                                }`}
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -52,7 +59,7 @@ const BattleCard = ({ battle, isExpanded, searchedImageId, onToggleExpansion }: 
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
-                        {battle.battleId.slice(-8)}
+                        {formatTime(battle.timestamp)}
                     </div>
                     <div className="text-sm text-gray-500">
                         {formatDate(battle.timestamp)}
@@ -60,44 +67,38 @@ const BattleCard = ({ battle, isExpanded, searchedImageId, onToggleExpansion }: 
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
-                        {battle.winnerImageId.slice(-8)}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                        Winner • {battle.winnerUserId.slice(-8)}
+                        {battle.winnerEmail || battle.winnerUserId.slice(-8)}
                     </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
-                        {battle.loserImageId.slice(-8)}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                        Loser • {battle.loserUserId.slice(-8)}
+                        {battle.loserEmail || battle.loserUserId.slice(-8)}
                     </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
                         {Math.round(battle.winnerRatingBefore)} → {Math.round(battle.winnerRatingAfter)}
-                    </div>
-                    <div className={`text-sm ${ratingChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                        {ratingChange >= 0 ? '+' : ''}{Math.round(ratingChange)}
+                        <span className={`ml-2 ${ratingChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            ({ratingChange >= 0 ? '+' : ''}{Math.round(ratingChange)})
+                        </span>
                     </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
                         {Math.round(battle.loserRatingBefore)} → {Math.round(battle.loserRatingAfter)}
-                    </div>
-                    <div className={`text-sm ${loserRatingChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                        {loserRatingChange >= 0 ? '+' : ''}{Math.round(loserRatingChange)}
+                        <span className={`ml-2 ${loserRatingChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            ({loserRatingChange >= 0 ? '+' : ''}{Math.round(loserRatingChange)})
+                        </span>
                     </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                     {battle.voterId ? (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            Auth
-                        </span>
+                        <div className="text-sm text-gray-900">
+                            {battle.voterEmail || `[User ${battle.voterId.slice(-8)}]`}
+                        </div>
                     ) : (
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                            Anon
+                            Anonymous
                         </span>
                     )}
                 </td>

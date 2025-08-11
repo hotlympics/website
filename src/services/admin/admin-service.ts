@@ -62,6 +62,8 @@ export interface AdminBattle {
     loserImageId: string;
     winnerUserId: string;
     loserUserId: string;
+    winnerEmail?: string;
+    loserEmail?: string;
     winnerRatingBefore: number;
     winnerRdBefore: number;
     loserRatingBefore: number;
@@ -71,6 +73,7 @@ export interface AdminBattle {
     loserRatingAfter: number;
     loserRdAfter: number;
     voterId?: string;
+    voterEmail?: string;
     timestamp: string;
     systemVersion: number;
 }
@@ -275,6 +278,19 @@ const searchBattles = async (imageId: string, limit: number = 50): Promise<Battl
     return response.json();
 };
 
+const searchBattlesWithEmails = async (imageId: string, limit: number = 50): Promise<BattleSearchResult> => {
+    const response = await fetch(`${API_BASE_URL}/admin/battles/search-with-emails?imageId=${encodeURIComponent(imageId)}&limit=${limit}`, {
+        headers: getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || "Failed to search battles with emails");
+    }
+
+    return response.json();
+};
+
 export const adminService = {
     login,
     logout,
@@ -287,4 +303,5 @@ export const adminService = {
     createUser,
     togglePhotoPool,
     searchBattles,
+    searchBattlesWithEmails,
 };

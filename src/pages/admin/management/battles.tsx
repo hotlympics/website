@@ -40,7 +40,7 @@ const BattlesTab = () => {
         setHasSearched(true);
 
         try {
-            const result = await adminService.searchBattles(searchTerm.trim(), 50);
+            const result = await adminService.searchBattlesWithEmails(searchTerm.trim(), 50);
             setBattles(result.battles);
             setCurrentPage(1); // Reset to first page when new search is performed
         } catch (err) {

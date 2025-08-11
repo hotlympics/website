@@ -24,7 +24,7 @@ const BattleTable = ({
                     <tr>
                         <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"></th>
                         <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-                            Battle
+                            Time
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
                             Winner
