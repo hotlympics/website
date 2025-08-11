@@ -244,18 +244,7 @@ const togglePhotoPool = async (
     return response.json();
 };
 
-const searchBattles = async (imageId: string, limit: number = 50): Promise<BattleSearchResult> => {
-    const response = await fetch(`${API_BASE_URL}/admin/battles/search?imageId=${encodeURIComponent(imageId)}&limit=${limit}`, {
-        headers: getAuthHeaders(),
-    });
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error?.message || "Failed to search battles");
-    }
-
-    return response.json();
-};
 
 const searchBattlesWithEmails = async (imageId: string, limit: number = 50): Promise<BattleSearchResult> => {
     const response = await fetch(`${API_BASE_URL}/admin/battles/search-with-emails?imageId=${encodeURIComponent(imageId)}&limit=${limit}`, {
@@ -293,7 +282,6 @@ export const adminService = {
     deletePhoto,
     createUser,
     togglePhotoPool,
-    searchBattles,
     searchBattlesWithEmails,
     getImageUrl,
 };
