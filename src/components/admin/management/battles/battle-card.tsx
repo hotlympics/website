@@ -4,6 +4,7 @@ import type { AdminBattle } from "../../../../services/admin/admin-service";
 interface BattleCardProps {
     battle: AdminBattle;
     searchedImageId: string;
+    isSelected: boolean;
     onBattleClick: (battle: AdminBattle) => void;
 }
 
@@ -15,7 +16,7 @@ const formatTime = (dateString: string) => {
     });
 };
 
-const BattleCard = ({ battle, searchedImageId, onBattleClick }: BattleCardProps) => {
+const BattleCard = ({ battle, searchedImageId, isSelected, onBattleClick }: BattleCardProps) => {
     const ratingChange = battle.winnerRatingAfter - battle.winnerRatingBefore;
     const loserRatingChange = battle.loserRatingAfter - battle.loserRatingBefore;
 
@@ -23,6 +24,9 @@ const BattleCard = ({ battle, searchedImageId, onBattleClick }: BattleCardProps)
     const isLoser = battle.loserImageId === searchedImageId;
 
     const getRowClasses = () => {
+        if (isSelected) {
+            return "transition-colors bg-blue-200 hover:bg-blue-250";
+        }
         return "transition-colors hover:bg-gray-50";
     };
 

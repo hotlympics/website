@@ -184,6 +184,7 @@ const BattlesTab = () => {
                                 battles={paginatedBattles}
                                 searchTerm={searchTerm}
                                 searchedImageId={searchTerm}
+                                selectedBattle={selectedBattle}
                                 onBattleClick={handleBattleClick}
                             />
 

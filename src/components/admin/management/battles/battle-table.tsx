@@ -6,6 +6,7 @@ interface BattleTableProps {
     battles: AdminBattle[];
     searchTerm: string;
     searchedImageId: string;
+    selectedBattle: AdminBattle | null;
     onBattleClick: (battle: AdminBattle) => void;
 }
 
@@ -13,6 +14,7 @@ const BattleTable = ({
     battles,
     searchTerm,
     searchedImageId,
+    selectedBattle,
     onBattleClick,
 }: BattleTableProps) => {
     return (
@@ -41,6 +43,7 @@ const BattleTable = ({
                                 key={battle.battleId}
                                 battle={battle}
                                 searchedImageId={searchedImageId}
+                                isSelected={selectedBattle?.battleId === battle.battleId}
                                 onBattleClick={onBattleClick}
                             />
                         ))
