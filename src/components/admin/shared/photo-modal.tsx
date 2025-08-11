@@ -158,12 +158,7 @@ const PhotoModal = ({
                                             : "Delete Photo"}
                                     </button>
                                 </div>
-                                <button
-                                    onClick={() => onNavigateToBattles(photoModal.imageData.imageId)}
-                                    className="w-full rounded px-4 py-2 text-sm font-medium bg-purple-600 text-white hover:bg-purple-700 transition-colors"
-                                >
-                                    View Battles
-                                </button>
+
                             </div>
                         </div>
 
@@ -174,13 +169,19 @@ const PhotoModal = ({
                                     Battle Statistics
                                 </h4>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div className="rounded-lg bg-blue-50 p-4">
+                                    <div className="rounded-lg bg-blue-50 p-4 relative">
                                         <div className="text-2xl font-bold text-blue-600">
                                             {photoModal.imageData.battles}
                                         </div>
                                         <div className="text-sm text-blue-800">
                                             Total Battles
                                         </div>
+                                        <button
+                                            onClick={() => onNavigateToBattles(photoModal.imageData.imageId)}
+                                            className="absolute top-2 right-2 rounded px-2 py-1 text-xs font-medium bg-purple-600 text-white hover:bg-purple-700 transition-colors"
+                                        >
+                                            See Battles
+                                        </button>
                                     </div>
                                     <div className="rounded-lg bg-green-50 p-4">
                                         <div className="text-2xl font-bold text-green-600">
