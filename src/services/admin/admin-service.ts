@@ -291,6 +291,19 @@ const searchBattlesWithEmails = async (imageId: string, limit: number = 50): Pro
     return response.json();
 };
 
+const getImageUrl = async (imageId: string): Promise<{ imageId: string; imageUrl: string }> => {
+    const response = await fetch(`${API_BASE_URL}/admin/images/${encodeURIComponent(imageId)}/url`, {
+        headers: getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || "Failed to get image URL");
+    }
+
+    return response.json();
+};
+
 export const adminService = {
     login,
     logout,
@@ -304,4 +317,5 @@ export const adminService = {
     togglePhotoPool,
     searchBattles,
     searchBattlesWithEmails,
+    getImageUrl,
 };

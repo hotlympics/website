@@ -4,6 +4,11 @@ export type {
     AdminStats,
     AdminUser,
     CreateUserData,
-    PhotoModalData,
     UserDetails,
 } from "../../../services/admin/admin-service";
+
+// Re-export types from photo utils
+export type {
+    PhotoModalData,
+    PhotoDeleteConfirmation,
+} from "../../admin/photo-utils";

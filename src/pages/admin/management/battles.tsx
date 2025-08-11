@@ -13,8 +13,10 @@ const BattlesTab = () => {
     const [battles, setBattles] = useState<AdminBattle[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [expandedBattles, setExpandedBattles] = useState<Set<string>>(new Set());
     const [hasSearched, setHasSearched] = useState(false);
+    const [searchedImageUrl, setSearchedImageUrl] = useState<string>("");
+    const [selectedBattle, setSelectedBattle] = useState<AdminBattle | null>(null);
+    const [otherImageUrl, setOtherImageUrl] = useState<string>("");
 
     // Pagination with 10 items per page (50 results = 5 pages)
     const {
@@ -43,6 +45,15 @@ const BattlesTab = () => {
             const result = await adminService.searchBattlesWithEmails(searchTerm.trim(), 50);
             setBattles(result.battles);
             setCurrentPage(1); // Reset to first page when new search is performed
+            
+            // Fetch the image URL for the searched image
+            try {
+                const imageResult = await adminService.getImageUrl(searchTerm.trim());
+                setSearchedImageUrl(imageResult.imageUrl);
+            } catch (imageError) {
+                console.error("Failed to fetch image URL:", imageError);
+                setSearchedImageUrl(""); // Clear image URL on error
+            }
         } catch (err) {
             setError(err instanceof Error ? err.message : "Failed to search battles");
             setBattles([]);
@@ -51,20 +62,37 @@ const BattlesTab = () => {
         }
     };
 
-    const toggleBattleExpansion = (battleId: string) => {
-        setExpandedBattles(prev => {
-            const newSet = new Set(prev);
-            if (newSet.has(battleId)) {
-                newSet.delete(battleId);
-            } else {
-                newSet.add(battleId);
-            }
-            return newSet;
-        });
+    const handleBattleClick = async (battle: AdminBattle) => {
+        setSelectedBattle(battle);
+        setOtherImageUrl("");
+        
+        // Determine which image is different from the searched one
+        const searchedImageId = searchTerm.trim();
+        let otherImageId: string;
+        let isWinner: boolean;
+        
+        if (battle.winnerImageId === searchedImageId) {
+            // Searched image is the winner, show the loser
+            otherImageId = battle.loserImageId;
+            isWinner = false;
+        } else {
+            // Searched image is the loser (or not involved), show the winner
+            otherImageId = battle.winnerImageId;
+            isWinner = true;
+        }
+        
+        try {
+            const result = await adminService.getImageUrl(otherImageId);
+            setOtherImageUrl(result.imageUrl);
+        } catch (err) {
+            console.error("Failed to fetch other image URL:", err);
+            setOtherImageUrl("");
+        }
     };
 
     return (
         <div className="overflow-hidden bg-white shadow sm:rounded-md">
+            {/* Header - Full Width */}
             <div className="px-4 py-5 sm:px-6">
                 <div className="flex items-center justify-between">
                     <div>
@@ -135,41 +163,98 @@ const BattlesTab = () => {
                 </div>
             </div>
 
+            {/* Error Message - Full Width */}
             {error && (
                 <div className="px-4 py-3 bg-red-50 border-l-4 border-red-400">
                     <div className="text-sm text-red-700">{error}</div>
                 </div>
             )}
 
-            {loading ? (
-                <div className="py-12 text-center">
-                    <div className="text-lg text-gray-600">Searching battles...</div>
-                </div>
-            ) : hasSearched ? (
-                <>
-                    <BattleTable
-                        battles={paginatedBattles}
-                        searchTerm={searchTerm}
-                        searchedImageId={searchTerm}
-                        expandedBattles={expandedBattles}
-                        onToggleExpansion={toggleBattleExpansion}
-                    />
+            {/* Main Content - Split Layout */}
+            <div className="flex">
+                {/* Left Side - Battle Table (70% width) */}
+                <div style={{ width: "70%" }}>
+                    {loading ? (
+                        <div className="py-12 text-center">
+                            <div className="text-lg text-gray-600">Searching battles...</div>
+                        </div>
+                    ) : hasSearched ? (
+                        <>
+                            <BattleTable
+                                battles={paginatedBattles}
+                                searchTerm={searchTerm}
+                                searchedImageId={searchTerm}
+                                onBattleClick={handleBattleClick}
+                            />
 
-                    {battles.length > 10 && (
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            totalItems={battles.length}
-                            itemsPerPage={10}
-                            onPageChange={setCurrentPage}
-                        />
+                            {battles.length > 10 && (
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    totalItems={battles.length}
+                                    itemsPerPage={10}
+                                    onPageChange={setCurrentPage}
+                                />
+                            )}
+                        </>
+                    ) : (
+                        <div className="py-12 text-center">
+                            <p className="mt-2 text-sm text-gray-500">Search to find battles</p>
+                        </div>
                     )}
-                </>
-            ) : (
-                <div className="py-12 text-center">
-                    <p className="mt-2 text-sm text-gray-500">Search to find battles</p>
                 </div>
-            )}
+
+                {/* Right Side - Search Image Display (30% width) */}
+                <div style={{ width: "30%" }} className="bg-gray-50 border-l border-gray-200 p-6">
+                    {hasSearched && searchTerm ? (
+                        <div className="space-y-4">
+                            {/* Main searched image */}
+                            <div className="text-center">
+                                {searchedImageUrl ? (
+                                    <div className="aspect-square w-full overflow-hidden rounded-lg shadow-md">
+                                        <img
+                                            src={searchedImageUrl}
+                                            alt={`Image ${searchTerm}`}
+                                            className="h-full w-full object-cover"
+                                            draggable={false}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="aspect-square w-full bg-gray-200 rounded-lg flex items-center justify-center">
+                                        <span className="text-gray-400">Image not found</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Other battle image */}
+                            {selectedBattle && (
+                                <div className="space-y-3">
+                                    <div className="text-center">
+                                        <div className="aspect-square w-full overflow-hidden rounded-lg shadow-sm">
+                                            {otherImageUrl ? (
+                                                <img
+                                                    src={otherImageUrl}
+                                                    alt="Other battle image"
+                                                    className="h-full w-full object-cover"
+                                                    draggable={false}
+                                                />
+                                            ) : (
+                                                <div className="h-full w-full bg-gray-200 flex items-center justify-center">
+                                                    <span className="text-gray-400 text-xs">Loading...</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="aspect-square w-full bg-gray-200 rounded-lg flex items-center justify-center">
+                            <span className="text-gray-400">No search performed</span>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 };

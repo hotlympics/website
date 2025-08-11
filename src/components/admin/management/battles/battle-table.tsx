@@ -6,23 +6,20 @@ interface BattleTableProps {
     battles: AdminBattle[];
     searchTerm: string;
     searchedImageId: string;
-    expandedBattles: Set<string>;
-    onToggleExpansion: (battleId: string) => void;
+    onBattleClick: (battle: AdminBattle) => void;
 }
 
 const BattleTable = ({
     battles,
     searchTerm,
     searchedImageId,
-    expandedBattles,
-    onToggleExpansion,
+    onBattleClick,
 }: BattleTableProps) => {
     return (
         <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                     <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"></th>
                         <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
                             Time
                         </th>
@@ -43,14 +40,13 @@ const BattleTable = ({
                             <BattleCard
                                 key={battle.battleId}
                                 battle={battle}
-                                isExpanded={expandedBattles.has(battle.battleId)}
                                 searchedImageId={searchedImageId}
-                                onToggleExpansion={onToggleExpansion}
+                                onBattleClick={onBattleClick}
                             />
                         ))
                     ) : (
                         <tr>
-                            <td colSpan={5}>
+                            <td colSpan={4}>
                                 <EmptyState
                                     title="No battles found"
                                     description={

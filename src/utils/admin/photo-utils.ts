@@ -1,13 +1,17 @@
 import type {
     AdminImageData,
     AdminUser,
-    PhotoModalData,
     UserDetails,
 } from "../types/admin/admin";
 
 export interface PhotoDeleteConfirmation {
     imageId: string;
     userId: string;
+    isInPool: boolean;
+}
+
+export interface PhotoModalData {
+    imageData: AdminImageData;
     isInPool: boolean;
 }
 
