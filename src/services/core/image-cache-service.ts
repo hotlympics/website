@@ -77,24 +77,9 @@ const clearCache = (): void => {
     }
 };
 
-const getCacheAge = (): number | null => {
-    try {
-        const cachedData = localStorage.getItem(CACHE_KEY);
-        if (!cachedData) {
-            return null;
-        }
-
-        const data: ImageCacheData = JSON.parse(cachedData);
-        return Date.now() - data.timestamp;
-    } catch {
-        return null;
-    }
-};
-
 export const imageCacheService = {
     saveCache,
     loadCache,
     clearCache,
-    getCacheAge,
     CACHE_DURATION_MS,
 };
