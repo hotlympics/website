@@ -1,5 +1,6 @@
 import { preloadImagesWithRetry } from "@/utils/image-preloader";
 import { firebaseAuthService } from "./firebase-auth";
+import { imageCacheService } from "./image-cache-service.js";
 
 const BLOCK_SIZE = 10; // ALWAYS DIVISIBLE BY 2
 const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -145,9 +146,37 @@ const rotateBlocks = (queue: ImageQueue): void => {
     }
 };
 
-const initialize = async (gender: "male" | "female"): Promise<void> => {
+const initialize = async (gender: "male" | "female", userId?: string): Promise<void> => {
     const queue = getQueue();
 
+    // Check if we have valid cache for this user and gender
+    const cacheResult = imageCacheService.validateCacheForUser(userId);
+    if (cacheResult.isValid && cacheResult.data && cacheResult.data.gender === gender) {
+        console.log("Restoring image queue from cache");
+        
+        // Restore queue state from cache
+        queue.gender = cacheResult.data.gender;
+        queue.currentIndex = cacheResult.data.currentIndex;
+        queue.activeBlock = cacheResult.data.activeBlock;
+        queue.bufferBlock = cacheResult.data.bufferBlock;
+        queue.preloadedImages.clear();
+        queue.isFetchingBlock = false;
+
+        // Preload the cached images
+        await preloadBlockImages(queue, queue.activeBlock);
+        if (queue.bufferBlock.length > 0) {
+            await preloadBlockImages(queue, queue.bufferBlock);
+        }
+
+        // If we're getting close to the end of activeBlock and don't have bufferBlock, start fetching
+        if (queue.currentIndex >= queue.activeBlock.length - 4 && queue.bufferBlock.length === 0) {
+            fetchAndPreloadNewBlock(queue);
+        }
+
+        return;
+    }
+
+    // No valid cache, proceed with normal initialization
     queue.gender = gender;
     queue.currentIndex = 0;
     queue.activeBlock = [];
@@ -228,9 +257,42 @@ const peekNextPair = (): ImageData[] | null => {
     return [queue.activeBlock[nextIndex], queue.activeBlock[nextIndex + 1]];
 };
 
+const resetQueue = (): void => {
+    const queue = getQueue();
+    queue.activeBlock = [];
+    queue.bufferBlock = [];
+    queue.currentIndex = 0;
+    queue.preloadedImages.clear();
+    queue.isFetchingBlock = false;
+    queue.gender = "female";
+};
+
+const saveQueueToCache = (userId?: string): void => {
+    const queue = getQueue();
+    
+    // Only save if we have meaningful data
+    if (queue.activeBlock.length > 0) {
+        imageCacheService.saveCache(
+            queue.activeBlock,
+            queue.bufferBlock,
+            queue.currentIndex,
+            queue.gender,
+            userId
+        );
+    }
+};
+
+const clearQueueCache = (): void => {
+    imageCacheService.clearCache();
+    resetQueue(); // Also reset the in-memory queue
+};
+
 export const imageQueueService = {
     initialize,
     getNextPair,
     getCurrentPair,
     peekNextPair,
+    saveQueueToCache,
+    clearQueueCache,
+    resetQueue,
 };

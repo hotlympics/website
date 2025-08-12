@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import {
     ImageData,
     imageQueueService,
@@ -6,6 +7,7 @@ import {
 import { ratingService } from "../../services/core/rating-service.js";
 import { userService } from "../../services/core/user-service.js";
 import { useAuth } from "../auth/use-auth.js";
+import { AuthUser } from "../../services/auth/firebase-auth.js";
 
 export interface RatingQueueState {
     imagePair: ImageData[] | null;
@@ -15,6 +17,7 @@ export interface RatingQueueState {
 
 export const useRatingQueue = () => {
     const { user } = useAuth();
+    const location = useLocation();
     const [imagePair, setImagePair] = useState<ImageData[] | null>(null);
     const [loadingImages, setLoadingImages] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -22,8 +25,12 @@ export const useRatingQueue = () => {
     const isInitializing = useRef(false);
     const lastUserId = useRef<string | null>(null);
     const currentGender = useRef<"male" | "female">("female");
+    const hasInitializedOnce = useRef(false); // Track if we've ever initialized
+    const isHomePage = location.pathname === "/";
 
-    const initializeQueue = useCallback(async () => {
+    const initializeQueue = useCallback(async (forceUser?: AuthUser | null) => {
+        const currentUser = forceUser !== undefined ? forceUser : user;
+        
         if (isInitialized.current || isInitializing.current) {
             return;
         }
@@ -36,7 +43,7 @@ export const useRatingQueue = () => {
             // Determine gender preference
             let gender: "male" | "female" = "female";
 
-            if (user) {
+            if (currentUser) {
                 const userDetails = await userService.getCurrentUser();
                 if (userDetails && userDetails.gender !== "unknown") {
                     gender = userDetails.gender === "male" ? "female" : "male";
@@ -45,11 +52,12 @@ export const useRatingQueue = () => {
 
             currentGender.current = gender;
 
-            // Initialize the queue service
-            await imageQueueService.initialize(gender);
+            // Initialize the queue service with userId for cache support
+            await imageQueueService.initialize(gender, currentUser?.uid);
 
             // Get the first pair
             const firstPair = imageQueueService.getCurrentPair();
+            
             if (firstPair) {
                 setImagePair(firstPair);
                 isInitialized.current = true;
@@ -66,17 +74,58 @@ export const useRatingQueue = () => {
     }, [user]);
 
     useEffect(() => {
-        // Only reinitialize if user actually changed (not just auth state loading)
+        // Handle different auth states:
+        // user === undefined: Auth still loading
+        // user === null: User logged out  
+        // user === object: User logged in
+        
         const currentUserId = user?.uid || null;
         
-        if (user !== undefined && currentUserId !== lastUserId.current) {
+        // Wait for auth to finish loading
+        if (user === undefined) {
+            return;
+        }
+        
+        // Initialize if user changed OR if this is the first time we're running
+        const userChanged = currentUserId !== lastUserId.current;
+        const isFirstRun = !hasInitializedOnce.current;
+        
+        if (userChanged || isFirstRun) {
             lastUserId.current = currentUserId;
+            hasInitializedOnce.current = true;
             isInitialized.current = false;
             isInitializing.current = false;
-            initializeQueue();
+            
+            // Clear cache when user logs out (not on first run)
+            if (userChanged && currentUserId === null) {
+                imageQueueService.clearQueueCache();
+                setImagePair(null);
+                setError(null);
+                setLoadingImages(true);
+            }
+            
+            // Initialize for both authenticated and unauthenticated users
+            initializeQueue(user);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user]);
+    }, [user, initializeQueue]);
+
+    // Handle cache saving when navigating away from homepage
+    useEffect(() => {
+        return () => {
+            // Save cache when component unmounts and we were on homepage
+            if (isHomePage && isInitialized.current) {
+                imageQueueService.saveQueueToCache(user?.uid);
+            }
+        };
+    }, [isHomePage, user?.uid]);
+
+    // Clear cache if user changes or if not on homepage
+    useEffect(() => {
+        if (!isHomePage) {
+            // Start cache timer when leaving homepage - cache will expire after 1 minute
+            // We don't clear immediately, we let the cache service handle expiry
+        }
+    }, [isHomePage]);
 
     const handleImageClick = async (selectedImage: ImageData) => {
         if (!imagePair || imagePair.length !== 2) return;
