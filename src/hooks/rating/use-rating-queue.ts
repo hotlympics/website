@@ -19,13 +19,16 @@ export const useRatingQueue = () => {
     const [loadingImages, setLoadingImages] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const isInitialized = useRef(false);
+    const isInitializing = useRef(false);
+    const lastUserId = useRef<string | null>(null);
     const currentGender = useRef<"male" | "female">("female");
 
     const initializeQueue = useCallback(async () => {
-        if (isInitialized.current) {
+        if (isInitialized.current || isInitializing.current) {
             return;
         }
 
+        isInitializing.current = true;
         setLoadingImages(true);
         setError(null);
 
@@ -58,16 +61,22 @@ export const useRatingQueue = () => {
             setError("Failed to load images. Please try again.");
         } finally {
             setLoadingImages(false);
+            isInitializing.current = false;
         }
     }, [user]);
 
     useEffect(() => {
-        // Reset when user changes
-        if (user !== undefined) {
+        // Only reinitialize if user actually changed (not just auth state loading)
+        const currentUserId = user?.uid || null;
+        
+        if (user !== undefined && currentUserId !== lastUserId.current) {
+            lastUserId.current = currentUserId;
             isInitialized.current = false;
+            isInitializing.current = false;
             initializeQueue();
         }
-    }, [user, initializeQueue]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user]);
 
     const handleImageClick = async (selectedImage: ImageData) => {
         if (!imagePair || imagePair.length !== 2) return;
