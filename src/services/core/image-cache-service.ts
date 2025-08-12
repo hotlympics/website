@@ -77,12 +77,6 @@ const clearCache = (): void => {
     }
 };
 
-// Get cache data if valid, otherwise return null
-const getValidCache = (): ImageCacheData | null => {
-    const result = loadCache();
-    return result.isValid ? result.data || null : null;
-};
-
 const getCacheAge = (): number | null => {
     try {
         const cachedData = localStorage.getItem(CACHE_KEY);
@@ -101,7 +95,6 @@ export const imageCacheService = {
     saveCache,
     loadCache,
     clearCache,
-    getValidCache,
     getCacheAge,
     CACHE_DURATION_MS,
 };

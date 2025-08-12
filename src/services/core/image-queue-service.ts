@@ -150,15 +150,15 @@ const initialize = async (gender: "male" | "female"): Promise<void> => {
     const queue = getQueue();
 
     // Check if we have valid cache
-    const cacheData = imageCacheService.getValidCache();
-    if (cacheData) {
+    const cacheResult = imageCacheService.loadCache();
+    if (cacheResult.isValid && cacheResult.data) {
         console.log("Restoring image queue from cache");
         
         // Restore queue state from cache
         queue.gender = gender;
-        queue.currentIndex = cacheData.currentIndex;
-        queue.activeBlock = cacheData.activeBlock;
-        queue.bufferBlock = cacheData.bufferBlock;
+        queue.currentIndex = cacheResult.data.currentIndex;
+        queue.activeBlock = cacheResult.data.activeBlock;
+        queue.bufferBlock = cacheResult.data.bufferBlock;
         queue.preloadedImages.clear();
         queue.isFetchingBlock = false;
 
