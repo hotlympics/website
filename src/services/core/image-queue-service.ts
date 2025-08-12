@@ -149,13 +149,13 @@ const rotateBlocks = (queue: ImageQueue): void => {
 const initialize = async (gender: "male" | "female", userId?: string): Promise<void> => {
     const queue = getQueue();
 
-    // Check if we have valid cache for this user and gender
+    // Check if we have valid cache for this user (regardless of gender)
     const cacheResult = imageCacheService.validateCacheForUser(userId);
-    if (cacheResult.isValid && cacheResult.data && cacheResult.data.gender === gender) {
+    if (cacheResult.isValid && cacheResult.data) {
         console.log("Restoring image queue from cache");
         
         // Restore queue state from cache
-        queue.gender = cacheResult.data.gender;
+        queue.gender = gender; // Use current gender preference, not cached gender
         queue.currentIndex = cacheResult.data.currentIndex;
         queue.activeBlock = cacheResult.data.activeBlock;
         queue.bufferBlock = cacheResult.data.bufferBlock;
@@ -276,7 +276,6 @@ const saveQueueToCache = (userId?: string): void => {
             queue.activeBlock,
             queue.bufferBlock,
             queue.currentIndex,
-            queue.gender,
             userId
         );
     }

@@ -7,7 +7,6 @@ export interface ImageCacheData {
     activeBlock: ImageData[];
     bufferBlock: ImageData[];
     currentIndex: number;
-    gender: "male" | "female";
     timestamp: number;
     userId?: string; // Store user ID to invalidate cache if user changes
 }
@@ -21,7 +20,6 @@ const saveCache = (
     activeBlock: ImageData[],
     bufferBlock: ImageData[],
     currentIndex: number,
-    gender: "male" | "female",
     userId?: string
 ): void => {
     try {
@@ -29,7 +27,6 @@ const saveCache = (
             activeBlock,
             bufferBlock,
             currentIndex,
-            gender,
             timestamp: Date.now(),
             userId,
         };
@@ -61,7 +58,6 @@ const loadCache = (): CacheValidationResult => {
             !Array.isArray(data.activeBlock) ||
             !Array.isArray(data.bufferBlock) ||
             typeof data.currentIndex !== "number" ||
-            !data.gender ||
             !data.timestamp
         ) {
             clearCache();
