@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import Pagination from "../../../components/admin/pagination";
+import Pagination from "../../../components/admin/shared/pagination";
 import DeletePhotoModal from "../../../components/admin/shared/delete-photo-modal";
 import PhotoModal from "../../../components/admin/shared/photo-modal";
-import CreateUserModal from "../../../components/admin/users/create-user-modal";
-import DeleteUserModal from "../../../components/admin/users/delete-user-modal";
-import UserTable from "../../../components/admin/users/user-table";
+import CreateUserModal from "../../../components/admin/management/users/create-user-modal";
+import DeleteUserModal from "../../../components/admin/management/users/delete-user-modal";
+import UserTable from "../../../components/admin/management/users/user-table";
 import { usePagination } from "../../../hooks/admin/use-pagination";
 import { usePhotoActions } from "../../../hooks/admin/use-photo-actions";
 import { useSearch } from "../../../hooks/admin/use-search";
@@ -39,6 +39,10 @@ interface UsersTabProps {
     setDeleteConfirmation: (data: PhotoDeleteConfirmation | null) => void;
     userDeleteConfirmation: UserDeleteConfirmation | null;
     setUserDeleteConfirmation: (data: UserDeleteConfirmation | null) => void;
+    onNavigateToBattles: (imageId: string) => void;
+    initialSearchTerm?: string;
+    userToExpand?: string | null;
+    onClearUserToExpand: () => void;
 }
 
 const UsersTab = ({
@@ -50,8 +54,12 @@ const UsersTab = ({
     setDeleteConfirmation,
     userDeleteConfirmation,
     setUserDeleteConfirmation,
+    onNavigateToBattles,
+    initialSearchTerm,
+    userToExpand,
+    onClearUserToExpand,
 }: UsersTabProps) => {
-    const { users, setUsers, loading, error, loadData, refreshStats } =
+    const { users, setUsers, loading, error, loadData } =
         useUsers();
     const {
         userDetails,
@@ -92,6 +100,23 @@ const UsersTab = ({
         setCurrentPage(1);
     }, [searchTerm, setCurrentPage]);
 
+    // Handle initial search term from navigation
+    useEffect(() => {
+        if (initialSearchTerm && initialSearchTerm.trim()) {
+            setSearchTerm(initialSearchTerm.trim());
+        }
+    }, [initialSearchTerm, setSearchTerm]);
+
+    // Handle user expansion from navigation
+    useEffect(() => {
+        if (userToExpand) {
+            toggleUserExpansion(userToExpand);
+            // Clear the userToExpand state after using it to prevent loops
+            onClearUserToExpand();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userToExpand]); // Remove toggleUserExpansion from dependencies to prevent loop
+
     // Create utility handlers
     const { openPhotoModal } = createPhotoModalHandlers(
         userDetails,
@@ -127,7 +152,6 @@ const UsersTab = ({
                 setUsers,
                 users,
                 removeUserDetails,
-                refreshStats,
                 setUserDeleteConfirmation
             );
         });
@@ -228,6 +252,7 @@ const UsersTab = ({
                 onClose={() => setPhotoModal(null)}
                 onTogglePool={handleTogglePhotoPool}
                 onDeletePhoto={handleDeletePhoto}
+                onNavigateToBattles={onNavigateToBattles}
                 togglingPool={togglingPool}
                 deletingPhoto={deletingPhoto}
                 userDetails={userDetails}

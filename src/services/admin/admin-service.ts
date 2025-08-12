@@ -30,17 +30,7 @@ export interface AdminImageData {
     inPool: boolean;
 }
 
-export interface AdminStats {
-    totalUsers: number;
-    totalImages: number;
-    totalBattles: number;
-    totalPoolImages: number;
-    usersByGender: {
-        male: number;
-        female: number;
-        unknown: number;
-    };
-}
+
 
 export interface UserDetails {
     user: AdminUser;
@@ -56,9 +46,32 @@ export interface CreateUserData {
     poolImageIndices?: number[];
 }
 
-export interface PhotoModalData {
-    imageData: AdminImageData;
-    isInPool: boolean;
+export interface AdminBattle {
+    battleId: string;
+    winnerImageId: string;
+    loserImageId: string;
+    winnerUserId: string;
+    loserUserId: string;
+    winnerEmail?: string;
+    loserEmail?: string;
+    winnerRatingBefore: number;
+    winnerRdBefore: number;
+    loserRatingBefore: number;
+    loserRdBefore: number;
+    winnerRatingAfter: number;
+    winnerRdAfter: number;
+    loserRatingAfter: number;
+    loserRdAfter: number;
+    voterId?: string;
+    voterEmail?: string;
+    timestamp: string;
+    systemVersion: number;
+}
+
+export interface BattleSearchResult {
+    battles: AdminBattle[];
+    totalCount: number;
+    searchTerm: string;
 }
 
 const getAuthHeaders = (): { Authorization: string } => {
@@ -147,18 +160,7 @@ const deleteUser = async (
     return response.json();
 };
 
-const getStats = async (): Promise<AdminStats> => {
-    const response = await fetch(`${API_BASE_URL}/admin/stats`, {
-        headers: getAuthHeaders(),
-    });
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error?.message || "Failed to fetch stats");
-    }
-
-    return response.json();
-};
 
 const deletePhoto = async (
     imageId: string
@@ -242,6 +244,34 @@ const togglePhotoPool = async (
     return response.json();
 };
 
+
+
+const searchBattlesWithEmails = async (imageId: string, limit: number = 50): Promise<BattleSearchResult> => {
+    const response = await fetch(`${API_BASE_URL}/admin/battles/search-with-emails?imageId=${encodeURIComponent(imageId)}&limit=${limit}`, {
+        headers: getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || "Failed to search battles with emails");
+    }
+
+    return response.json();
+};
+
+const getImageUrl = async (imageId: string): Promise<{ imageId: string; imageUrl: string }> => {
+    const response = await fetch(`${API_BASE_URL}/admin/images/${encodeURIComponent(imageId)}/url`, {
+        headers: getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || "Failed to get image URL");
+    }
+
+    return response.json();
+};
+
 export const adminService = {
     login,
     logout,
@@ -249,8 +279,9 @@ export const adminService = {
     getUsers,
     getUserDetails,
     deleteUser,
-    getStats,
     deletePhoto,
     createUser,
     togglePhotoPool,
+    searchBattlesWithEmails,
+    getImageUrl,
 };

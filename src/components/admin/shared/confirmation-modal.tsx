@@ -1,4 +1,4 @@
-import type { ConfirmationModalProps } from "../../utils/types/admin/common";
+import type { ConfirmationModalProps } from "../../../utils/types/admin/common";
 
 const ConfirmationModal = ({
     isOpen,

@@ -13,6 +13,7 @@ interface PhotoModalProps {
         currentlyInPool: boolean
     ) => void;
     onDeletePhoto: (imageId: string, userId: string) => void;
+    onNavigateToBattles: (imageId: string) => void;
     togglingPool: string | null;
     deletingPhoto: string | null;
     userDetails: Record<string, UserDetails>;
@@ -23,6 +24,7 @@ const PhotoModal = ({
     onClose,
     onTogglePool,
     onDeletePhoto,
+    onNavigateToBattles,
     togglingPool,
     deletingPhoto,
     userDetails,
@@ -113,47 +115,50 @@ const PhotoModal = ({
                             </div>
 
                             {/* Action buttons */}
-                            <div className="flex items-center space-x-3">
-                                <button
-                                    onClick={handleTogglePool}
-                                    disabled={
-                                        togglingPool ===
+                            <div className="space-y-3">
+                                <div className="flex items-center space-x-3">
+                                    <button
+                                        onClick={handleTogglePool}
+                                        disabled={
+                                            togglingPool ===
+                                            photoModal.imageData.imageId
+                                        }
+                                        className={`flex-1 rounded px-4 py-2 text-sm font-medium transition-colors ${
+                                            togglingPool ===
+                                            photoModal.imageData.imageId
+                                                ? "cursor-not-allowed bg-gray-400 text-white"
+                                                : photoModal.isInPool
+                                                  ? "bg-orange-600 text-white hover:bg-orange-700"
+                                                  : "bg-blue-600 text-white hover:bg-blue-700"
+                                        }`}
+                                    >
+                                        {togglingPool ===
                                         photoModal.imageData.imageId
-                                    }
-                                    className={`flex-1 rounded px-4 py-2 text-sm font-medium transition-colors ${
-                                        togglingPool ===
-                                        photoModal.imageData.imageId
-                                            ? "cursor-not-allowed bg-gray-400 text-white"
+                                            ? "Updating..."
                                             : photoModal.isInPool
-                                              ? "bg-orange-600 text-white hover:bg-orange-700"
-                                              : "bg-blue-600 text-white hover:bg-blue-700"
-                                    }`}
-                                >
-                                    {togglingPool ===
-                                    photoModal.imageData.imageId
-                                        ? "Updating..."
-                                        : photoModal.isInPool
-                                          ? "Remove from Pool"
-                                          : "Add to Pool"}
-                                </button>
-                                <button
-                                    onClick={handleDeletePhoto}
-                                    disabled={
-                                        deletingPhoto ===
+                                              ? "Remove from Pool"
+                                              : "Add to Pool"}
+                                    </button>
+                                    <button
+                                        onClick={handleDeletePhoto}
+                                        disabled={
+                                            deletingPhoto ===
+                                            photoModal.imageData.imageId
+                                        }
+                                        className={`flex-1 rounded px-4 py-2 text-sm font-medium transition-colors ${
+                                            deletingPhoto ===
+                                            photoModal.imageData.imageId
+                                                ? "cursor-not-allowed bg-gray-400 text-white"
+                                                : "bg-red-600 text-white hover:bg-red-700"
+                                        }`}
+                                    >
+                                        {deletingPhoto ===
                                         photoModal.imageData.imageId
-                                    }
-                                    className={`flex-1 rounded px-4 py-2 text-sm font-medium transition-colors ${
-                                        deletingPhoto ===
-                                        photoModal.imageData.imageId
-                                            ? "cursor-not-allowed bg-gray-400 text-white"
-                                            : "bg-red-600 text-white hover:bg-red-700"
-                                    }`}
-                                >
-                                    {deletingPhoto ===
-                                    photoModal.imageData.imageId
-                                        ? "Deleting..."
-                                        : "Delete Photo"}
-                                </button>
+                                            ? "Deleting..."
+                                            : "Delete Photo"}
+                                    </button>
+                                </div>
+
                             </div>
                         </div>
 
@@ -164,13 +169,19 @@ const PhotoModal = ({
                                     Battle Statistics
                                 </h4>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div className="rounded-lg bg-blue-50 p-4">
+                                    <div className="rounded-lg bg-blue-50 p-4 relative">
                                         <div className="text-2xl font-bold text-blue-600">
                                             {photoModal.imageData.battles}
                                         </div>
                                         <div className="text-sm text-blue-800">
                                             Total Battles
                                         </div>
+                                        <button
+                                            onClick={() => onNavigateToBattles(photoModal.imageData.imageId)}
+                                            className="absolute top-2 right-2 rounded px-2 py-1 text-xs font-medium bg-purple-600 text-white hover:bg-purple-700 transition-colors"
+                                        >
+                                            See Battles
+                                        </button>
                                     </div>
                                     <div className="rounded-lg bg-green-50 p-4">
                                         <div className="text-2xl font-bold text-green-600">

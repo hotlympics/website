@@ -81,7 +81,6 @@ export const updateStateAfterUserDelete = (
     setUsers: React.Dispatch<React.SetStateAction<AdminUser[]>>,
     users: AdminUser[],
     removeUserDetails: (userId: string) => void,
-    refreshStats: () => void,
     setUserDeleteConfirmation: (
         confirmation: UserDeleteConfirmation | null
     ) => void
@@ -90,7 +89,6 @@ export const updateStateAfterUserDelete = (
     setUsers(users.filter((user) => user.id !== deletedUserId));
     removeUserDetails(deletedUserId);
 
-    // Refresh stats and close modal
-    refreshStats();
+    // Close modal
     setUserDeleteConfirmation(null);
 };

@@ -11,6 +11,9 @@ type ManagementTab = "users" | "moderation" | "battles";
 
 const ManagementPage = () => {
     const [activeTab, setActiveTab] = useState<ManagementTab>("users");
+    const [battleSearchTerm, setBattleSearchTerm] = useState("");
+    const [userSearchTerm, setUserSearchTerm] = useState("");
+    const [userToExpand, setUserToExpand] = useState<string | null>(null);
 
     // Local state for modals and confirmations shared across tabs
     const [photoModal, setPhotoModal] = useState<PhotoModalData | null>(null);
@@ -20,11 +23,39 @@ const ManagementPage = () => {
     const [userDeleteConfirmation, setUserDeleteConfirmation] =
         useState<UserDeleteConfirmation | null>(null);
 
+    const navigateToBattles = (imageId: string) => {
+        setBattleSearchTerm(imageId);
+        setActiveTab("battles");
+        setPhotoModal(null); // Close the modal
+    };
+
+    const navigateToUsers = (email: string, userId?: string) => {
+        setUserSearchTerm(email);
+        setUserToExpand(userId || null);
+        setActiveTab("users");
+    };
+
+    // Clear userToExpand after it's been used to prevent loops
+    const clearUserToExpand = () => {
+        setUserToExpand(null);
+    };
+
     const tabs: { id: ManagementTab; label: string }[] = [
         { id: "users", label: "Users" },
         { id: "moderation", label: "Moderation" },
         { id: "battles", label: "Battles" },
     ];
+
+    const handleTabClick = (tabId: ManagementTab) => {
+        setActiveTab(tabId);
+        // Clear search terms when manually switching tabs
+        if (tabId === "users") {
+            setUserSearchTerm("");
+            setUserToExpand(null);
+        } else if (tabId === "battles") {
+            setBattleSearchTerm("");
+        }
+    };
 
     const renderTabContent = () => {
         switch (activeTab) {
@@ -39,12 +70,16 @@ const ManagementPage = () => {
                         setDeleteConfirmation={setDeleteConfirmation}
                         userDeleteConfirmation={userDeleteConfirmation}
                         setUserDeleteConfirmation={setUserDeleteConfirmation}
+                        onNavigateToBattles={navigateToBattles}
+                        initialSearchTerm={userSearchTerm}
+                        userToExpand={userToExpand}
+                        onClearUserToExpand={clearUserToExpand}
                     />
                 );
             case "moderation":
                 return <ModerationTab />;
             case "battles":
-                return <BattlesTab />;
+                return <BattlesTab initialSearchTerm={battleSearchTerm} onNavigateToUsers={navigateToUsers} />;
             default:
                 return null;
         }
@@ -58,7 +93,7 @@ const ManagementPage = () => {
                         {tabs.map((tab) => (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
+                                onClick={() => handleTabClick(tab.id)}
                                 className={`border-b-2 px-1 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
                                     activeTab === tab.id
                                         ? "border-blue-500 text-blue-600"
