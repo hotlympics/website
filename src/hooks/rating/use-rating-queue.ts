@@ -75,6 +75,7 @@ export const useRatingQueue = () => {
             isInitializing.current = false;
             initializeQueue();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     const handleImageClick = async (selectedImage: ImageData) => {
