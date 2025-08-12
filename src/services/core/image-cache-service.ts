@@ -37,6 +37,7 @@ const saveCache = (
 const loadCache = (): CacheValidationResult => {
     try {
         const cachedData = localStorage.getItem(CACHE_KEY);
+        
         if (!cachedData) {
             return { isValid: false };
         }
@@ -45,6 +46,7 @@ const loadCache = (): CacheValidationResult => {
         
         // Check if cache has expired
         const isExpired = Date.now() - data.timestamp > CACHE_DURATION_MS;
+        
         if (isExpired) {
             clearCache();
             return { isValid: false };

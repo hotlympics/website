@@ -151,9 +151,8 @@ const initialize = async (gender: "male" | "female"): Promise<void> => {
 
     // Check if we have valid cache
     const cacheResult = imageCacheService.loadCache();
+    
     if (cacheResult.isValid && cacheResult.data) {
-        console.log("Restoring image queue from cache");
-        
         // Restore queue state from cache
         queue.gender = gender;
         queue.currentIndex = cacheResult.data.currentIndex;

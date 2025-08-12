@@ -23,14 +23,12 @@ export const useRatingQueue = () => {
     const [error, setError] = useState<string | null>(null);
     const isInitialized = useRef(false);
     const isInitializing = useRef(false);
-    const lastUserId = useRef<string | null>(null);
     const currentGender = useRef<"male" | "female">("female");
-    const hasInitializedOnce = useRef(false); // Track if we've ever initialized
     const isHomePage = location.pathname === "/";
 
     const initializeQueue = useCallback(async (forceUser?: AuthUser | null) => {
         const currentUser = forceUser !== undefined ? forceUser : user;
-        
+
         if (isInitialized.current || isInitializing.current) {
             return;
         }
@@ -57,7 +55,7 @@ export const useRatingQueue = () => {
 
             // Get the first pair
             const firstPair = imageQueueService.getCurrentPair();
-            
+
             if (firstPair) {
                 setImagePair(firstPair);
                 isInitialized.current = true;
@@ -74,42 +72,13 @@ export const useRatingQueue = () => {
     }, [user]);
 
     useEffect(() => {
-        // Handle different auth states:
-        // user === undefined: Auth still loading
-        // user === null: User logged out  
-        // user === object: User logged in
-        
-        const currentUserId = user?.uid || null;
-        
         // Wait for auth to finish loading
         if (user === undefined) {
             return;
         }
-        
-        // Initialize if user changed OR if this is the first time we're running
-        const userChanged = currentUserId !== lastUserId.current;
-        const isFirstRun = !hasInitializedOnce.current;
-        
-        if (userChanged || isFirstRun) {
-            // Clear cache when user changes (but not on first run)
-            if (userChanged && !isFirstRun) {
-                console.log("User changed - clearing cache");
-                imageQueueService.clearQueueCache();
-            }
-            
-            lastUserId.current = currentUserId;
-            hasInitializedOnce.current = true;
-            isInitialized.current = false;
-            isInitializing.current = false;
-            
-            // Reset UI state when user logs out
-            if (userChanged && currentUserId === null) {
-                setImagePair(null);
-                setError(null);
-                setLoadingImages(true);
-            }
-            
-            // Initialize for both authenticated and unauthenticated users
+
+        // Initialize only once when component mounts
+        if (!isInitialized.current && !isInitializing.current) {
             initializeQueue(user);
         }
     }, [user, initializeQueue]);
@@ -127,7 +96,7 @@ export const useRatingQueue = () => {
     // Clear cache if user changes or if not on homepage
     useEffect(() => {
         if (!isHomePage) {
-            // Start cache timer when leaving homepage - cache will expire after 1 minute
+            // Start cache timer when leaving homepage
             // We don't clear immediately, we let the cache service handle expiry
         }
     }, [isHomePage]);
