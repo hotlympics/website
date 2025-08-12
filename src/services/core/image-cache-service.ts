@@ -8,7 +8,6 @@ export interface ImageCacheData {
     bufferBlock: ImageData[];
     currentIndex: number;
     timestamp: number;
-    userId?: string; // Store user ID to invalidate cache if user changes
 }
 
 export interface CacheValidationResult {
@@ -19,8 +18,7 @@ export interface CacheValidationResult {
 const saveCache = (
     activeBlock: ImageData[],
     bufferBlock: ImageData[],
-    currentIndex: number,
-    userId?: string
+    currentIndex: number
 ): void => {
     try {
         const cacheData: ImageCacheData = {
@@ -28,7 +26,6 @@ const saveCache = (
             bufferBlock,
             currentIndex,
             timestamp: Date.now(),
-            userId,
         };
 
         localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
@@ -80,24 +77,10 @@ const clearCache = (): void => {
     }
 };
 
-const validateCacheForUser = (userId?: string): CacheValidationResult => {
+// Get cache data if valid, otherwise return null
+const getValidCache = (): ImageCacheData | null => {
     const result = loadCache();
-    
-    if (!result.isValid || !result.data) {
-        return { isValid: false };
-    }
-
-    // Invalidate cache if user has changed
-    if (result.data.userId !== userId) {
-        clearCache();
-        return { isValid: false };
-    }
-
-    return result;
-};
-
-const isExpired = (timestamp: number): boolean => {
-    return Date.now() - timestamp > CACHE_DURATION_MS;
+    return result.isValid ? result.data || null : null;
 };
 
 const getCacheAge = (): number | null => {
@@ -118,8 +101,7 @@ export const imageCacheService = {
     saveCache,
     loadCache,
     clearCache,
-    validateCacheForUser,
-    isExpired,
+    getValidCache,
     getCacheAge,
     CACHE_DURATION_MS,
 };

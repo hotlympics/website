@@ -146,19 +146,19 @@ const rotateBlocks = (queue: ImageQueue): void => {
     }
 };
 
-const initialize = async (gender: "male" | "female", userId?: string): Promise<void> => {
+const initialize = async (gender: "male" | "female"): Promise<void> => {
     const queue = getQueue();
 
-    // Check if we have valid cache for this user (regardless of gender)
-    const cacheResult = imageCacheService.validateCacheForUser(userId);
-    if (cacheResult.isValid && cacheResult.data) {
+    // Check if we have valid cache
+    const cacheData = imageCacheService.getValidCache();
+    if (cacheData) {
         console.log("Restoring image queue from cache");
         
         // Restore queue state from cache
-        queue.gender = gender; // Use current gender preference, not cached gender
-        queue.currentIndex = cacheResult.data.currentIndex;
-        queue.activeBlock = cacheResult.data.activeBlock;
-        queue.bufferBlock = cacheResult.data.bufferBlock;
+        queue.gender = gender;
+        queue.currentIndex = cacheData.currentIndex;
+        queue.activeBlock = cacheData.activeBlock;
+        queue.bufferBlock = cacheData.bufferBlock;
         queue.preloadedImages.clear();
         queue.isFetchingBlock = false;
 
@@ -267,7 +267,7 @@ const resetQueue = (): void => {
     queue.gender = "female";
 };
 
-const saveQueueToCache = (userId?: string): void => {
+const saveQueueToCache = (): void => {
     const queue = getQueue();
     
     // Only save if we have meaningful data
@@ -275,8 +275,7 @@ const saveQueueToCache = (userId?: string): void => {
         imageCacheService.saveCache(
             queue.activeBlock,
             queue.bufferBlock,
-            queue.currentIndex,
-            userId
+            queue.currentIndex
         );
     }
 };

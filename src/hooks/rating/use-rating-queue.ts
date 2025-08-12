@@ -40,7 +40,7 @@ export const useRatingQueue = () => {
         setError(null);
 
         try {
-            // Determine gender preference
+            // Determine desired gender preference
             let gender: "male" | "female" = "female";
 
             if (currentUser) {
@@ -52,8 +52,8 @@ export const useRatingQueue = () => {
 
             currentGender.current = gender;
 
-            // Initialize the queue service with userId for cache support
-            await imageQueueService.initialize(gender, currentUser?.uid);
+            // Initialize the queue service - it will check cache internally
+            await imageQueueService.initialize(gender);
 
             // Get the first pair
             const firstPair = imageQueueService.getCurrentPair();
@@ -91,14 +91,19 @@ export const useRatingQueue = () => {
         const isFirstRun = !hasInitializedOnce.current;
         
         if (userChanged || isFirstRun) {
+            // Clear cache when user changes (but not on first run)
+            if (userChanged && !isFirstRun) {
+                console.log("User changed - clearing cache");
+                imageQueueService.clearQueueCache();
+            }
+            
             lastUserId.current = currentUserId;
             hasInitializedOnce.current = true;
             isInitialized.current = false;
             isInitializing.current = false;
             
-            // Clear cache when user logs out (not on first run)
+            // Reset UI state when user logs out
             if (userChanged && currentUserId === null) {
-                imageQueueService.clearQueueCache();
                 setImagePair(null);
                 setError(null);
                 setLoadingImages(true);
@@ -114,7 +119,7 @@ export const useRatingQueue = () => {
         return () => {
             // Save cache when component unmounts and we were on homepage
             if (isHomePage && isInitialized.current) {
-                imageQueueService.saveQueueToCache(user?.uid);
+                imageQueueService.saveQueueToCache();
             }
         };
     }, [isHomePage, user?.uid]);
