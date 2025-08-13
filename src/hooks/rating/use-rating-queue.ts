@@ -80,14 +80,6 @@ export const useRatingQueue = () => {
         };
     }, [isHomePage]);
 
-    // Clear cache if user changes or if not on homepage
-    useEffect(() => {
-        if (!isHomePage) {
-            // Start cache timer when leaving homepage
-            // We don't clear immediately, we let the cache service handle expiry
-        }
-    }, [isHomePage]);
-
     const handleImageClick = async (selectedImage: ImageData) => {
         if (!imagePair || imagePair.length !== 2) return;
 
