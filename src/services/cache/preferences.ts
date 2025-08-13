@@ -32,16 +32,16 @@ const saveCache = (preferences: ViewingPreferences): void => {
 const loadCache = (): CacheValidationResult => {
     try {
         const cachedData = localStorage.getItem(PREFERENCE_CACHE_KEY);
-        
+
         if (!cachedData) {
             return { isValid: false };
         }
 
         const data: PreferenceCacheData = JSON.parse(cachedData);
-        
+
         // Check if cache has expired
         const isExpired = Date.now() - data.timestamp > CACHE_DURATION_MS;
-        
+
         if (isExpired) {
             clearCache();
             return { isValid: false };

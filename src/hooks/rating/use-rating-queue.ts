@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { viewingPreferenceService } from "../../services/cache/viewing-preferences.js";
 import {
     ImageData,
     imageQueueService,
-} from "../../services/core/image-queue-service.js";
-import { ratingService } from "../../services/core/rating-service.js";
-import { viewingPreferenceService } from "../../services/core/viewing-preference-service.js";
+} from "../../services/core/image-queue.js";
+import { ratingService } from "../../services/core/rating.js";
 import { useAuth } from "../auth/use-auth.js";
 
 export const useRatingQueue = () => {

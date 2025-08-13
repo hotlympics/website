@@ -30,8 +30,6 @@ export interface AdminImageData {
     inPool: boolean;
 }
 
-
-
 export interface UserDetails {
     user: AdminUser;
     imageData: AdminImageData[];
@@ -160,8 +158,6 @@ const deleteUser = async (
     return response.json();
 };
 
-
-
 const deletePhoto = async (
     imageId: string
 ): Promise<{ message: string; deletedImageId: string; userId: string }> => {
@@ -244,25 +240,36 @@ const togglePhotoPool = async (
     return response.json();
 };
 
-
-
-const searchBattlesWithEmails = async (imageId: string, limit: number = 50): Promise<BattleSearchResult> => {
-    const response = await fetch(`${API_BASE_URL}/admin/battles/search-with-emails?imageId=${encodeURIComponent(imageId)}&limit=${limit}`, {
-        headers: getAuthHeaders(),
-    });
+const searchBattlesWithEmails = async (
+    imageId: string,
+    limit: number = 50
+): Promise<BattleSearchResult> => {
+    const response = await fetch(
+        `${API_BASE_URL}/admin/battles/search-with-emails?imageId=${encodeURIComponent(imageId)}&limit=${limit}`,
+        {
+            headers: getAuthHeaders(),
+        }
+    );
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error?.message || "Failed to search battles with emails");
+        throw new Error(
+            errorData.error?.message || "Failed to search battles with emails"
+        );
     }
 
     return response.json();
 };
 
-const getImageUrl = async (imageId: string): Promise<{ imageId: string; imageUrl: string }> => {
-    const response = await fetch(`${API_BASE_URL}/admin/images/${encodeURIComponent(imageId)}/url`, {
-        headers: getAuthHeaders(),
-    });
+const getImageUrl = async (
+    imageId: string
+): Promise<{ imageId: string; imageUrl: string }> => {
+    const response = await fetch(
+        `${API_BASE_URL}/admin/images/${encodeURIComponent(imageId)}/url`,
+        {
+            headers: getAuthHeaders(),
+        }
+    );
 
     if (!response.ok) {
         const errorData = await response.json();

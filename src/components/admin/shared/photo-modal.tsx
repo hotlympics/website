@@ -158,7 +158,6 @@ const PhotoModal = ({
                                             : "Delete Photo"}
                                     </button>
                                 </div>
-
                             </div>
                         </div>
 
@@ -169,7 +168,7 @@ const PhotoModal = ({
                                     Battle Statistics
                                 </h4>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div className="rounded-lg bg-blue-50 p-4 relative">
+                                    <div className="relative rounded-lg bg-blue-50 p-4">
                                         <div className="text-2xl font-bold text-blue-600">
                                             {photoModal.imageData.battles}
                                         </div>
@@ -177,8 +176,12 @@ const PhotoModal = ({
                                             Total Battles
                                         </div>
                                         <button
-                                            onClick={() => onNavigateToBattles(photoModal.imageData.imageId)}
-                                            className="absolute top-2 right-2 rounded px-2 py-1 text-xs font-medium bg-purple-600 text-white hover:bg-purple-700 transition-colors"
+                                            onClick={() =>
+                                                onNavigateToBattles(
+                                                    photoModal.imageData.imageId
+                                                )
+                                            }
+                                            className="absolute top-2 right-2 rounded bg-purple-600 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-purple-700"
                                         >
                                             See Battles
                                         </button>

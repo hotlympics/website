@@ -8,6 +8,6 @@ export type {
 
 // Re-export types from photo utils
 export type {
-    PhotoModalData,
     PhotoDeleteConfirmation,
+    PhotoModalData,
 } from "../../admin/photo-utils";

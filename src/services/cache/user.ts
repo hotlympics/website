@@ -34,7 +34,7 @@ const getCachedUser = (): User | null => {
 
         const data: UserCache = JSON.parse(cached);
         const isExpired = Date.now() - data.timestamp > USER_CACHE_DURATION;
-        
+
         if (isExpired) {
             localStorage.removeItem(USER_CACHE_KEY);
             return null;
@@ -50,7 +50,7 @@ const setCachedUser = (user: User): void => {
     try {
         const cacheData: UserCache = {
             user,
-            timestamp: Date.now()
+            timestamp: Date.now(),
         };
         localStorage.setItem(USER_CACHE_KEY, JSON.stringify(cacheData));
     } catch {
@@ -85,10 +85,10 @@ const getCurrentUser = async (): Promise<User | null> => {
 
         const data = await response.json();
         const user = data as User;
-        
+
         // Cache the result
         setCachedUser(user);
-        
+
         return user;
     } catch (error) {
         console.error("Error fetching user:", error);

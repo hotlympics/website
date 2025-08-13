@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { uploadService } from "../../services/core/upload-service";
+import { uploadService } from "../../services/core/upload";
 import {
     compressImage,
     validateImageFile,

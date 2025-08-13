@@ -1,5 +1,8 @@
-import { userCacheService } from "./user-cache-service.js";
-import { preferenceCacheService, type ViewingPreferences } from "./preference-cache-service.js";
+import {
+    preferenceCacheService,
+    type ViewingPreferences,
+} from "./preferences.js";
+import { userCacheService } from "./user.js";
 
 /**
  * Service for managing viewing preferences (gender, age ranges, location filters, etc.)
@@ -22,9 +25,9 @@ const getViewingGender = async (): Promise<"male" | "female"> => {
 
     // No valid preferences cache - derive from user data
     const user = await userCacheService.getCurrentUser();
-    
+
     let derivedGender: "male" | "female" = "female"; // Default for anonymous users
-    
+
     if (user && user.gender !== "unknown") {
         // Show opposite gender to user's gender
         derivedGender = user.gender === "male" ? "female" : "male";
@@ -32,7 +35,7 @@ const getViewingGender = async (): Promise<"male" | "female"> => {
 
     // Cache the derived preference
     const preferences: ViewingPreferences = {
-        showGender: derivedGender
+        showGender: derivedGender,
     };
     preferenceCacheService.saveCache(preferences);
 
@@ -58,8 +61,4 @@ export const viewingPreferenceService = {
     getViewingGender,
     setViewingPreferences,
     clearAllCaches,
-    
-    // Re-export individual services for direct access if needed
-    userCache: userCacheService,
-    preferenceCache: preferenceCacheService,
 };

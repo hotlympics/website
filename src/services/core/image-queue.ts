@@ -1,6 +1,6 @@
 import { preloadImagesWithRetry } from "@/utils/image-preloader";
 import { firebaseAuthService } from "../auth/firebase-auth";
-import { imageCacheService } from "./image-cache-service.js";
+import { imageCacheService } from "../cache/image.js";
 
 const BLOCK_SIZE = 10; // ALWAYS DIVISIBLE BY 2
 const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -151,7 +151,7 @@ const initialize = async (gender: "male" | "female"): Promise<void> => {
 
     // Check if we have valid cache
     const cacheResult = imageCacheService.loadCache();
-    
+
     if (cacheResult.isValid && cacheResult.data) {
         // Restore queue state from cache
         queue.gender = gender;
@@ -168,7 +168,10 @@ const initialize = async (gender: "male" | "female"): Promise<void> => {
         }
 
         // If we're getting close to the end of activeBlock and don't have bufferBlock, start fetching
-        if (queue.currentIndex >= queue.activeBlock.length - 4 && queue.bufferBlock.length === 0) {
+        if (
+            queue.currentIndex >= queue.activeBlock.length - 4 &&
+            queue.bufferBlock.length === 0
+        ) {
             fetchAndPreloadNewBlock(queue);
         }
 
@@ -268,7 +271,7 @@ const resetQueue = (): void => {
 
 const saveQueueToCache = (): void => {
     const queue = getQueue();
-    
+
     // Only save if we have meaningful data
     if (queue.activeBlock.length > 0) {
         imageCacheService.saveCache(
@@ -291,5 +294,4 @@ export const imageQueueService = {
     peekNextPair,
     saveQueueToCache,
     clearQueueCache,
-    resetQueue,
 };

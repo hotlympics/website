@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import Pagination from "../../../components/admin/shared/pagination";
-import DeletePhotoModal from "../../../components/admin/shared/delete-photo-modal";
-import PhotoModal from "../../../components/admin/shared/photo-modal";
 import CreateUserModal from "../../../components/admin/management/users/create-user-modal";
 import DeleteUserModal from "../../../components/admin/management/users/delete-user-modal";
 import UserTable from "../../../components/admin/management/users/user-table";
+import DeletePhotoModal from "../../../components/admin/shared/delete-photo-modal";
+import Pagination from "../../../components/admin/shared/pagination";
+import PhotoModal from "../../../components/admin/shared/photo-modal";
 import { usePagination } from "../../../hooks/admin/use-pagination";
 import { usePhotoActions } from "../../../hooks/admin/use-photo-actions";
 import { useSearch } from "../../../hooks/admin/use-search";
@@ -59,8 +59,7 @@ const UsersTab = ({
     userToExpand,
     onClearUserToExpand,
 }: UsersTabProps) => {
-    const { users, setUsers, loading, error, loadData } =
-        useUsers();
+    const { users, setUsers, loading, error, loadData } = useUsers();
     const {
         userDetails,
         setUserDetails,

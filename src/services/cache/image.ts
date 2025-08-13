@@ -1,4 +1,4 @@
-import { ImageData } from "./image-queue-service.js";
+import { ImageData } from "../core/image-queue.js";
 
 const CACHE_KEY = "hotlympics_image_cache";
 const CACHE_DURATION_MS = 60 * 1000; // 1 minute
@@ -37,16 +37,16 @@ const saveCache = (
 const loadCache = (): CacheValidationResult => {
     try {
         const cachedData = localStorage.getItem(CACHE_KEY);
-        
+
         if (!cachedData) {
             return { isValid: false };
         }
 
         const data: ImageCacheData = JSON.parse(cachedData);
-        
+
         // Check if cache has expired
         const isExpired = Date.now() - data.timestamp > CACHE_DURATION_MS;
-        
+
         if (isExpired) {
             clearCache();
             return { isValid: false };
