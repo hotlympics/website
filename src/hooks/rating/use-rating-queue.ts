@@ -22,7 +22,6 @@ export const useRatingQueue = () => {
     const [error, setError] = useState<string | null>(null);
     const isInitialized = useRef(false);
     const isInitializing = useRef(false);
-    const currentGender = useRef<"male" | "female">("female");
     const isHomePage = location.pathname === "/";
 
     const initializeQueue = useCallback(async () => {
@@ -37,7 +36,6 @@ export const useRatingQueue = () => {
         try {
             // Get viewing gender preference (uses cache when possible)
             const gender = await viewingPreferenceService.getViewingGender();
-            currentGender.current = gender;
 
             // Initialize the queue service - it will check cache internally
             await imageQueueService.initialize(gender);
@@ -80,7 +78,7 @@ export const useRatingQueue = () => {
                 imageQueueService.saveQueueToCache();
             }
         };
-    }, [isHomePage, user?.uid]);
+    }, [isHomePage]);
 
     // Clear cache if user changes or if not on homepage
     useEffect(() => {

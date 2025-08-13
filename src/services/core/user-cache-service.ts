@@ -1,4 +1,4 @@
-import { firebaseAuthService } from "./firebase-auth";
+import { firebaseAuthService } from "../auth/firebase-auth";
 
 export interface User {
     id: string;

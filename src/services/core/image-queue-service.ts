@@ -1,5 +1,5 @@
 import { preloadImagesWithRetry } from "@/utils/image-preloader";
-import { firebaseAuthService } from "./firebase-auth";
+import { firebaseAuthService } from "../auth/firebase-auth";
 import { imageCacheService } from "./image-cache-service.js";
 
 const BLOCK_SIZE = 10; // ALWAYS DIVISIBLE BY 2
