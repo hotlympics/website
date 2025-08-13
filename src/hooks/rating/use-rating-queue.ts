@@ -8,12 +8,6 @@ import { ratingService } from "../../services/core/rating-service.js";
 import { viewingPreferenceService } from "../../services/core/viewing-preference-service.js";
 import { useAuth } from "../auth/use-auth.js";
 
-export interface RatingQueueState {
-    imagePair: ImageData[] | null;
-    loadingImages: boolean;
-    error: string | null;
-}
-
 export const useRatingQueue = () => {
     const { user } = useAuth();
     const location = useLocation();
