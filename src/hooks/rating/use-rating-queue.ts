@@ -1,27 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { viewingPreferenceService } from "../../services/cache/viewing-preferences.js";
 import {
     ImageData,
     imageQueueService,
-} from "../../services/core/image-queue-service.js";
-import { ratingService } from "../../services/core/rating-service.js";
-import { userService } from "../../services/core/user-service.js";
+} from "../../services/core/image-queue.js";
+import { ratingService } from "../../services/core/rating.js";
 import { useAuth } from "../auth/use-auth.js";
-
-export interface RatingQueueState {
-    imagePair: ImageData[] | null;
-    loadingImages: boolean;
-    error: string | null;
-}
 
 export const useRatingQueue = () => {
     const { user } = useAuth();
+    const location = useLocation();
     const [imagePair, setImagePair] = useState<ImageData[] | null>(null);
     const [loadingImages, setLoadingImages] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const isInitialized = useRef(false);
     const isInitializing = useRef(false);
-    const lastUserId = useRef<string | null>(null);
-    const currentGender = useRef<"male" | "female">("female");
+    const isHomePage = location.pathname === "/";
 
     const initializeQueue = useCallback(async () => {
         if (isInitialized.current || isInitializing.current) {
@@ -33,23 +28,15 @@ export const useRatingQueue = () => {
         setError(null);
 
         try {
-            // Determine gender preference
-            let gender: "male" | "female" = "female";
+            // Get viewing gender preference (uses cache when possible)
+            const gender = await viewingPreferenceService.getViewingGender();
 
-            if (user) {
-                const userDetails = await userService.getCurrentUser();
-                if (userDetails && userDetails.gender !== "unknown") {
-                    gender = userDetails.gender === "male" ? "female" : "male";
-                }
-            }
-
-            currentGender.current = gender;
-
-            // Initialize the queue service
+            // Initialize the queue service - it will check cache internally
             await imageQueueService.initialize(gender);
 
             // Get the first pair
             const firstPair = imageQueueService.getCurrentPair();
+
             if (firstPair) {
                 setImagePair(firstPair);
                 isInitialized.current = true;
@@ -63,20 +50,29 @@ export const useRatingQueue = () => {
             setLoadingImages(false);
             isInitializing.current = false;
         }
-    }, [user]);
+    }, []);
 
     useEffect(() => {
-        // Only reinitialize if user actually changed (not just auth state loading)
-        const currentUserId = user?.uid || null;
-        
-        if (user !== undefined && currentUserId !== lastUserId.current) {
-            lastUserId.current = currentUserId;
-            isInitialized.current = false;
-            isInitializing.current = false;
+        // Wait for auth to finish loading
+        if (user === undefined) {
+            return;
+        }
+
+        // Initialize only once when component mounts
+        if (!isInitialized.current && !isInitializing.current) {
             initializeQueue();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user]);
+    }, [user, initializeQueue]);
+
+    // Handle cache saving when navigating away from homepage
+    useEffect(() => {
+        return () => {
+            // Save cache when component unmounts and we were on homepage
+            if (isHomePage && isInitialized.current) {
+                imageQueueService.saveQueueToCache();
+            }
+        };
+    }, [isHomePage]);
 
     const handleImageClick = async (selectedImage: ImageData) => {
         if (!imagePair || imagePair.length !== 2) return;

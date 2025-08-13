@@ -79,7 +79,12 @@ const ManagementPage = () => {
             case "moderation":
                 return <ModerationTab />;
             case "battles":
-                return <BattlesTab initialSearchTerm={battleSearchTerm} onNavigateToUsers={navigateToUsers} />;
+                return (
+                    <BattlesTab
+                        initialSearchTerm={battleSearchTerm}
+                        onNavigateToUsers={navigateToUsers}
+                    />
+                );
             default:
                 return null;
         }

@@ -1,18 +1,29 @@
-import { useState, useEffect, useCallback } from "react";
-import SearchInput from "../../../components/admin/shared/search-input";
-import Pagination from "../../../components/admin/shared/pagination";
+import { useCallback, useEffect, useState } from "react";
 import BattleTable from "../../../components/admin/management/battles/battle-table";
-import { adminService, type AdminBattle } from "../../../services/admin/admin-service";
+import Pagination from "../../../components/admin/shared/pagination";
+import SearchInput from "../../../components/admin/shared/search-input";
 import { usePagination } from "../../../hooks/admin/use-pagination";
+import {
+    adminService,
+    type AdminBattle,
+} from "../../../services/admin/admin-service";
 
-const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTerm?: string; onNavigateToUsers?: (email: string, userId?: string) => void }) => {
+const BattlesTab = ({
+    initialSearchTerm,
+    onNavigateToUsers,
+}: {
+    initialSearchTerm?: string;
+    onNavigateToUsers?: (email: string, userId?: string) => void;
+}) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [battles, setBattles] = useState<AdminBattle[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [hasSearched, setHasSearched] = useState(false);
     const [searchedImageUrl, setSearchedImageUrl] = useState<string>("");
-    const [selectedBattle, setSelectedBattle] = useState<AdminBattle | null>(null);
+    const [selectedBattle, setSelectedBattle] = useState<AdminBattle | null>(
+        null
+    );
     const [otherImageUrl, setOtherImageUrl] = useState<string>("");
 
     // Pagination with 10 items per page (50 results = 5 pages)
@@ -23,36 +34,47 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
         paginatedItems: paginatedBattles,
     } = usePagination(battles, 10);
 
-    const performSearch = useCallback(async (searchValue: string) => {
-        if (!searchValue.trim()) {
-            setError("Please enter an image ID to search");
-            return;
-        }
-
-        setLoading(true);
-        setError(null);
-        setHasSearched(true);
-
-        try {
-            const result = await adminService.searchBattlesWithEmails(searchValue, 50);
-            setBattles(result.battles);
-            setCurrentPage(1); // Reset to first page when new search is performed
-            
-            // Fetch the image URL for the searched image
-            try {
-                const imageResult = await adminService.getImageUrl(searchValue);
-                setSearchedImageUrl(imageResult.imageUrl);
-            } catch (imageError) {
-                console.error("Failed to fetch image URL:", imageError);
-                setSearchedImageUrl(""); // Clear image URL on error
+    const performSearch = useCallback(
+        async (searchValue: string) => {
+            if (!searchValue.trim()) {
+                setError("Please enter an image ID to search");
+                return;
             }
-        } catch (err) {
-            setError(err instanceof Error ? err.message : "Failed to search battles");
-            setBattles([]);
-        } finally {
-            setLoading(false);
-        }
-    }, [setCurrentPage]);
+
+            setLoading(true);
+            setError(null);
+            setHasSearched(true);
+
+            try {
+                const result = await adminService.searchBattlesWithEmails(
+                    searchValue,
+                    50
+                );
+                setBattles(result.battles);
+                setCurrentPage(1); // Reset to first page when new search is performed
+
+                // Fetch the image URL for the searched image
+                try {
+                    const imageResult =
+                        await adminService.getImageUrl(searchValue);
+                    setSearchedImageUrl(imageResult.imageUrl);
+                } catch (imageError) {
+                    console.error("Failed to fetch image URL:", imageError);
+                    setSearchedImageUrl(""); // Clear image URL on error
+                }
+            } catch (err) {
+                setError(
+                    err instanceof Error
+                        ? err.message
+                        : "Failed to search battles"
+                );
+                setBattles([]);
+            } finally {
+                setLoading(false);
+            }
+        },
+        [setCurrentPage]
+    );
 
     // Handle initial search term from navigation
     useEffect(() => {
@@ -71,7 +93,7 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
             // Determine which image is the "other" one
             const searchedImageId = searchTerm.trim();
             let otherImageId: string;
-            
+
             if (selectedBattle.winnerImageId === searchedImageId) {
                 // Searched image is the winner, the other is the loser
                 otherImageId = selectedBattle.loserImageId;
@@ -79,7 +101,7 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
                 // Searched image is the loser (or not involved), the other is the winner
                 otherImageId = selectedBattle.winnerImageId;
             }
-            
+
             // Perform new search with the other image ID
             setSearchTerm(otherImageId);
             performSearch(otherImageId);
@@ -91,11 +113,11 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
     const handleBattleClick = async (battle: AdminBattle) => {
         setSelectedBattle(battle);
         setOtherImageUrl("");
-        
+
         // Determine which image is different from the searched one
         const searchedImageId = searchTerm.trim();
         let otherImageId: string;
-        
+
         if (battle.winnerImageId === searchedImageId) {
             // Searched image is the winner, show the loser
             otherImageId = battle.loserImageId;
@@ -103,7 +125,7 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
             // Searched image is the loser (or not involved), show the winner
             otherImageId = battle.winnerImageId;
         }
-        
+
         try {
             const result = await adminService.getImageUrl(otherImageId);
             setOtherImageUrl(result.imageUrl);
@@ -159,7 +181,7 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
 
             {/* Error Message - Full Width */}
             {error && (
-                <div className="px-4 py-3 bg-red-50 border-l-4 border-red-400">
+                <div className="border-l-4 border-red-400 bg-red-50 px-4 py-3">
                     <div className="text-sm text-red-700">{error}</div>
                 </div>
             )}
@@ -170,7 +192,9 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
                 <div style={{ width: "70%" }}>
                     {loading ? (
                         <div className="py-12 text-center">
-                            <div className="text-lg text-gray-600">Searching battles...</div>
+                            <div className="text-lg text-gray-600">
+                                Searching battles...
+                            </div>
                         </div>
                     ) : hasSearched ? (
                         <>
@@ -195,13 +219,18 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
                         </>
                     ) : (
                         <div className="py-12 text-center">
-                            <p className="mt-2 text-sm text-gray-500">Search to find battles</p>
+                            <p className="mt-2 text-sm text-gray-500">
+                                Search to find battles
+                            </p>
                         </div>
                     )}
                 </div>
 
                 {/* Right Side - Search Image Display (30% width) */}
-                <div style={{ width: "30%" }} className="bg-gray-50 border-l border-gray-200 p-6">
+                <div
+                    style={{ width: "30%" }}
+                    className="border-l border-gray-200 bg-gray-50 p-6"
+                >
                     {hasSearched && searchTerm ? (
                         <div className="space-y-4">
                             {/* Main searched image */}
@@ -216,8 +245,10 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
                                         />
                                     </div>
                                 ) : (
-                                    <div className="aspect-square w-full bg-gray-200 rounded-lg flex items-center justify-center">
-                                        <span className="text-gray-400">Image not found</span>
+                                    <div className="flex aspect-square w-full items-center justify-center rounded-lg bg-gray-200">
+                                        <span className="text-gray-400">
+                                            Image not found
+                                        </span>
                                     </div>
                                 )}
                             </div>
@@ -226,8 +257,8 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
                             {selectedBattle && (
                                 <div className="space-y-3">
                                     <div className="text-center">
-                                        <div 
-                                            className="aspect-square w-full overflow-hidden rounded-lg shadow-sm cursor-pointer hover:scale-105 transition-all duration-200"
+                                        <div
+                                            className="aspect-square w-full cursor-pointer overflow-hidden rounded-lg shadow-sm transition-all duration-200 hover:scale-105"
                                             onClick={handleOtherImageClick}
                                         >
                                             {otherImageUrl ? (
@@ -238,8 +269,10 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
                                                     draggable={false}
                                                 />
                                             ) : (
-                                                <div className="h-full w-full bg-gray-200 flex items-center justify-center">
-                                                    <span className="text-gray-400 text-xs">Loading...</span>
+                                                <div className="flex h-full w-full items-center justify-center bg-gray-200">
+                                                    <span className="text-xs text-gray-400">
+                                                        Loading...
+                                                    </span>
                                                 </div>
                                             )}
                                         </div>
@@ -248,8 +281,10 @@ const BattlesTab = ({ initialSearchTerm, onNavigateToUsers }: { initialSearchTer
                             )}
                         </div>
                     ) : (
-                        <div className="aspect-square w-full bg-gray-200 rounded-lg flex items-center justify-center">
-                            <span className="text-gray-400">No search performed</span>
+                        <div className="flex aspect-square w-full items-center justify-center rounded-lg bg-gray-200">
+                            <span className="text-gray-400">
+                                No search performed
+                            </span>
                         </div>
                     )}
                 </div>

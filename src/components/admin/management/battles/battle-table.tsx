@@ -45,7 +45,9 @@ const BattleTable = ({
                                 key={battle.battleId}
                                 battle={battle}
                                 searchedImageId={searchedImageId}
-                                isSelected={selectedBattle?.battleId === battle.battleId}
+                                isSelected={
+                                    selectedBattle?.battleId === battle.battleId
+                                }
                                 onBattleClick={onBattleClick}
                                 onNavigateToUsers={onNavigateToUsers}
                             />

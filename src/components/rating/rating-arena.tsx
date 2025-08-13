@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useRatingQueue } from "../../hooks/rating/use-rating-queue.js";
-import { imageQueueService } from "../../services/core/image-queue-service.js";
+import { imageQueueService } from "../../services/core/image-queue.js";
 import { SwipeCard, type SwipeCardHandle } from "./swipe-card.js";
 
 export const RatingArena = () => {

@@ -9,8 +9,8 @@ import {
     useRef,
     useState,
 } from "react";
-import type { ImageData } from "../../services/core/image-queue-service";
-import { reactionService } from "../../services/core/reaction-service";
+import type { ImageData } from "../../services/core/image-queue";
+import { reactionService } from "../../services/core/reactions";
 
 interface SwipeCardProps {
     pair: ImageData[];
