@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AuthUser, firebaseAuthService } from "../services/auth/firebase-auth";
 import { imageQueueService } from "../services/core/image-queue-service.js";
+import { viewingPreferenceService } from "../services/core/viewing-preference-service.js";
 import { AuthContext } from "./auth-context-definition";
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -21,6 +22,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
                 if (previousUser !== undefined) { // Skip initial load
                     if (wasLoggedIn !== isNowLoggedIn) {
                         imageQueueService.clearQueueCache();
+                        viewingPreferenceService.clearAllCaches();
                     }
                 }
                 
@@ -35,6 +37,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const signOut = async () => {
         imageQueueService.clearQueueCache();
+        viewingPreferenceService.clearAllCaches();
         await firebaseAuthService.signOut();
         setUser(null);
     };

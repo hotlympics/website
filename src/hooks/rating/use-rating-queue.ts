@@ -5,9 +5,8 @@ import {
     imageQueueService,
 } from "../../services/core/image-queue-service.js";
 import { ratingService } from "../../services/core/rating-service.js";
-import { userService } from "../../services/core/user-service.js";
+import { viewingPreferenceService } from "../../services/core/viewing-preference-service.js";
 import { useAuth } from "../auth/use-auth.js";
-import { AuthUser } from "../../services/auth/firebase-auth.js";
 
 export interface RatingQueueState {
     imagePair: ImageData[] | null;
@@ -26,9 +25,7 @@ export const useRatingQueue = () => {
     const currentGender = useRef<"male" | "female">("female");
     const isHomePage = location.pathname === "/";
 
-    const initializeQueue = useCallback(async (forceUser?: AuthUser | null) => {
-        const currentUser = forceUser !== undefined ? forceUser : user;
-
+    const initializeQueue = useCallback(async () => {
         if (isInitialized.current || isInitializing.current) {
             return;
         }
@@ -38,16 +35,8 @@ export const useRatingQueue = () => {
         setError(null);
 
         try {
-            // Determine desired gender preference
-            let gender: "male" | "female" = "female";
-
-            if (currentUser) {
-                const userDetails = await userService.getCurrentUser();
-                if (userDetails && userDetails.gender !== "unknown") {
-                    gender = userDetails.gender === "male" ? "female" : "male";
-                }
-            }
-
+            // Get viewing gender preference (uses cache when possible)
+            const gender = await viewingPreferenceService.getViewingGender();
             currentGender.current = gender;
 
             // Initialize the queue service - it will check cache internally
@@ -69,7 +58,7 @@ export const useRatingQueue = () => {
             setLoadingImages(false);
             isInitializing.current = false;
         }
-    }, [user]);
+    }, []);
 
     useEffect(() => {
         // Wait for auth to finish loading
@@ -79,7 +68,7 @@ export const useRatingQueue = () => {
 
         // Initialize only once when component mounts
         if (!isInitialized.current && !isInitializing.current) {
-            initializeQueue(user);
+            initializeQueue();
         }
     }, [user, initializeQueue]);
 
