@@ -9,7 +9,7 @@ import { ratingService } from "../../services/core/rating.js";
 import { useAuth } from "../auth/use-auth.js";
 
 export const useRatingQueue = () => {
-    const { user } = useAuth();
+    const { loading } = useAuth();
     const location = useLocation();
     const [imagePair, setImagePair] = useState<ImageData[] | null>(null);
     const [loadingImages, setLoadingImages] = useState(true);
@@ -31,17 +31,26 @@ export const useRatingQueue = () => {
             // Get viewing gender preference (uses cache when possible)
             const gender = await viewingPreferenceService.getViewingGender();
 
-            // Initialize the queue service - it will check cache internally
-            await imageQueueService.initialize(gender);
-
-            // Get the first pair
-            const firstPair = imageQueueService.getCurrentPair();
-
-            if (firstPair) {
+            // Initialize the queue service with progressive loading callback
+            const onFirstPairReady = (firstPair: ImageData[]) => {
+                // Show first pair immediately when ready
                 setImagePair(firstPair);
+                setLoadingImages(false);
                 isInitialized.current = true;
-            } else {
-                setError("No images available for rating at this time.");
+            };
+
+            // Initialize the queue service - it will check cache internally
+            await imageQueueService.initialize(gender, onFirstPairReady);
+
+            // If no callback was triggered (e.g., cache hit with full preload), get first pair normally
+            if (!isInitialized.current) {
+                const firstPair = imageQueueService.getCurrentPair();
+                if (firstPair) {
+                    setImagePair(firstPair);
+                    isInitialized.current = true;
+                } else {
+                    setError("No images available for rating at this time.");
+                }
             }
         } catch (err) {
             console.error("Error initializing image queue:", err);
@@ -53,8 +62,8 @@ export const useRatingQueue = () => {
     }, []);
 
     useEffect(() => {
-        // Wait for auth to finish loading
-        if (user === undefined) {
+        // Wait for auth to finish loading before starting image load
+        if (loading) {
             return;
         }
 
@@ -62,7 +71,7 @@ export const useRatingQueue = () => {
         if (!isInitialized.current && !isInitializing.current) {
             initializeQueue();
         }
-    }, [user, initializeQueue]);
+    }, [loading, initializeQueue]);
 
     // Handle cache saving when navigating away from homepage
     useEffect(() => {

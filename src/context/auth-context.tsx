@@ -11,7 +11,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        let previousUser: AuthUser | null = null;
+        let previousUser: AuthUser | null | undefined = undefined;
 
         const unsubscribe = firebaseAuthService.onAuthStateChanged(
             (authUser) => {

@@ -19,6 +19,7 @@ import { userCacheService } from "./user.js";
 const getViewingGender = async (): Promise<"male" | "female"> => {
     // Check preference cache first
     const preferenceResult = preferenceCacheService.loadCache();
+    
     if (preferenceResult.isValid && preferenceResult.data) {
         return preferenceResult.data.preferences.showGender;
     }
