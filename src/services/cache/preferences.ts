@@ -1,5 +1,5 @@
 const PREFERENCE_CACHE_KEY = "hotlympics_preferences";
-const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
+const CACHE_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours (was 5 minutes)
 
 export interface ViewingPreferences {
     showGender: "male" | "female";

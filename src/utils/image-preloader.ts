@@ -65,18 +65,3 @@ export const preloadImageWithRetry = async (
         ),
     };
 };
-
-/**
- * Pre-load multiple images with retry logic
- */
-export const preloadImagesWithRetry = async (
-    urls: string[],
-    maxRetries: number = 3
-): Promise<PreloadResult[]> => {
-    const promises = urls.map(async (url) => {
-        const result = await preloadImageWithRetry(url, maxRetries);
-        return result;
-    });
-
-    return Promise.all(promises);
-};

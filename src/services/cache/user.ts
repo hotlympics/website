@@ -20,7 +20,7 @@ const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 // Cache for user data to avoid repeated API calls
 const USER_CACHE_KEY = "hotlympics_user_cache";
-const USER_CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const USER_CACHE_DURATION = 2 * 60 * 60 * 1000; // 2 hours (was 5 minutes)
 
 interface UserCache {
     user: User;
@@ -33,7 +33,8 @@ const getCachedUser = (): User | null => {
         if (!cached) return null;
 
         const data: UserCache = JSON.parse(cached);
-        const isExpired = Date.now() - data.timestamp > USER_CACHE_DURATION;
+        const age = Date.now() - data.timestamp;
+        const isExpired = age > USER_CACHE_DURATION;
 
         if (isExpired) {
             localStorage.removeItem(USER_CACHE_KEY);
@@ -41,7 +42,7 @@ const getCachedUser = (): User | null => {
         }
 
         return data.user;
-    } catch {
+    } catch (error) {
         return null;
     }
 };
@@ -53,7 +54,7 @@ const setCachedUser = (user: User): void => {
             timestamp: Date.now(),
         };
         localStorage.setItem(USER_CACHE_KEY, JSON.stringify(cacheData));
-    } catch {
+    } catch (error) {
         // Ignore cache errors
     }
 };
@@ -61,12 +62,14 @@ const setCachedUser = (user: User): void => {
 const getCurrentUser = async (): Promise<User | null> => {
     try {
         const token = await firebaseAuthService.getIdToken();
+        
         if (!token) {
             return null;
         }
 
         // Check cache first
         const cachedUser = getCachedUser();
+        
         if (cachedUser) {
             return cachedUser;
         }
@@ -99,7 +102,7 @@ const getCurrentUser = async (): Promise<User | null> => {
 const clearUserCache = (): void => {
     try {
         localStorage.removeItem(USER_CACHE_KEY);
-    } catch {
+    } catch (error) {
         // Ignore errors
     }
 };

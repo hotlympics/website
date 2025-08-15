@@ -1,4 +1,4 @@
-import { preloadImagesWithRetry } from "@/utils/image-preloader";
+import { preloadImageWithRetry } from "@/utils/image-preloader";
 import { firebaseAuthService } from "../auth/firebase-auth";
 import { imageCacheService } from "../cache/image.js";
 
@@ -40,6 +40,7 @@ export interface ImageQueue {
     >;
     gender: "male" | "female";
     isFetchingBlock: boolean; // are we already currently loading a block
+    onFirstPairReady?: (block: ImageData[]) => void; // callback for when first pair is ready
 }
 
 // Create a singleton queue instance
@@ -54,6 +55,7 @@ const getQueue = (): ImageQueue => {
             preloadedImages: new Map(),
             gender: "female",
             isFetchingBlock: false,
+            onFirstPairReady: undefined,
         };
     }
     return queueInstance;
@@ -96,16 +98,32 @@ const fetchImageBlock = async (
 
 const preloadBlockImages = async (
     queue: ImageQueue,
-    block: ImageData[]
+    block: ImageData[],
+    onPairReady?: (readyCount: number) => void
 ): Promise<void> => {
     const urls = block.map((img) => img.imageUrl);
-    const results = await preloadImagesWithRetry(urls, 3);
+    let loadedCount = 0;
 
-    results.forEach((result) => {
-        if (result.success && result.image) {
-            queue.preloadedImages.set(result.url, result.image);
+    // Load images one by one to enable progressive display
+    for (let i = 0; i < urls.length; i++) {
+        const url = urls[i];
+        
+        try {
+            const result = await preloadImageWithRetry(url, 3);
+            
+            if (result.success && result.image) {
+                queue.preloadedImages.set(result.url, result.image);
+                loadedCount++;
+
+                // Notify when first pair is ready for display
+                if (loadedCount === 2 && onPairReady) {
+                    onPairReady(loadedCount);
+                }
+            }
+        } catch (error) {
+            console.error("Error preloading image:", error);
         }
-    });
+    }
 };
 
 const fetchAndPreloadNewBlock = async (queue: ImageQueue): Promise<void> => {
@@ -146,8 +164,14 @@ const rotateBlocks = (queue: ImageQueue): void => {
     }
 };
 
-const initialize = async (gender: "male" | "female"): Promise<void> => {
+const initialize = async (
+    gender: "male" | "female",
+    onFirstPairReady?: (block: ImageData[]) => void
+): Promise<void> => {
     const queue = getQueue();
+    
+    // Set the callback
+    queue.onFirstPairReady = onFirstPairReady;
 
     // Check if we have valid cache
     const cacheResult = imageCacheService.loadCache();
@@ -161,8 +185,15 @@ const initialize = async (gender: "male" | "female"): Promise<void> => {
         queue.preloadedImages.clear();
         queue.isFetchingBlock = false;
 
-        // Preload the cached images
+        // Preload the cached images (instant from browser cache)
         await preloadBlockImages(queue, queue.activeBlock);
+        
+        // Show current pair immediately if callback provided
+        if (onFirstPairReady && queue.activeBlock.length >= queue.currentIndex + 2) {
+            const currentPair = queue.activeBlock.slice(queue.currentIndex, queue.currentIndex + 2);
+            onFirstPairReady(currentPair);
+        }
+        
         if (queue.bufferBlock.length > 0) {
             await preloadBlockImages(queue, queue.bufferBlock);
         }
@@ -185,8 +216,9 @@ const initialize = async (gender: "male" | "female"): Promise<void> => {
     queue.bufferBlock = [];
     queue.preloadedImages.clear();
 
-    // Fetch two blocks in parallel
+    // Fetch initial block
     const initialBlock = await fetchImageBlock(gender, BLOCK_SIZE);
+    
     if (!initialBlock || initialBlock.length === 0) {
         throw new Error(
             "Failed to initialize image queue: No images available"
@@ -194,7 +226,15 @@ const initialize = async (gender: "male" | "female"): Promise<void> => {
     }
 
     queue.activeBlock = initialBlock;
-    await preloadBlockImages(queue, queue.activeBlock);
+    
+    // Use progressive preloading with callback for first pair
+    const onPairReady = (readyCount: number) => {
+        if (readyCount === 2 && onFirstPairReady && queue.activeBlock.length >= 2) {
+            onFirstPairReady(queue.activeBlock.slice(0, 2));
+        }
+    };
+    
+    await preloadBlockImages(queue, queue.activeBlock, onPairReady);
 
     // Start preloading the next block immediately
     fetchAndPreloadNewBlock(queue);
