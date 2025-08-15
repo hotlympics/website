@@ -42,7 +42,7 @@ const getCachedUser = (): User | null => {
         }
 
         return data.user;
-    } catch (error) {
+    } catch {
         return null;
     }
 };
@@ -54,7 +54,7 @@ const setCachedUser = (user: User): void => {
             timestamp: Date.now(),
         };
         localStorage.setItem(USER_CACHE_KEY, JSON.stringify(cacheData));
-    } catch (error) {
+    } catch {
         // Ignore cache errors
     }
 };
@@ -102,7 +102,7 @@ const getCurrentUser = async (): Promise<User | null> => {
 const clearUserCache = (): void => {
     try {
         localStorage.removeItem(USER_CACHE_KEY);
-    } catch (error) {
+    } catch {
         // Ignore errors
     }
 };
