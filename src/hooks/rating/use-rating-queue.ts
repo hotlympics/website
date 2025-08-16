@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { cacheManager } from "../../services/cache/cache-manager.js";
-import { viewingPreferenceService } from "../../services/cache/viewing-preferences.js";
+import { viewingPreferenceService } from "../../services/cache/preferences.js";
 import {
     ImageData,
     imageQueueService,
@@ -32,7 +32,10 @@ export const useRatingQueue = () => {
         cacheManager.setRatingPagePriority(true);
 
         try {
-            // Get viewing gender preference (uses cache when possible)
+            // Ensure viewing preferences are initialized from user data if needed
+            await viewingPreferenceService.initializeViewingPreferences();
+
+            // Get viewing gender preference (preferences-only)
             const gender = await viewingPreferenceService.getViewingGender();
 
             // Initialize the queue service with progressive loading callback
@@ -65,14 +68,12 @@ export const useRatingQueue = () => {
         } catch (err) {
             console.error("Error initializing image queue:", err);
             setError("Failed to load images. Please try again.");
-            
+
             // Clear rating page priority on error to allow background caching
             cacheManager.setRatingPagePriority(false);
         } finally {
             setLoadingImages(false);
             isInitializing.current = false;
-
-
         }
     }, []);
 

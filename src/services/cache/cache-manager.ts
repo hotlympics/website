@@ -1,6 +1,7 @@
 import { CACHE_CONFIG } from "../../config/cache-config.js";
 import { imageCacheService } from "./image.js";
 import { leaderboardCacheService } from "./leaderboard.js";
+import { viewingPreferenceService } from "./preferences.js";
 import { userCacheService } from "./user.js";
 
 type CacheType = keyof typeof CACHE_CONFIG;
@@ -72,6 +73,7 @@ const clearAllCaches = (): void => {
         leaderboardCacheService.clearAllLeaderboards();
         userCacheService.clearUserCache();
         imageCacheService.clearCache();
+        viewingPreferenceService.clearCache();
         console.log("All caches cleared successfully");
     } catch (error) {
         console.error("Error clearing caches:", error);
@@ -140,9 +142,10 @@ const executeBackgroundCaching = async (): Promise<void> => {
     }
 
     // Use pending expired caches if available, otherwise check for new expired caches
-    const expiredCaches = pendingExpiredCaches.length > 0 
-        ? pendingExpiredCaches 
-        : checkExpiredCaches();
+    const expiredCaches =
+        pendingExpiredCaches.length > 0
+            ? pendingExpiredCaches
+            : checkExpiredCaches();
 
     if (expiredCaches.length > 0) {
         await refreshCaches(expiredCaches);
