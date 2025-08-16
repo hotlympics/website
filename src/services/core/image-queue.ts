@@ -107,10 +107,10 @@ const preloadBlockImages = async (
     // Load images one by one to enable progressive display
     for (let i = 0; i < urls.length; i++) {
         const url = urls[i];
-        
+
         try {
             const result = await preloadImageWithRetry(url, 3);
-            
+
             if (result.success && result.image) {
                 queue.preloadedImages.set(result.url, result.image);
                 loadedCount++;
@@ -169,7 +169,7 @@ const initialize = async (
     onFirstPairReady?: (block: ImageData[]) => void
 ): Promise<void> => {
     const queue = getQueue();
-    
+
     // Set the callback
     queue.onFirstPairReady = onFirstPairReady;
 
@@ -187,13 +187,19 @@ const initialize = async (
 
         // Preload the cached images (instant from browser cache)
         await preloadBlockImages(queue, queue.activeBlock);
-        
+
         // Show current pair immediately if callback provided
-        if (onFirstPairReady && queue.activeBlock.length >= queue.currentIndex + 2) {
-            const currentPair = queue.activeBlock.slice(queue.currentIndex, queue.currentIndex + 2);
+        if (
+            onFirstPairReady &&
+            queue.activeBlock.length >= queue.currentIndex + 2
+        ) {
+            const currentPair = queue.activeBlock.slice(
+                queue.currentIndex,
+                queue.currentIndex + 2
+            );
             onFirstPairReady(currentPair);
         }
-        
+
         if (queue.bufferBlock.length > 0) {
             await preloadBlockImages(queue, queue.bufferBlock);
         }
@@ -218,7 +224,7 @@ const initialize = async (
 
     // Fetch initial block
     const initialBlock = await fetchImageBlock(gender, BLOCK_SIZE);
-    
+
     if (!initialBlock || initialBlock.length === 0) {
         throw new Error(
             "Failed to initialize image queue: No images available"
@@ -226,14 +232,18 @@ const initialize = async (
     }
 
     queue.activeBlock = initialBlock;
-    
+
     // Use progressive preloading with callback for first pair
     const onPairReady = (readyCount: number) => {
-        if (readyCount === 2 && onFirstPairReady && queue.activeBlock.length >= 2) {
+        if (
+            readyCount === 2 &&
+            onFirstPairReady &&
+            queue.activeBlock.length >= 2
+        ) {
             onFirstPairReady(queue.activeBlock.slice(0, 2));
         }
     };
-    
+
     await preloadBlockImages(queue, queue.activeBlock, onPairReady);
 
     // Start preloading the next block immediately
