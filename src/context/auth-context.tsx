@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AuthUser, firebaseAuthService } from "../services/auth/firebase-auth";
+import { cacheManager } from "../services/cache/cache-manager.js";
 import { viewingPreferenceService } from "../services/cache/viewing-preferences.js";
 import { imageQueueService } from "../services/core/image-queue.js";
 import { AuthContext } from "./auth-context-definition";
@@ -24,6 +25,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
                     if (wasLoggedIn !== isNowLoggedIn) {
                         imageQueueService.clearQueueCache();
                         viewingPreferenceService.clearAllCaches();
+                        cacheManager.clearAllCaches();
                     }
                 }
 
@@ -36,9 +38,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         return unsubscribe;
     }, []); // Remove user dependency
 
+    // Initialize cache manager after auth is loaded
+    useEffect(() => {
+        if (!loading) {
+            cacheManager.initialize();
+        }
+    }, [loading]);
+
     const signOut = async () => {
         imageQueueService.clearQueueCache();
         viewingPreferenceService.clearAllCaches();
+        cacheManager.clearAllCaches();
         await firebaseAuthService.signOut();
         setUser(null);
     };

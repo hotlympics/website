@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { cacheManager } from "../../services/cache/cache-manager.js";
 import { viewingPreferenceService } from "../../services/cache/viewing-preferences.js";
 import {
     ImageData,
@@ -27,6 +28,9 @@ export const useRatingQueue = () => {
         setLoadingImages(true);
         setError(null);
 
+        // Signal cache manager that rating page is priority
+        cacheManager.setRatingPagePriority(true);
+
         try {
             // Get viewing gender preference (uses cache when possible)
             const gender = await viewingPreferenceService.getViewingGender();
@@ -37,6 +41,9 @@ export const useRatingQueue = () => {
                 setImagePair(firstPair);
                 setLoadingImages(false);
                 isInitialized.current = true;
+
+                // Signal cache manager that first pair is displayed - safe for background caching
+                cacheManager.onFirstPairDisplayed();
             };
 
             // Initialize the queue service - it will check cache internally
@@ -48,6 +55,9 @@ export const useRatingQueue = () => {
                 if (firstPair) {
                     setImagePair(firstPair);
                     isInitialized.current = true;
+
+                    // Signal cache manager that first pair is displayed
+                    cacheManager.onFirstPairDisplayed();
                 } else {
                     setError("No images available for rating at this time.");
                 }
@@ -55,9 +65,14 @@ export const useRatingQueue = () => {
         } catch (err) {
             console.error("Error initializing image queue:", err);
             setError("Failed to load images. Please try again.");
+            
+            // Clear rating page priority on error to allow background caching
+            cacheManager.setRatingPagePriority(false);
         } finally {
             setLoadingImages(false);
             isInitializing.current = false;
+
+
         }
     }, []);
 

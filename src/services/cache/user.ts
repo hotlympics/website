@@ -62,14 +62,14 @@ const setCachedUser = (user: User): void => {
 const getCurrentUser = async (): Promise<User | null> => {
     try {
         const token = await firebaseAuthService.getIdToken();
-        
+
         if (!token) {
             return null;
         }
 
         // Check cache first
         const cachedUser = getCachedUser();
-        
+
         if (cachedUser) {
             return cachedUser;
         }
