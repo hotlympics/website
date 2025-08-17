@@ -40,7 +40,9 @@ const LeaderboardPodium = ({
               ? "order-1 self-end"
               : "order-3 self-end";
         // Add transform to push 2nd and 3rd place down and pull 1st place up
-        const positionClass = isFirst ? "transform -translate-y-12" : "transform translate-y-8";
+        const positionClass = isFirst
+            ? "transform -translate-y-12"
+            : "transform translate-y-8";
 
         return (
             <div
@@ -48,8 +50,11 @@ const LeaderboardPodium = ({
             >
                 {/* Crown for first place */}
                 {isFirst && (
-                    <div className="mb-3 relative z-10">
-                        <CrownIcon className="text-emerald-500 transform translate-y-5" size={56} />
+                    <div className="relative z-10 mb-3">
+                        <CrownIcon
+                            className="translate-y-5 transform text-emerald-500"
+                            size={56}
+                        />
                     </div>
                 )}
 
@@ -82,7 +87,9 @@ const LeaderboardPodium = ({
                 </div>
 
                 {/* Score */}
-                <p className={`mt-3 text-center font-bold ${isFirst ? "text-lg text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full shadow-sm" : "text-base text-emerald-600"}`}>
+                <p
+                    className={`mt-3 text-center font-bold ${isFirst ? "rounded-full bg-emerald-50 px-3 py-1 text-lg text-emerald-700 shadow-sm" : "text-base text-emerald-600"}`}
+                >
                     {Math.round(entry.rating)} pts
                 </p>
             </div>
