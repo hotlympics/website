@@ -7,7 +7,6 @@ export interface CacheItem {
 export interface CacheConfig {
     leaderboards: CacheItem;
     userProfiles: CacheItem;
-    preferences: CacheItem;
 }
 
 export const CACHE_CONFIG: CacheConfig = {
@@ -19,9 +18,5 @@ export const CACHE_CONFIG: CacheConfig = {
 
     userProfiles: {
         duration: 2 * 60 * 60 * 1000, // 2 hours (existing duration)
-    },
-
-    preferences: {
-        duration: 24 * 60 * 60 * 1000, // 24 hours (existing duration)
     },
 };

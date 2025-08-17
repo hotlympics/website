@@ -185,10 +185,7 @@ const refreshCache = async (cacheType: CacheType): Promise<void> => {
                 // We could add explicit refresh logic here if needed
                 break;
 
-            case "preferences":
-                // Preferences cache is handled automatically by the existing service
-                // We could add explicit refresh logic here if needed
-                break;
+
 
             default:
                 console.warn(`Unknown cache type: ${cacheType}`);
@@ -219,11 +216,7 @@ const isCacheExpired = (cacheType: CacheType, duration: number): boolean => {
             return false; // Let the existing service handle its own expiration
         }
 
-        case "preferences": {
-            // Check preferences cache expiration using existing service
-            const prefCache = imageCacheService.loadCache(); // This checks viewing preferences
-            return !prefCache.isValid;
-        }
+
 
         default:
             return true;
@@ -258,10 +251,7 @@ const getCacheAge = (cacheType: CacheType): number | null => {
             return null;
         }
 
-        case "preferences": {
-            // Preferences cache age is harder to determine with current structure
-            return null;
-        }
+
 
         default:
             return null;
