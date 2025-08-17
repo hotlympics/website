@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { cacheManager } from "../../services/cache/cache-manager.js";
-import { viewingPreferenceService } from "../../services/cache/viewing-preferences.js";
+import { userCacheService } from "../../services/cache/user.js";
 import {
     ImageData,
     imageQueueService,
@@ -19,6 +19,20 @@ export const useRatingQueue = () => {
     const isInitializing = useRef(false);
     const isHomePage = location.pathname === "/";
 
+    //TODO: replace this eventually with a preferences object in user collection
+    // so users can choose what they want to see
+    const getViewingGender = async (): Promise<"male" | "female"> => {
+        const user = await userCacheService.getCurrentUser();
+
+        if (user && user.gender !== "unknown") {
+            // Show opposite gender to user's gender
+            return user.gender === "male" ? "female" : "male";
+        }
+
+        // Default to "female" for anonymous users or users with unknown gender
+        return "female";
+    };
+
     const initializeQueue = useCallback(async () => {
         if (isInitialized.current || isInitializing.current) {
             return;
@@ -32,8 +46,8 @@ export const useRatingQueue = () => {
         cacheManager.setRatingPagePriority(true);
 
         try {
-            // Get viewing gender preference (uses cache when possible)
-            const gender = await viewingPreferenceService.getViewingGender();
+            // Get viewing gender based on user's gender (opposite gender)
+            const gender = await getViewingGender();
 
             // Initialize the queue service with progressive loading callback
             const onFirstPairReady = (firstPair: ImageData[]) => {
@@ -65,7 +79,7 @@ export const useRatingQueue = () => {
         } catch (err) {
             console.error("Error initializing image queue:", err);
             setError("Failed to load images. Please try again.");
-            
+
             // Clear rating page priority on error to allow background caching
             cacheManager.setRatingPagePriority(false);
         } finally {
