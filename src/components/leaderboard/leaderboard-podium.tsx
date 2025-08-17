@@ -33,14 +33,14 @@ const LeaderboardPodium = ({
         position: "first" | "second" | "third";
     }) => {
         const isFirst = position === "first";
-        const sizeClass = isFirst ? "h-32 w-32" : "h-28 w-28";
+        const sizeClass = isFirst ? "h-36 w-36" : "h-28 w-28";
         const containerClass = isFirst
             ? "order-2"
             : position === "second"
               ? "order-1 self-end"
               : "order-3 self-end";
-        // Add transform to push 2nd and 3rd place down without affecting layout spacing
-        const positionClass = isFirst ? "" : "transform translate-y-16";
+        // Add transform to push 2nd and 3rd place down and pull 1st place up
+        const positionClass = isFirst ? "transform -translate-y-12" : "transform translate-y-8";
 
         return (
             <div
@@ -48,8 +48,8 @@ const LeaderboardPodium = ({
             >
                 {/* Crown for first place */}
                 {isFirst && (
-                    <div className="mb-3">
-                        <CrownIcon className="text-emerald-500" size={36} />
+                    <div className="mb-3 relative z-10">
+                        <CrownIcon className="text-emerald-500 transform translate-y-5" size={56} />
                     </div>
                 )}
 
@@ -82,7 +82,7 @@ const LeaderboardPodium = ({
                 </div>
 
                 {/* Score */}
-                <p className="mt-2 text-sm font-medium text-gray-600">
+                <p className={`mt-3 text-center font-bold ${isFirst ? "text-lg text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full shadow-sm" : "text-base text-emerald-600"}`}>
                     {Math.round(entry.rating)} pts
                 </p>
             </div>
@@ -91,7 +91,7 @@ const LeaderboardPodium = ({
 
     return (
         <div className="mx-auto max-w-md">
-            <div className="flex items-end justify-center gap-4">
+            <div className="flex items-end justify-center gap-1">
                 {/* Second Place */}
                 {second && (
                     <PodiumPosition entry={second} rank={2} position="second" />

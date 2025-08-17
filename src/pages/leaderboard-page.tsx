@@ -25,7 +25,7 @@ const LeaderboardPage = () => {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-gray-50 px-4 py-8">
+            <div className="min-h-screen px-4 py-8">
                 <div className="mx-auto max-w-6xl">
                     <EmptyState
                         title="Failed to load leaderboard"
@@ -53,7 +53,7 @@ const LeaderboardPage = () => {
 
     if (entries.length === 0) {
         return (
-            <div className="min-h-screen bg-gray-50 px-4 py-8">
+            <div className="min-h-screen px-4 py-8">
                 <div className="mx-auto max-w-6xl">
                     <EmptyState
                         title="No leaderboard data"
@@ -80,7 +80,7 @@ const LeaderboardPage = () => {
     }
 
     return (
-        <div className="fixed inset-0 flex flex-col bg-gray-50">
+        <div className="fixed inset-0 flex flex-col">
             {/* Fixed Header */}
             <div className="flex-shrink-0 px-4 pt-8 pb-4">
                 <div className="mx-auto max-w-6xl">

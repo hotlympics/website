@@ -19,7 +19,7 @@ const LeaderboardEntryRow = ({
     return (
         <button
             onClick={() => onEntryClick(entry)}
-            className={`group flex w-full items-center gap-4 rounded-lg p-4 text-left shadow-sm transition-all ${
+            className={`group flex w-full items-center gap-4 rounded-lg p-3 text-left shadow-sm transition-all ${
                 isSelected
                     ? "bg-emerald-50 shadow-md ring-2 ring-emerald-200"
                     : "bg-white hover:bg-gray-50 hover:shadow-md"
