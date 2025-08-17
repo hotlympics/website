@@ -19,7 +19,7 @@ export const useRatingQueue = () => {
     const isInitializing = useRef(false);
     const isHomePage = location.pathname === "/";
 
-    //TODO: replace this eventually with a preferences object in user collection
+    // TODO: replace this eventually with a preferences object in user collection
     // so users can choose what they want to see
     const getViewingGender = async (): Promise<"male" | "female"> => {
         const user = await userCacheService.getCurrentUser();
@@ -85,8 +85,6 @@ export const useRatingQueue = () => {
         } finally {
             setLoadingImages(false);
             isInitializing.current = false;
-
-
         }
     }, []);
 
