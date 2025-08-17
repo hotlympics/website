@@ -1,4 +1,3 @@
-import { ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import {
     LEADERBOARD_OPTIONS,
@@ -92,9 +91,6 @@ const LeaderboardSelector = ({
                                 <div>
                                     <div className="font-medium">
                                         {option.label}
-                                    </div>
-                                    <div className="text-xs text-gray-500">
-                                        {option.description}
                                     </div>
                                 </div>
                             </button>
