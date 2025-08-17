@@ -63,20 +63,16 @@ const LeaderboardSelector = ({
             <button
                 onClick={() => !disabled && setIsOpen(!isOpen)}
                 disabled={disabled}
-                className={`flex items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm font-medium shadow-sm transition-colors ${
+                className={`flex items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold shadow-md transition-all duration-200 focus:outline-none ${
                     disabled
-                        ? "cursor-not-allowed border-gray-200 bg-gray-50 text-gray-400"
-                        : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                        ? "cursor-not-allowed bg-gray-50 text-gray-400"
+                        : "bg-gradient-to-r from-emerald-50 to-white text-emerald-800 hover:from-emerald-100 hover:to-emerald-50 hover:shadow-lg active:scale-95"
                 } `}
                 type="button"
                 aria-expanded={isOpen}
                 aria-haspopup="true"
             >
                 <span className="truncate">{currentInfo.label}</span>
-                <ChevronDown
-                    size={16}
-                    className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
-                />
             </button>
 
             {isOpen && (

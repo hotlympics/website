@@ -19,22 +19,22 @@ export interface LeaderboardDisplayInfo {
 export const LEADERBOARD_OPTIONS: LeaderboardDisplayInfo[] = [
     {
         key: "female_top",
-        label: "Female Top 10",
+        label: "Top Rated Women",
         description: "Highest rated female participants",
     },
     {
         key: "female_bottom",
-        label: "Female Bottom 10",
+        label: "Bottom Rated Women",
         description: "Lowest rated female participants",
     },
     {
         key: "male_top",
-        label: "Male Top 10",
+        label: "Top Rated Men",
         description: "Highest rated male participants",
     },
     {
         key: "male_bottom",
-        label: "Male Bottom 10",
+        label: "Bottom Rated Men",
         description: "Lowest rated male participants",
     },
 ];

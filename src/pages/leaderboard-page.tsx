@@ -84,10 +84,7 @@ const LeaderboardPage = () => {
             {/* Fixed Header */}
             <div className="flex-shrink-0 px-4 pt-8 pb-4">
                 <div className="mx-auto max-w-6xl">
-                    <div className="flex flex-row items-center justify-between">
-                        <h1 className="text-2xl font-bold text-gray-800">
-                            Leaderboard
-                        </h1>
+                    <div className="flex flex-row items-center justify-end">
                         <LeaderboardSelector
                             currentLeaderboard={currentLeaderboard}
                             onLeaderboardChange={switchLeaderboard}
