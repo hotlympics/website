@@ -140,9 +140,10 @@ const executeBackgroundCaching = async (): Promise<void> => {
     }
 
     // Use pending expired caches if available, otherwise check for new expired caches
-    const expiredCaches = pendingExpiredCaches.length > 0 
-        ? pendingExpiredCaches 
-        : checkExpiredCaches();
+    const expiredCaches =
+        pendingExpiredCaches.length > 0
+            ? pendingExpiredCaches
+            : checkExpiredCaches();
 
     if (expiredCaches.length > 0) {
         await refreshCaches(expiredCaches);
@@ -185,8 +186,6 @@ const refreshCache = async (cacheType: CacheType): Promise<void> => {
                 // We could add explicit refresh logic here if needed
                 break;
 
-
-
             default:
                 console.warn(`Unknown cache type: ${cacheType}`);
         }
@@ -215,8 +214,6 @@ const isCacheExpired = (cacheType: CacheType, duration: number): boolean => {
             // The user cache service doesn't expose cache validation, so we'll assume it's handling expiration internally
             return false; // Let the existing service handle its own expiration
         }
-
-
 
         default:
             return true;
@@ -250,8 +247,6 @@ const getCacheAge = (cacheType: CacheType): number | null => {
             // User cache service doesn't expose cache age, return null
             return null;
         }
-
-
 
         default:
             return null;

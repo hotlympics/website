@@ -1,0 +1,110 @@
+import { LeaderboardEntry } from "../../services/cache/leaderboard.js";
+import CrownIcon from "./crown-icon.js";
+
+interface LeaderboardPodiumProps {
+    entries: LeaderboardEntry[];
+    onEntryClick: (entry: LeaderboardEntry) => void;
+}
+
+const LeaderboardPodium = ({
+    entries,
+    onEntryClick,
+}: LeaderboardPodiumProps) => {
+    // Get top 3 entries
+    const first = entries[0];
+    const second = entries[1];
+    const third = entries[2];
+
+    if (!first) {
+        return (
+            <div className="flex h-64 items-center justify-center text-gray-500">
+                <p>No leaderboard data available</p>
+            </div>
+        );
+    }
+
+    const PodiumPosition = ({
+        entry,
+        rank,
+        position,
+    }: {
+        entry: LeaderboardEntry;
+        rank: number;
+        position: "first" | "second" | "third";
+    }) => {
+        const isFirst = position === "first";
+        const sizeClass = isFirst ? "h-32 w-32" : "h-28 w-28";
+        const containerClass = isFirst
+            ? "order-2"
+            : position === "second"
+              ? "order-1 self-end"
+              : "order-3 self-end";
+        // Add transform to push 2nd and 3rd place down without affecting layout spacing
+        const positionClass = isFirst ? "" : "transform translate-y-16";
+
+        return (
+            <div
+                className={`flex flex-1 flex-col items-center ${containerClass} ${positionClass}`}
+            >
+                {/* Crown for first place */}
+                {isFirst && (
+                    <div className="mb-3">
+                        <CrownIcon className="text-emerald-500" size={36} />
+                    </div>
+                )}
+
+                {/* Profile Image */}
+                <button
+                    onClick={() => onEntryClick(entry)}
+                    className="group relative transition-transform hover:scale-105 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:outline-none"
+                    type="button"
+                >
+                    <div
+                        className={`overflow-hidden rounded-full border-4 ${sizeClass} ${isFirst ? "border-emerald-400" : "border-emerald-300"} `}
+                    >
+                        <img
+                            src={entry.imageUrl}
+                            alt={`Rank ${rank} participant`}
+                            className="h-full w-full object-cover"
+                            onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = "/placeholder-avatar.png";
+                            }}
+                        />
+                    </div>
+                </button>
+
+                {/* Rank Badge */}
+                <div className="mt-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-base font-bold text-white">
+                    {rank}
+                </div>
+
+                {/* Score */}
+                <p className="mt-2 text-sm font-medium text-gray-600">
+                    {Math.round(entry.rating)} pts
+                </p>
+            </div>
+        );
+    };
+
+    return (
+        <div className="mx-auto max-w-md">
+            <div className="flex items-end justify-center gap-4">
+                {/* Second Place */}
+                {second && (
+                    <PodiumPosition entry={second} rank={2} position="second" />
+                )}
+
+                {/* First Place */}
+                <PodiumPosition entry={first} rank={1} position="first" />
+
+                {/* Third Place */}
+                {third && (
+                    <PodiumPosition entry={third} rank={3} position="third" />
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default LeaderboardPodium;

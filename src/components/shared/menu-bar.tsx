@@ -1,4 +1,4 @@
-import { Circle, House, Square, Triangle, UserPen } from "lucide-react";
+import { Circle, House, Square, Trophy, UserPen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/auth/use-auth.js";
 
@@ -14,10 +14,10 @@ const MenuBar = () => {
             functional: true,
         },
         {
-            icon: Triangle,
-            label: "Temp 1",
-            onClick: () => {},
-            functional: false,
+            icon: Trophy,
+            label: "Leaderboard",
+            onClick: () => navigate("/leaderboard"),
+            functional: true,
         },
         {
             icon: Circle,
