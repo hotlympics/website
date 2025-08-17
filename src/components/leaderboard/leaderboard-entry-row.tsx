@@ -19,7 +19,7 @@ const LeaderboardEntryRow = ({
     return (
         <button
             onClick={() => onEntryClick(entry)}
-            className={`group flex w-full items-center gap-4 rounded-lg p-3 text-left shadow-sm transition-all ${
+            className={`group flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-left shadow-sm transition-all ${
                 isSelected
                     ? "bg-emerald-50 shadow-md ring-2 ring-emerald-200"
                     : "bg-white hover:bg-gray-50 hover:shadow-md"
@@ -46,10 +46,10 @@ const LeaderboardEntryRow = ({
 
             {/* Profile Picture */}
             <div
-                className={`overflow-hidden rounded-full border-2 shadow-[0_18px_60px_rgba(0,0,0,0.55)] ring-1 ring-black/10 transition-transform group-hover:scale-105 ${
+                className={`overflow-hidden rounded-full border-2 transition-transform group-hover:scale-105 ${
                     isTopThree
-                        ? "h-12 w-12 border-emerald-300"
-                        : "h-10 w-10 border-gray-200"
+                        ? "h-14 w-14 border-emerald-300"
+                        : "h-12 w-12 border-gray-200"
                 } `}
             >
                 <img
