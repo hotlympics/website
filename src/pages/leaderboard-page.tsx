@@ -98,8 +98,8 @@ const LeaderboardPage = () => {
             </div>
 
             {/* Fixed Top Section - Podium or Detail Card */}
-            <div className="flex-shrink-0 px-4 pb-4">
-                <div className="mx-auto max-w-6xl">
+            <div className="h-80 flex-shrink-0 px-4 pb-4">
+                <div className="mx-auto flex h-full max-w-6xl items-center justify-center">
                     {viewMode === "podium" ? (
                         <LeaderboardPodium
                             entries={entries}
@@ -123,7 +123,7 @@ const LeaderboardPage = () => {
             </div>
 
             {/* Scrollable Cards Section */}
-            <div className="flex-1 overflow-y-auto px-4 pt-8 pb-20">
+            <div className="h-[30rem] overflow-y-auto px-4 pt-4 pb-20">
                 <div className="mx-auto max-w-6xl">
                     <LeaderboardFullList
                         entries={entries}

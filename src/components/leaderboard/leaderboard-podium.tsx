@@ -54,29 +54,31 @@ const LeaderboardPodium = ({
                 )}
 
                 {/* Profile Image */}
-                <button
-                    onClick={() => onEntryClick(entry)}
-                    className="group relative transition-transform hover:scale-105 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:outline-none"
-                    type="button"
-                >
-                    <div
-                        className={`overflow-hidden rounded-full border-4 ${sizeClass} ${isFirst ? "border-emerald-400" : "border-emerald-300"} `}
+                <div className="relative">
+                    <button
+                        onClick={() => onEntryClick(entry)}
+                        className="group relative transition-transform hover:scale-105 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:outline-none"
+                        type="button"
                     >
-                        <img
-                            src={entry.imageUrl}
-                            alt={`Rank ${rank} participant`}
-                            className="h-full w-full object-cover"
-                            onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.src = "/placeholder-avatar.png";
-                            }}
-                        />
-                    </div>
-                </button>
+                        <div
+                            className={`overflow-hidden rounded-full border-4 ${sizeClass} ${isFirst ? "border-emerald-400" : "border-emerald-300"} `}
+                        >
+                            <img
+                                src={entry.imageUrl}
+                                alt={`Rank ${rank} participant`}
+                                className="h-full w-full object-cover"
+                                onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = "/placeholder-avatar.png";
+                                }}
+                            />
+                        </div>
+                    </button>
 
-                {/* Rank Badge */}
-                <div className="mt-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-base font-bold text-white">
-                    {rank}
+                    {/* Rank Badge - Overlapping bottom of image */}
+                    <div className="absolute -bottom-2 left-1/2 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full bg-emerald-600 text-base font-bold text-white">
+                        {rank}
+                    </div>
                 </div>
 
                 {/* Score */}
