@@ -1,7 +1,7 @@
 import { ImageData } from "../core/image-queue.js";
 
 const CACHE_KEY = "hotlympics_image_cache";
-const CACHE_DURATION_MS = 60 * 1000; // 1 minute
+const CACHE_DURATION_MS = 10 * 60 * 1000; // 1 minute
 
 export interface ImageCacheData {
     activeBlock: ImageData[];
