@@ -46,7 +46,7 @@ const LeaderboardEntryRow = ({
 
             {/* Profile Picture */}
             <div
-                className={`overflow-hidden rounded-full border-2 transition-transform group-hover:scale-105 ${
+                className={`overflow-hidden rounded-full border-2 shadow-[0_18px_60px_rgba(0,0,0,0.55)] ring-1 ring-black/10 transition-transform group-hover:scale-105 ${
                     isTopThree
                         ? "h-12 w-12 border-emerald-300"
                         : "h-10 w-10 border-gray-200"

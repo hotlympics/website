@@ -61,7 +61,7 @@ const LeaderboardPodium = ({
                         type="button"
                     >
                         <div
-                            className={`overflow-hidden rounded-full border-4 ${sizeClass} ${isFirst ? "border-emerald-400" : "border-emerald-300"} `}
+                            className={`overflow-hidden rounded-full border-4 shadow-[0_18px_60px_rgba(0,0,0,0.55)] ring-1 ring-black/10 ${sizeClass} ${isFirst ? "border-emerald-400" : "border-emerald-300"} `}
                         >
                             <img
                                 src={entry.imageUrl}
