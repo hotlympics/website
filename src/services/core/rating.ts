@@ -1,3 +1,4 @@
+import { getApiUrl } from "../../utils/api";
 import { firebaseAuthService } from "../auth/firebase-auth";
 
 export interface RatingSubmission {
@@ -10,7 +11,7 @@ export interface RatingResponse {
     message?: string;
 }
 
-const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const apiUrl = getApiUrl();
 
 const submitRating = async (
     winnerId: string,

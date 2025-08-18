@@ -1,7 +1,8 @@
+import { getApiUrl } from "../../utils/api";
 import { firebaseAuthService } from "./firebase-auth.js";
 
 export const syncUserWithBackend = async (firebaseUid: string) => {
-    const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+    const apiUrl = getApiUrl();
     const idToken = await firebaseAuthService.getIdToken();
 
     if (!idToken) {

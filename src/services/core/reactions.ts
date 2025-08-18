@@ -1,3 +1,4 @@
+import { getApiUrl } from "../../utils/api";
 import { firebaseAuthService } from "../auth/firebase-auth";
 
 export interface ReactionResponse {
@@ -6,7 +7,7 @@ export interface ReactionResponse {
 }
 
 class ReactionService {
-    private apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+    private apiUrl = getApiUrl();
 
     async submitReaction(
         imageId: string,
