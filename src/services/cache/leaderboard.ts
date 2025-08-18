@@ -1,7 +1,8 @@
+import { getApiUrl } from "../../utils/api";
 import { preloadImageWithRetry } from "@/utils/image-preloader";
 import { firebaseAuthService } from "../auth/firebase-auth";
 
-const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const apiUrl = getApiUrl();
 
 // Use the same types from server
 export interface LeaderboardEntry {

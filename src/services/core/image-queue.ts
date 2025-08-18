@@ -1,9 +1,10 @@
+import { getApiUrl } from "../../utils/api";
 import { preloadImageWithRetry } from "@/utils/image-preloader";
 import { firebaseAuthService } from "../auth/firebase-auth";
 import { imageCacheService } from "../cache/image.js";
 
 const BLOCK_SIZE = 10; // ALWAYS DIVISIBLE BY 2
-const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const apiUrl = getApiUrl();
 
 export interface GlickoState {
     rating: number; // Display rating R

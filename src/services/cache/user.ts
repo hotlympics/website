@@ -16,7 +16,9 @@ export interface User {
     photoUrl?: string | null;
 }
 
-const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+import { getApiUrl } from "../../utils/api";
+
+const apiUrl = getApiUrl();
 
 // Cache for user data to avoid repeated API calls
 const USER_CACHE_KEY = "hotlympics_user_cache";
