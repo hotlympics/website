@@ -1,5 +1,5 @@
-import { getApiUrl } from "../../utils/api";
 import { preloadImageWithRetry } from "@/utils/image-preloader";
+import { getApiUrl } from "../../utils/api";
 import { firebaseAuthService } from "../auth/firebase-auth";
 
 const apiUrl = getApiUrl();

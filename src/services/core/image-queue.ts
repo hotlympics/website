@@ -1,5 +1,5 @@
-import { getApiUrl } from "../../utils/api";
 import { preloadImageWithRetry } from "@/utils/image-preloader";
+import { getApiUrl } from "../../utils/api";
 import { firebaseAuthService } from "../auth/firebase-auth";
 import { imageCacheService } from "../cache/image.js";
 
@@ -103,28 +103,50 @@ const preloadBlockImages = async (
     onPairReady?: (readyCount: number) => void
 ): Promise<void> => {
     const urls = block.map((img) => img.imageUrl);
-    let loadedCount = 0;
+    let pairReadyCallbackFired = false;
 
-    // Load images one by one to enable progressive display
-    for (let i = 0; i < urls.length; i++) {
-        const url = urls[i];
+    // Start timing
+    const startTime = performance.now();
+    let firstPairTime: number | null = null;
 
+    // Create promises for all images
+    const imagePromises = urls.map(async (url, index) => {
         try {
             const result = await preloadImageWithRetry(url, 3);
 
             if (result.success && result.image) {
                 queue.preloadedImages.set(result.url, result.image);
-                loadedCount++;
 
-                // Notify when first pair is ready for display
-                if (loadedCount === 2 && onPairReady) {
-                    onPairReady(loadedCount);
+                // Check if this is one of the first two images and we have both loaded
+                if (!pairReadyCallbackFired && index < 2) {
+                    // Check if both first two images are loaded
+                    const firstTwoLoaded = urls
+                        .slice(0, 2)
+                        .every((u) => queue.preloadedImages.has(u));
+
+                    if (firstTwoLoaded && onPairReady) {
+                        pairReadyCallbackFired = true;
+                        firstPairTime = performance.now() - startTime;
+                        console.log(
+                            `[Image Queue] First pair ready in ${firstPairTime.toFixed(2)}ms`
+                        );
+                        onPairReady(2);
+                    }
                 }
             }
         } catch (error) {
             console.error("Error preloading image:", error);
         }
-    }
+    });
+
+    // Wait for all images to load in parallel
+    await Promise.all(imagePromises);
+
+    // Log total time
+    const totalTime = performance.now() - startTime;
+    console.log(
+        `[Image Queue] All ${urls.length} images ready in ${totalTime.toFixed(2)}ms`
+    );
 };
 
 const fetchAndPreloadNewBlock = async (queue: ImageQueue): Promise<void> => {
@@ -183,6 +205,15 @@ const initialize = async (
         queue.currentIndex = cacheResult.data.currentIndex;
         queue.activeBlock = cacheResult.data.activeBlock;
         queue.bufferBlock = cacheResult.data.bufferBlock;
+
+        for (let i = 0; i < 10; i++) {
+            console.log(queue.activeBlock[i]);
+        }
+        for (let i = 0; i < 10; i++) {
+            console.log(queue.bufferBlock[i]);
+        }
+        console.log(queue.bufferBlock.length);
+
         queue.preloadedImages.clear();
         queue.isFetchingBlock = false;
 
@@ -206,10 +237,7 @@ const initialize = async (
         }
 
         // If we're getting close to the end of activeBlock and don't have bufferBlock, start fetching
-        if (
-            queue.currentIndex >= queue.activeBlock.length - 4 &&
-            queue.bufferBlock.length === 0
-        ) {
+        if (queue.bufferBlock.length === 0) {
             fetchAndPreloadNewBlock(queue);
         }
 
@@ -253,6 +281,9 @@ const initialize = async (
 
 const getNextPair = (): ImageData[] | null => {
     const queue = getQueue();
+    console.log(queue.currentIndex);
+    console.log(queue.activeBlock.length);
+    console.log(queue.bufferBlock.length);
 
     // First increment to get the NEXT pair
     queue.currentIndex += 2;
