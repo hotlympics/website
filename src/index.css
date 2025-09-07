@@ -9,7 +9,7 @@
     body,
     #root {
         min-height: 100dvh;
-        background-color: #0f0f23; /* Dark blue-black background */
+        background-color: #000000; /* Black background */
         color: #e2e8f0; /* Light gray text */
     }
 }

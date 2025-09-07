@@ -153,10 +153,10 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
                     }
                 >
                     {/* Top image */}
-                    <div className="relative w-full overflow-hidden">
+                    <div className="relative w-full overflow-hidden rounded-t-2xl">
                         <button
                             type="button"
-                            className="relative w-full overflow-hidden"
+                            className="relative w-full overflow-hidden rounded-t-2xl"
                             onClick={handleClickTop}
                         >
                             <div className="aspect-square w-full">
@@ -173,10 +173,10 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
                     <div className="h-px w-full bg-gray-600" />
 
                     {/* Bottom image */}
-                    <div className="relative w-full overflow-hidden">
+                    <div className="relative w-full overflow-hidden rounded-b-2xl">
                         <button
                             type="button"
-                            className="relative w-full overflow-hidden"
+                            className="relative w-full overflow-hidden rounded-b-2xl"
                             onClick={handleClickBottom}
                         >
                             <div className="aspect-square w-full">

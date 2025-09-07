@@ -29,9 +29,9 @@ export const RatingArena = () => {
         <div className="relative flex min-h-[100dvh] flex-col items-center justify-between overflow-hidden">
             {/* Centered content with bottom margin for MenuBar */}
             <div
-                className="mt-4 flex w-full flex-grow flex-col items-center justify-center pb-24"
+                className="mt-4 flex w-full flex-grow flex-col items-center justify-center pb-20"
                 style={{
-                    paddingBottom: "calc(6rem + env(safe-area-inset-bottom))",
+                    paddingBottom: "calc(5rem + env(safe-area-inset-bottom))",
                 }}
             >
                 <div className="mx-auto w-full max-w-7xl px-3">
