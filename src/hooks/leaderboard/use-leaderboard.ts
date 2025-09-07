@@ -4,11 +4,9 @@ import {
     leaderboardCacheService,
 } from "../../services/cache/leaderboard.js";
 
-export type LeaderboardType =
-    | "female_top"
-    | "female_bottom"
-    | "male_top"
-    | "male_bottom";
+export type LeaderboardType = "female_top" | "male_top";
+
+export type GenderType = "female" | "male";
 
 export interface LeaderboardDisplayInfo {
     key: LeaderboardType;
@@ -23,21 +21,21 @@ export const LEADERBOARD_OPTIONS: LeaderboardDisplayInfo[] = [
         description: "Highest rated female participants",
     },
     {
-        key: "female_bottom",
-        label: "Bottom Rated Women",
-        description: "Lowest rated female participants",
-    },
-    {
         key: "male_top",
         label: "Top Rated Men",
         description: "Highest rated male participants",
     },
-    {
-        key: "male_bottom",
-        label: "Bottom Rated Men",
-        description: "Lowest rated male participants",
-    },
 ];
+
+export const genderToLeaderboardType = (
+    gender: GenderType
+): LeaderboardType => {
+    return gender === "female" ? "female_top" : "male_top";
+};
+
+export const leaderboardTypeToGender = (type: LeaderboardType): GenderType => {
+    return type === "female_top" ? "female" : "male";
+};
 
 interface LeaderboardState {
     entries: LeaderboardEntry[];
@@ -46,14 +44,19 @@ interface LeaderboardState {
     selectedEntry: LeaderboardEntry | null;
     viewMode: "podium" | "detail";
     currentLeaderboard: LeaderboardType;
+    showingFullscreen: boolean;
 }
 
 interface UseLeaderboardReturn extends LeaderboardState {
     selectEntry: (entry: LeaderboardEntry) => void;
     clearSelection: () => void;
     switchLeaderboard: (type: LeaderboardType) => void;
+    switchGender: (gender: GenderType) => void;
     refreshLeaderboard: () => Promise<void>;
     getCurrentLeaderboardInfo: () => LeaderboardDisplayInfo;
+    getCurrentGender: () => GenderType;
+    openFullscreen: (entry: LeaderboardEntry) => void;
+    closeFullscreen: () => void;
 }
 
 export const useLeaderboard = (
@@ -66,6 +69,7 @@ export const useLeaderboard = (
         selectedEntry: null,
         viewMode: "podium",
         currentLeaderboard: initialType,
+        showingFullscreen: false,
     });
 
     const loadLeaderboard = useCallback(async (type: LeaderboardType) => {
@@ -173,6 +177,34 @@ export const useLeaderboard = (
         await loadLeaderboard(state.currentLeaderboard);
     }, [state.currentLeaderboard, loadLeaderboard]);
 
+    const openFullscreen = useCallback((entry: LeaderboardEntry) => {
+        setState((prev) => ({
+            ...prev,
+            selectedEntry: entry,
+            showingFullscreen: true,
+        }));
+    }, []);
+
+    const closeFullscreen = useCallback(() => {
+        setState((prev) => ({
+            ...prev,
+            selectedEntry: null,
+            showingFullscreen: false,
+        }));
+    }, []);
+
+    const switchGender = useCallback(
+        (gender: GenderType) => {
+            const type = genderToLeaderboardType(gender);
+            switchLeaderboard(type);
+        },
+        [switchLeaderboard]
+    );
+
+    const getCurrentGender = useCallback((): GenderType => {
+        return leaderboardTypeToGender(state.currentLeaderboard);
+    }, [state.currentLeaderboard]);
+
     const getCurrentLeaderboardInfo =
         useCallback((): LeaderboardDisplayInfo => {
             return (
@@ -187,7 +219,11 @@ export const useLeaderboard = (
         selectEntry,
         clearSelection,
         switchLeaderboard,
+        switchGender,
         refreshLeaderboard,
         getCurrentLeaderboardInfo,
+        getCurrentGender,
+        openFullscreen,
+        closeFullscreen,
     };
 };

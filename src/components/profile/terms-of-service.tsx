@@ -74,7 +74,9 @@ export function TermsOfService({ onAccept, onDecline }: TermsOfServiceProps) {
     return (
         <div className="flex flex-col gap-6">
             <div>
-                <h2 className="mb-4 text-2xl font-bold text-gray-100">Terms of Service</h2>
+                <h2 className="mb-4 text-2xl font-bold text-gray-100">
+                    Terms of Service
+                </h2>
                 <p className="mb-4 text-gray-400">
                     Please read and accept our terms of service to continue.
                 </p>

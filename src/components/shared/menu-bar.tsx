@@ -72,9 +72,7 @@ const MenuBar = () => {
     };
 
     return (
-        <div 
-            className="mx-0 flex w-full items-center justify-center rounded-none bg-black/95 p-6 shadow-lg backdrop-blur-sm sm:p-8"
-        >
+        <div className="mx-0 flex w-full items-center justify-center rounded-none bg-black/95 p-6 shadow-lg backdrop-blur-sm sm:p-8">
             <div className="flex w-full max-w-md items-start justify-between px-2">
                 {menuItems.map((item) => {
                     const Icon = item.icon;
@@ -87,19 +85,23 @@ const MenuBar = () => {
                             className={`flex h-16 w-16 items-center justify-center rounded-xl transition-all duration-200 sm:h-18 sm:w-18 ${
                                 item.functional
                                     ? `${
-                                          isActive 
-                                              ? "text-blue-500" 
+                                          isActive
+                                              ? "text-blue-500"
                                               : "text-gray-400 hover:text-gray-300"
                                       } hover:bg-white/10 active:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50`
                                     : "cursor-not-allowed text-gray-600"
                             }`}
                             title={item.label}
                         >
-                            <Icon 
-                                size={30} 
-                                className="sm:size-9" 
-                                strokeWidth={1.5} 
-                                fill={isActive && item.functional ? "currentColor" : "none"}
+                            <Icon
+                                size={30}
+                                className="sm:size-9"
+                                strokeWidth={1.5}
+                                fill={
+                                    isActive && item.functional
+                                        ? "currentColor"
+                                        : "none"
+                                }
                             />
                         </button>
                     );

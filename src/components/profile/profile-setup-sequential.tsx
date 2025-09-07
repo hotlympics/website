@@ -91,7 +91,7 @@ const ProfileSetupSequential = ({
                                                 | "female",
                                         })
                                     }
-                                    className="block w-full rounded-md bg-gray-800 border border-gray-700 p-2 text-gray-100 placeholder-gray-400 shadow-sm focus:border-blue-400 focus:ring-blue-400"
+                                    className="block w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-1 text-gray-100 placeholder-gray-400 shadow-sm focus:outline-none"
                                     required
                                 >
                                     <option value="unknown" disabled>
@@ -120,7 +120,7 @@ const ProfileSetupSequential = ({
                                         })
                                     }
                                     max={new Date().toISOString().split("T")[0]}
-                                    className="block w-full rounded-md bg-gray-800 border border-gray-700 p-2 text-gray-100 placeholder-gray-400 shadow-sm focus:border-blue-400 focus:ring-blue-400"
+                                    className="block w-full rounded-md border border-gray-700 bg-gray-900 px-3 py-1 text-gray-100 placeholder-gray-400 shadow-sm focus:outline-none"
                                     required
                                 />
                             </div>

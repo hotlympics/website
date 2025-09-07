@@ -117,7 +117,7 @@ export const SignInForm = ({ redirect, onMagicLinkSent }: SignInFormProps) => {
                         required
                         disabled={loading}
                         placeholder="Enter your email"
-                        className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-gray-100 placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-blue-400 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-gray-100 placeholder-gray-400 focus:border-blue-400 focus:ring-blue-400 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                     />
                 </div>
 
