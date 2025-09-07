@@ -3,11 +3,8 @@ import CreateUserModal from "../../../components/admin/management/users/create-u
 import DeleteUserModal from "../../../components/admin/management/users/delete-user-modal";
 import UserTable from "../../../components/admin/management/users/user-table";
 import DeletePhotoModal from "../../../components/admin/shared/delete-photo-modal";
-import Pagination from "../../../components/admin/shared/pagination";
 import PhotoModal from "../../../components/admin/shared/photo-modal";
-import { usePagination } from "../../../hooks/admin/use-pagination";
 import { usePhotoActions } from "../../../hooks/admin/use-photo-actions";
-import { useSearch } from "../../../hooks/admin/use-search";
 import { useUserActions } from "../../../hooks/admin/use-user-actions";
 import { useUserDetails } from "../../../hooks/admin/use-user-details";
 import { useUsers } from "../../../hooks/admin/use-users";
@@ -25,7 +22,6 @@ import {
     type UserDeleteConfirmation,
 } from "../../../utils/admin/user-utils";
 import type {
-    AdminUser,
     CreateUserData,
     PhotoModalData,
 } from "../../../utils/types/admin/admin";
@@ -40,7 +36,6 @@ interface UsersTabProps {
     userDeleteConfirmation: UserDeleteConfirmation | null;
     setUserDeleteConfirmation: (data: UserDeleteConfirmation | null) => void;
     onNavigateToBattles: (imageId: string) => void;
-    initialSearchTerm?: string;
     userToExpand?: string | null;
     onClearUserToExpand: () => void;
 }
@@ -55,11 +50,11 @@ const UsersTab = ({
     userDeleteConfirmation,
     setUserDeleteConfirmation,
     onNavigateToBattles,
-    initialSearchTerm,
     userToExpand,
     onClearUserToExpand,
 }: UsersTabProps) => {
-    const { users, setUsers, loading, error, loadData } = useUsers();
+    const { users, setUsers, loading, error, loadData, loadNextPage, hasMore } =
+        useUsers();
     const {
         userDetails,
         setUserDetails,
@@ -73,38 +68,9 @@ const UsersTab = ({
     const { deletingPhoto, togglingPool, deletePhoto, togglePhotoPool } =
         usePhotoActions();
 
-    // Search functionality
-    const {
-        searchTerm,
-        setSearchTerm,
-        filteredItems: filteredUsers,
-    } = useSearch(users, (user: AdminUser, term: string) =>
-        user.email.toLowerCase().includes(term)
-    );
-
-    // Pagination
-    const {
-        currentPage,
-        setCurrentPage,
-        totalPages,
-        paginatedItems: paginatedUsers,
-    } = usePagination(filteredUsers, 10);
-
     useEffect(() => {
         loadData();
     }, [loadData]);
-
-    // Reset to page 1 when search changes
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchTerm, setCurrentPage]);
-
-    // Handle initial search term from navigation
-    useEffect(() => {
-        if (initialSearchTerm && initialSearchTerm.trim()) {
-            setSearchTerm(initialSearchTerm.trim());
-        }
-    }, [initialSearchTerm, setSearchTerm]);
 
     // Handle user expansion from navigation
     useEffect(() => {
@@ -221,9 +187,7 @@ const UsersTab = ({
     return (
         <>
             <UserTable
-                users={paginatedUsers}
-                searchTerm={searchTerm}
-                onSearchChange={setSearchTerm}
+                users={users}
                 expandedUsers={expandedUsers}
                 loadingDetails={loadingDetails}
                 userDetails={userDetails}
@@ -236,14 +200,16 @@ const UsersTab = ({
                 onCreateUser={openCreateUserModal}
             />
 
-            {filteredUsers.length > 10 && (
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    totalItems={filteredUsers.length}
-                    itemsPerPage={10}
-                    onPageChange={setCurrentPage}
-                />
+            {hasMore && (
+                <div className="mt-4 flex justify-center">
+                    <button
+                        onClick={loadNextPage}
+                        disabled={loading}
+                        className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+                    >
+                        {loading ? "Loading..." : "Load Next Page"}
+                    </button>
+                </div>
             )}
 
             <PhotoModal

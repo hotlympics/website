@@ -4,13 +4,10 @@ import type {
     UserDetails,
 } from "../../../../utils/types/admin/admin";
 import EmptyState from "../../shared/empty-state";
-import SearchInput from "../../shared/search-input";
 import UserRow from "./user-row";
 
 interface UserTableProps {
     users: AdminUser[];
-    searchTerm: string;
-    onSearchChange: (value: string) => void;
     expandedUsers: Set<string>;
     loadingDetails: Set<string>;
     userDetails: Record<string, UserDetails>;
@@ -29,8 +26,6 @@ interface UserTableProps {
 
 const UserTable = ({
     users,
-    searchTerm,
-    onSearchChange,
     expandedUsers,
     loadingDetails,
     userDetails,
@@ -52,35 +47,28 @@ const UserTable = ({
                         </h3>
                         <p className="mt-1 max-w-2xl text-sm text-gray-500">
                             Click the arrow to expand user details and view
-                            photos
+                            photos. Showing 10 users per page.
                         </p>
                     </div>
-                    <div className="flex items-center space-x-3">
-                        <button
-                            onClick={onCreateUser}
-                            className="flex items-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none"
+                    <button
+                        onClick={onCreateUser}
+                        className="flex items-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none"
+                    >
+                        <svg
+                            className="mr-2 h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
                         >
-                            <svg
-                                className="mr-2 h-4 w-4"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                                />
-                            </svg>
-                            Add User
-                        </button>
-                        <SearchInput
-                            value={searchTerm}
-                            onChange={onSearchChange}
-                            placeholder="Search by email..."
-                        />
-                    </div>
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                            />
+                        </svg>
+                        Add User
+                    </button>
                 </div>
             </div>
             <div className="overflow-x-auto">
@@ -132,11 +120,7 @@ const UserTable = ({
                                 <td colSpan={7}>
                                     <EmptyState
                                         title="No users found"
-                                        description={
-                                            searchTerm
-                                                ? `No users match the email "${searchTerm}"`
-                                                : "No users available"
-                                        }
+                                        description="No users available"
                                     />
                                 </td>
                             </tr>

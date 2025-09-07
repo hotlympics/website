@@ -12,7 +12,6 @@ type ManagementTab = "users" | "moderation" | "battles";
 const ManagementPage = () => {
     const [activeTab, setActiveTab] = useState<ManagementTab>("users");
     const [battleSearchTerm, setBattleSearchTerm] = useState("");
-    const [userSearchTerm, setUserSearchTerm] = useState("");
     const [userToExpand, setUserToExpand] = useState<string | null>(null);
 
     // Local state for modals and confirmations shared across tabs
@@ -29,8 +28,7 @@ const ManagementPage = () => {
         setPhotoModal(null); // Close the modal
     };
 
-    const navigateToUsers = (email: string, userId?: string) => {
-        setUserSearchTerm(email);
+    const navigateToUsers = (_email: string, userId?: string) => {
         setUserToExpand(userId || null);
         setActiveTab("users");
     };
@@ -50,7 +48,6 @@ const ManagementPage = () => {
         setActiveTab(tabId);
         // Clear search terms when manually switching tabs
         if (tabId === "users") {
-            setUserSearchTerm("");
             setUserToExpand(null);
         } else if (tabId === "battles") {
             setBattleSearchTerm("");
@@ -71,7 +68,6 @@ const ManagementPage = () => {
                         userDeleteConfirmation={userDeleteConfirmation}
                         setUserDeleteConfirmation={setUserDeleteConfirmation}
                         onNavigateToBattles={navigateToBattles}
-                        initialSearchTerm={userSearchTerm}
                         userToExpand={userToExpand}
                         onClearUserToExpand={clearUserToExpand}
                     />

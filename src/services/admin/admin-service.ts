@@ -111,8 +111,21 @@ const isLoggedIn = (): boolean => {
     return !!localStorage.getItem("adminToken");
 };
 
-const getUsers = async (): Promise<{ users: AdminUser[] }> => {
-    const response = await fetch(`${API_BASE_URL}/admin/users`, {
+const getUsers = async (
+    startAfter?: string,
+    limit: number = 10
+): Promise<{
+    users: AdminUser[];
+    nextCursor: string | null;
+    hasMore: boolean;
+}> => {
+    const url = new URL(`${API_BASE_URL}/admin/users`);
+    url.searchParams.set("limit", limit.toString());
+    if (startAfter) {
+        url.searchParams.set("startAfter", startAfter);
+    }
+
+    const response = await fetch(url.toString(), {
         headers: getAuthHeaders(),
     });
 
