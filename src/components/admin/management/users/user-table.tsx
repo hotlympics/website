@@ -4,6 +4,7 @@ import type {
     UserDetails,
 } from "../../../../utils/types/admin/admin";
 import EmptyState from "../../shared/empty-state";
+import SearchInput from "../../shared/search-input";
 import UserRow from "./user-row";
 
 interface UserTableProps {
@@ -22,6 +23,12 @@ interface UserTableProps {
     ) => void;
     deletingPhoto: string | null;
     onCreateUser: () => void;
+    searchEmail: string;
+    activeSearchTerm: string;
+    onSearchEmailChange: (value: string) => void;
+    onSearch: (event: React.FormEvent) => void;
+    isSearchMode: boolean;
+    loading: boolean;
 }
 
 const UserTable = ({
@@ -36,6 +43,12 @@ const UserTable = ({
     onDeletePhoto,
     deletingPhoto,
     onCreateUser,
+    searchEmail,
+    activeSearchTerm,
+    onSearchEmailChange,
+    onSearch,
+    isSearchMode,
+    loading,
 }: UserTableProps) => {
     return (
         <div className="overflow-hidden bg-white shadow sm:rounded-md">
@@ -45,30 +58,50 @@ const UserTable = ({
                         <h3 className="text-lg leading-6 font-medium text-gray-900">
                             All Users
                         </h3>
-                        <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                            Click the arrow to expand user details and view
-                            photos. Showing 10 users per page.
-                        </p>
+                        {isSearchMode && (
+                            <p className="mt-1 text-sm text-blue-600">
+                                Showing search results for "{activeSearchTerm}"
+                            </p>
+                        )}
                     </div>
-                    <button
-                        onClick={onCreateUser}
-                        className="flex items-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none"
-                    >
-                        <svg
-                            className="mr-2 h-4 w-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                    <div className="flex items-center space-x-3">
+                        <button
+                            onClick={onCreateUser}
+                            className="flex items-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none"
                         >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                            <svg
+                                className="mr-2 h-4 w-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                />
+                            </svg>
+                            Add User
+                        </button>
+                        <form
+                            onSubmit={onSearch}
+                            className="flex items-center space-x-2"
+                        >
+                            <SearchInput
+                                value={searchEmail}
+                                onChange={onSearchEmailChange}
+                                placeholder="Search by email..."
                             />
-                        </svg>
-                        Add User
-                    </button>
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="rounded bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+                            >
+                                {loading ? "..." : "Search"}
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div className="overflow-x-auto">

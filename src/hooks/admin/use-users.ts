@@ -10,17 +10,30 @@ export const useUsers = () => {
     const [prevCursor, setPrevCursor] = useState<string | null>(null);
     const [hasMore, setHasMore] = useState(false);
     const [hasPrevious, setHasPrevious] = useState(false);
-    const [currentPageStart, setCurrentPageStart] = useState<string | null>(null); // Track where current page starts
+    const [currentPageStart, setCurrentPageStart] = useState<string | null>(
+        null
+    );
+    const [searchEmail, setSearchEmail] = useState("");
+    const [activeSearchTerm, setActiveSearchTerm] = useState(""); // The actual search term being used
+    const [isSearchMode, setIsSearchMode] = useState(false);
 
     const loadData = useCallback(
-        async (startAfter?: string, endBefore?: string) => {
+        async (
+            startAfter?: string,
+            endBefore?: string,
+            searchTerm?: string
+        ) => {
             try {
                 setLoading(true);
                 setError("");
+
+                const searchToUse =
+                    searchTerm !== undefined ? searchTerm : activeSearchTerm;
                 const data = await adminService.getUsers(
                     startAfter,
                     10,
-                    endBefore
+                    endBefore,
+                    searchToUse
                 );
 
                 setUsers(data.users);
@@ -28,6 +41,7 @@ export const useUsers = () => {
                 setPrevCursor(data.prevCursor);
                 setHasMore(data.hasMore);
                 setHasPrevious(data.hasPrevious);
+                setIsSearchMode(!!(searchToUse && searchToUse.trim()));
 
                 // Track where this page starts
                 if (data.users.length > 0) {
@@ -43,8 +57,23 @@ export const useUsers = () => {
                 setLoading(false);
             }
         },
-        []
+        [activeSearchTerm]
     );
+
+    const performSearch = useCallback(
+        async (searchTerm: string) => {
+            setActiveSearchTerm(searchTerm);
+            await loadData(undefined, undefined, searchTerm);
+        },
+        [loadData]
+    );
+
+    const clearSearch = useCallback(async () => {
+        setSearchEmail("");
+        setActiveSearchTerm("");
+        setIsSearchMode(false);
+        await loadData(undefined, undefined, "");
+    }, [loadData]);
 
     const loadNextPage = useCallback(async () => {
         if (nextCursor && hasMore) {
@@ -71,5 +100,11 @@ export const useUsers = () => {
         hasPrevious,
         nextCursor,
         prevCursor,
+        searchEmail,
+        setSearchEmail,
+        activeSearchTerm,
+        isSearchMode,
+        performSearch,
+        clearSearch,
     };
 };

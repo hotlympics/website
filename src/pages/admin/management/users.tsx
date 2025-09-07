@@ -63,6 +63,12 @@ const UsersTab = ({
         loadPreviousPage,
         hasMore,
         hasPrevious,
+        searchEmail,
+        setSearchEmail,
+        activeSearchTerm,
+        isSearchMode,
+        performSearch,
+        clearSearch,
     } = useUsers();
     const {
         userDetails,
@@ -177,6 +183,25 @@ const UsersTab = ({
         );
     };
 
+    const handleSearch = (event: React.FormEvent) => {
+        event.preventDefault();
+        if (searchEmail.trim()) {
+            performSearch(searchEmail);
+        }
+    };
+
+    const handleClearSearch = () => {
+        clearSearch();
+    };
+
+    const handleSearchInputChange = (value: string) => {
+        setSearchEmail(value);
+        // If the search input is cleared (X button clicked), clear the search
+        if (value === "") {
+            handleClearSearch();
+        }
+    };
+
     if (loading) {
         return (
             <div className="py-8 text-center">
@@ -207,6 +232,12 @@ const UsersTab = ({
                 onDeletePhoto={handleDeletePhoto}
                 deletingPhoto={deletingPhoto}
                 onCreateUser={openCreateUserModal}
+                searchEmail={searchEmail}
+                activeSearchTerm={activeSearchTerm}
+                onSearchEmailChange={handleSearchInputChange}
+                onSearch={handleSearch}
+                isSearchMode={isSearchMode}
+                loading={loading}
             />
 
             {(hasMore || hasPrevious) && (
