@@ -53,8 +53,19 @@ const UsersTab = ({
     userToExpand,
     onClearUserToExpand,
 }: UsersTabProps) => {
-    const { users, setUsers, loading, error, loadData, loadNextPage, hasMore } =
-        useUsers();
+    const {
+        users,
+        setUsers,
+        loading,
+        error,
+        loadData,
+        loadNextPage,
+        loadPreviousPage,
+        hasMore,
+        hasPrevious,
+        nextCursor,
+        prevCursor,
+    } = useUsers();
     const {
         userDetails,
         setUserDetails,
@@ -200,17 +211,47 @@ const UsersTab = ({
                 onCreateUser={openCreateUserModal}
             />
 
-            {hasMore && (
-                <div className="mt-4 flex justify-center">
-                    <button
-                        onClick={loadNextPage}
-                        disabled={loading}
-                        className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
-                    >
-                        {loading ? "Loading..." : "Load Next Page"}
-                    </button>
+            {(hasMore || hasPrevious) && (
+                <div className="mt-4 flex justify-center space-x-4">
+                    {hasPrevious && (
+                        <button
+                            onClick={() => {
+                                console.log("Previous button clicked", {
+                                    hasPrevious,
+                                    prevCursor,
+                                });
+                                loadPreviousPage();
+                            }}
+                            disabled={loading}
+                            className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+                        >
+                            {loading ? "Loading..." : "Previous Page"}
+                        </button>
+                    )}
+                    {hasMore && (
+                        <button
+                            onClick={() => {
+                                console.log("Next button clicked", {
+                                    hasMore,
+                                    nextCursor,
+                                });
+                                loadNextPage();
+                            }}
+                            disabled={loading}
+                            className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+                        >
+                            {loading ? "Loading..." : "Next Page"}
+                        </button>
+                    )}
                 </div>
             )}
+
+            {/* Debug info */}
+            <div className="mt-2 text-center text-xs text-gray-500">
+                Debug: hasMore={hasMore ? "true" : "false"}, hasPrevious=
+                {hasPrevious ? "true" : "false"}, nextCursor=
+                {nextCursor || "null"}, prevCursor={prevCursor || "null"}
+            </div>
 
             <PhotoModal
                 photoModal={photoModal}
