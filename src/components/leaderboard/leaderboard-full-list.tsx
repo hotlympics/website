@@ -15,13 +15,13 @@ const LeaderboardFullList = ({
     if (entries.length === 0) {
         return (
             <div className="rounded p-8 text-center">
-                <p className="text-gray-500">No entries found</p>
+                <p className="text-gray-300">No entries found</p>
             </div>
         );
     }
 
     return (
-        <div className="rounded p-4">
+        <div className="rounded p-4 bg-gray-800">
             <div className="space-y-2">
                 {entries.map((entry, index) => {
                     const rank = index + 1;

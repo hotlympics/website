@@ -56,17 +56,17 @@ export const SignInForm = ({ redirect, onMagicLinkSent }: SignInFormProps) => {
         <>
             <button
                 onClick={() => navigate("/")}
-                className="mb-4 text-gray-600 hover:text-gray-800"
+                className="mb-4 text-gray-300 hover:text-white"
                 disabled={loading}
             >
                 ← Back to rating
             </button>
 
-            <h2 className="mb-6 text-center text-3xl font-bold text-gray-800">
+            <h2 className="mb-6 text-center text-3xl font-bold text-gray-100">
                 Sign In or Sign Up
             </h2>
 
-            <p className="mb-6 text-center text-gray-600">
+            <p className="mb-6 text-center text-gray-400">
                 Enter your email to get a magic sign-in link
             </p>
 
@@ -75,7 +75,7 @@ export const SignInForm = ({ redirect, onMagicLinkSent }: SignInFormProps) => {
                     type="button"
                     onClick={handleGoogleSignIn}
                     disabled={loading}
-                    className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-700 bg-gray-800 px-4 py-2.5 text-gray-200 transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                     <svg className="h-5 w-5" viewBox="0 0 24 24">
                         <path
@@ -100,14 +100,14 @@ export const SignInForm = ({ redirect, onMagicLinkSent }: SignInFormProps) => {
             </div>
 
             <div className="my-6 flex items-center">
-                <div className="flex-1 border-t border-gray-300"></div>
-                <span className="px-4 text-sm text-gray-500">or</span>
-                <div className="flex-1 border-t border-gray-300"></div>
+                <div className="flex-1 border-t border-gray-700"></div>
+                <span className="px-4 text-sm text-gray-400">or</span>
+                <div className="flex-1 border-t border-gray-700"></div>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
+                    <label className="mb-1 block text-sm font-medium text-gray-300">
                         Email
                     </label>
                     <input
@@ -117,13 +117,13 @@ export const SignInForm = ({ redirect, onMagicLinkSent }: SignInFormProps) => {
                         required
                         disabled={loading}
                         placeholder="Enter your email"
-                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                        className="w-full rounded-lg border border-gray-700 bg-gray-800 px-3 py-2 text-gray-100 placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-blue-400 disabled:cursor-not-allowed disabled:opacity-50"
                     />
                 </div>
 
                 {error && (
-                    <div className="mb-2 rounded-lg bg-red-50 p-3 text-center">
-                        <p className="text-sm text-red-600">{error}</p>
+                    <div className="mb-2 rounded-lg bg-red-900/25 p-3 text-center">
+                        <p className="text-sm text-red-300">{error}</p>
                     </div>
                 )}
 
@@ -136,7 +136,7 @@ export const SignInForm = ({ redirect, onMagicLinkSent }: SignInFormProps) => {
                 </button>
             </form>
 
-            <div className="mt-4 text-center text-sm text-gray-600">
+            <div className="mt-4 text-center text-sm text-gray-400">
                 No password needed! We'll email you a secure link to sign in.
             </div>
         </>

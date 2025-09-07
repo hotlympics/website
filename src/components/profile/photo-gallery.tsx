@@ -24,16 +24,16 @@ const PhotoGallery = ({
 }: PhotoGalleryProps) => {
     if (photos.length === 0) {
         return (
-            <div className="rounded-lg bg-white p-6 shadow-md">
+            <div className="rounded-lg bg-gray-800 p-6 shadow-md">
                 <div className="mb-6 flex items-center justify-between">
-                    <h2 className="text-xl font-semibold text-gray-700">
+                    <h2 className="text-xl font-semibold text-gray-300">
                         Uploaded Photos
                     </h2>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-gray-400">
                         {photos.length}/{maxPhotos} photos
                     </span>
                 </div>
-                <p className="text-center text-gray-500">
+                <p className="text-center text-gray-400">
                     No photos uploaded yet
                 </p>
             </div>
@@ -41,12 +41,12 @@ const PhotoGallery = ({
     }
 
     return (
-        <div className="rounded-lg bg-white p-6 shadow-md">
+        <div className="rounded-lg bg-gray-800 p-6 shadow-md">
             <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-700">
+                <h2 className="text-xl font-semibold text-gray-300">
                     Uploaded Photos
                 </h2>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-gray-400">
                     {photos.length}/{maxPhotos} photos
                 </span>
             </div>
@@ -57,7 +57,7 @@ const PhotoGallery = ({
                     return (
                         <div
                             key={photo.id}
-                            className={`group relative aspect-square cursor-pointer overflow-hidden rounded-lg bg-gray-100 ${
+                            className={`group relative aspect-square cursor-pointer overflow-hidden rounded-lg bg-gray-700 ${
                                 deletingPhoto === photo.id ? "opacity-50" : ""
                             } ${isInPool ? "ring-4 ring-green-500" : ""}`}
                             onClick={() => onPoolToggle(photo.id)}
@@ -92,7 +92,7 @@ const PhotoGallery = ({
 
                             {deletingPhoto === photo.id && (
                                 <div className="bg-opacity-50 absolute inset-0 flex items-center justify-center bg-black">
-                                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-white"></div>
+                                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-700 border-t-white"></div>
                                 </div>
                             )}
 
@@ -102,7 +102,7 @@ const PhotoGallery = ({
                                     onDeletePhoto(photo.id);
                                 }}
                                 disabled={deletingPhoto === photo.id}
-                                className="absolute top-2 right-2 rounded-md bg-red-600 p-2 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-700 disabled:bg-gray-400"
+                                className="absolute top-2 right-2 rounded-md bg-red-600 p-2 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-700 disabled:bg-gray-600"
                                 title="Delete photo"
                             >
                                 <svg

@@ -59,12 +59,12 @@ const ProfileSetupSequential = ({
         return (
             <div className="min-h-screen">
                 <div className="mx-auto max-w-md px-4 py-8">
-                    <h1 className="mb-8 text-center text-3xl font-bold text-gray-800">
+                    <h1 className="mb-8 text-center text-3xl font-bold text-gray-100">
                         Complete Your Profile
                     </h1>
 
-                    <div className="rounded-lg bg-white p-8 shadow-md">
-                        <p className="mb-6 text-center text-gray-600">
+                    <div className="rounded-lg bg-gray-800 p-8 shadow-md">
+                        <p className="mb-6 text-center text-gray-400">
                             Please provide your gender and date of birth to
                             continue.
                         </p>
@@ -76,7 +76,7 @@ const ProfileSetupSequential = ({
                             <div>
                                 <label
                                     htmlFor="gender"
-                                    className="mb-2 block text-sm font-medium text-gray-700"
+                                    className="mb-2 block text-sm font-medium text-gray-300"
                                 >
                                     Gender
                                 </label>
@@ -91,7 +91,7 @@ const ProfileSetupSequential = ({
                                                 | "female",
                                         })
                                     }
-                                    className="block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                    className="block w-full rounded-md bg-gray-800 border border-gray-700 p-2 text-gray-100 placeholder-gray-400 shadow-sm focus:border-blue-400 focus:ring-blue-400"
                                     required
                                 >
                                     <option value="unknown" disabled>
@@ -105,7 +105,7 @@ const ProfileSetupSequential = ({
                             <div>
                                 <label
                                     htmlFor="dateOfBirth"
-                                    className="mb-2 block text-sm font-medium text-gray-700"
+                                    className="mb-2 block text-sm font-medium text-gray-300"
                                 >
                                     Date of Birth
                                 </label>
@@ -120,14 +120,14 @@ const ProfileSetupSequential = ({
                                         })
                                     }
                                     max={new Date().toISOString().split("T")[0]}
-                                    className="block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                    className="block w-full rounded-md bg-gray-800 border border-gray-700 p-2 text-gray-100 placeholder-gray-400 shadow-sm focus:border-blue-400 focus:ring-blue-400"
                                     required
                                 />
                             </div>
 
                             {error && (
-                                <div className="rounded-md bg-red-50 p-4">
-                                    <p className="text-sm text-red-800">
+                                <div className="rounded-md bg-red-900/20 p-4">
+                                    <p className="text-sm text-red-300">
                                         {error}
                                     </p>
                                 </div>
@@ -145,7 +145,7 @@ const ProfileSetupSequential = ({
                                         isLoading ||
                                         profileForm.gender === "unknown" ||
                                         !profileForm.dateOfBirth
-                                            ? "cursor-not-allowed bg-gray-400"
+                                            ? "cursor-not-allowed bg-gray-600"
                                             : "bg-blue-600 hover:bg-blue-700"
                                     }`}
                                 >
@@ -172,16 +172,16 @@ const ProfileSetupSequential = ({
         return (
             <div className="min-h-screen">
                 <div className="mx-auto max-w-2xl px-4 py-8">
-                    <div className="rounded-lg bg-white p-8 shadow-md">
+                    <div className="rounded-lg bg-gray-800 p-8 shadow-md">
                         {error && (
-                            <div className="mb-4 rounded-md bg-red-50 p-4">
-                                <p className="text-sm text-red-800">{error}</p>
+                            <div className="mb-4 rounded-md bg-red-900/20 p-4">
+                                <p className="text-sm text-red-300">{error}</p>
                             </div>
                         )}
 
                         {isProcessingTos ? (
                             <div className="py-8 text-center">
-                                <p className="text-gray-600">Processing...</p>
+                                <p className="text-gray-400">Processing...</p>
                             </div>
                         ) : (
                             <TermsOfService

@@ -12,7 +12,7 @@ const LeaderboardDetailCard = ({
     onClose,
 }: LeaderboardDetailCardProps) => {
     return (
-        <div className="mx-auto h-80 w-80 overflow-hidden rounded-lg shadow-[0_18px_60px_rgba(0,0,0,0.55)] ring-1 ring-black/10">
+        <div className="mx-auto h-80 w-80 overflow-hidden rounded-lg shadow-[0_18px_60px_rgba(0,0,0,0.55)] ring-1 ring-white/10 bg-gray-800">
             <img
                 src={entry.imageUrl}
                 alt={`Rank ${rank} participant`}

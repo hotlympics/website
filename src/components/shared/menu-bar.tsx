@@ -46,7 +46,7 @@ const MenuBar = () => {
     ];
 
     return (
-        <div className="mx-3 flex w-[calc(100%-1.5rem)] items-center justify-center rounded-2xl bg-white/80 p-3 shadow-md backdrop-blur-sm sm:mx-4 sm:w-[calc(100%-2rem)] sm:p-5">
+        <div className="mx-3 flex w-[calc(100%-1.5rem)] items-center justify-center rounded-2xl bg-gray-900/90 p-3 shadow-md backdrop-blur-sm sm:mx-4 sm:w-[calc(100%-2rem)] sm:p-5">
             <div className="flex items-center justify-center gap-6 sm:gap-8">
                 {menuItems.map((item) => {
                     const Icon = item.icon;
@@ -58,7 +58,7 @@ const MenuBar = () => {
                             className={`flex h-10 w-10 items-center justify-center rounded-lg shadow-md transition-colors sm:h-12 sm:w-12 ${
                                 item.functional
                                     ? "bg-blue-600 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-                                    : "cursor-not-allowed bg-gray-300 text-gray-500"
+                                    : "cursor-not-allowed bg-gray-700 text-gray-500"
                             }`}
                             title={item.label}
                         >

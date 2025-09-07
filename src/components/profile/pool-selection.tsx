@@ -26,7 +26,7 @@ const PoolSelection = ({
 
     return (
         <div className="mb-4 flex items-center justify-between">
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-400">
                 Select up to 2 photos for the rating pool ({poolSelections.size}
                 /2 selected)
             </p>
@@ -35,7 +35,7 @@ const PoolSelection = ({
                 disabled={isUpdating || !hasChanges}
                 className={`rounded-md px-4 py-2 text-sm font-medium text-white ${
                     isUpdating || !hasChanges
-                        ? "cursor-not-allowed bg-gray-400"
+                        ? "cursor-not-allowed bg-gray-600"
                         : "bg-green-600 hover:bg-green-700"
                 }`}
             >

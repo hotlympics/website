@@ -9,7 +9,8 @@
     body,
     #root {
         min-height: 100dvh;
-        background-color: #e6f0ff; /* light blue */
+        background-color: #0f0f23; /* Dark blue-black background */
+        color: #e2e8f0; /* Light gray text */
     }
 }
 

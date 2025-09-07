@@ -60,7 +60,7 @@ const LeaderboardPage = () => {
                         description="There are no entries for this leaderboard yet."
                         icon={
                             <svg
-                                className="mx-auto mb-3 h-12 w-12 text-gray-400"
+                                className="mx-auto mb-3 h-12 w-12 text-gray-300"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"

@@ -37,14 +37,16 @@ export const RatingArena = () => {
                 <div className="mx-auto w-full max-w-7xl px-3">
                     {loadingImages ? (
                         <div className="flex items-center justify-center py-32">
-                            <div className="text-xl text-gray-600">
+                            <div className="text-xl text-gray-300">
                                 Loading images...
                             </div>
                         </div>
                     ) : error ? (
                         <div className="flex flex-col items-center justify-center py-32">
-                            <p className="mb-4 text-xl text-red-600">{error}</p>
-                            We encountered an error. Please refresh the page
+                            <p className="mb-4 text-xl text-red-400">{error}</p>
+                            <span className="text-gray-300">
+                                We encountered an error. Please refresh the page
+                            </span>
                         </div>
                     ) : imagePair && imagePair.length === 2 ? (
                         <div className="flex items-center justify-center py-2">
@@ -56,7 +58,7 @@ export const RatingArena = () => {
                                 }}
                             >
                                 {/* Fixed shadow frame that does not move with cards */}
-                                <div className="relative aspect-[1/2] w-full overflow-hidden rounded-2xl bg-white shadow-[0_18px_60px_rgba(0,0,0,0.55)] ring-1 ring-black/10">
+                                <div className="relative aspect-[1/2] w-full overflow-hidden rounded-2xl bg-gray-800 shadow-[0_18px_60px_rgba(0,0,0,0.8)] ring-1 ring-white/10">
                                     {/* Background next pair, visible from start of swipe */}
                                     {(() => {
                                         const nextPair =
@@ -93,7 +95,7 @@ export const RatingArena = () => {
                         </div>
                     ) : (
                         <div className="flex items-center justify-center py-32">
-                            <p className="text-xl text-gray-600">
+                            <p className="text-xl text-gray-300">
                                 No images available
                             </p>
                         </div>

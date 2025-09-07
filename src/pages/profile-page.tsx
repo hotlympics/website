@@ -109,8 +109,8 @@ const ProfilePage = () => {
         return (
             <div className="flex min-h-screen items-center justify-center">
                 <div className="text-center">
-                    <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600"></div>
-                    <p className="text-gray-600">Loading...</p>
+                    <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-blue-600"></div>
+                    <p className="text-gray-400">Loading...</p>
                 </div>
             </div>
         );
@@ -138,7 +138,7 @@ const ProfilePage = () => {
         <div className="min-h-screen">
             <div className="mx-auto max-w-6xl px-4 py-8">
                 <div className="mb-8 flex items-center justify-between">
-                    <h1 className="text-3xl font-bold text-gray-800">
+                    <h1 className="text-3xl font-bold text-gray-100">
                         My Account
                     </h1>
                     <button
@@ -151,11 +151,11 @@ const ProfilePage = () => {
 
                 <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
                     {/* Profile Info Card */}
-                    <div className="rounded-lg bg-white p-6 shadow-md">
-                        <h2 className="mb-4 text-xl font-semibold text-gray-700">
+                    <div className="rounded-lg bg-gray-800 p-6 shadow-md">
+                        <h2 className="mb-4 text-xl font-semibold text-gray-300">
                             Profile Information
                         </h2>
-                        <p className="text-gray-600">Email: {user.email}</p>
+                        <p className="text-gray-400">Email: {user.email}</p>
                     </div>
 
                     {/* Upload Photo Card */}
@@ -189,13 +189,13 @@ const ProfilePage = () => {
 
                 {/* Error/Success Messages */}
                 {error && (
-                    <div className="mt-4 rounded-md bg-red-50 p-4">
-                        <p className="text-sm text-red-800">{error}</p>
+                    <div className="mt-4 rounded-md bg-red-900/20 p-4">
+                        <p className="text-sm text-red-300">{error}</p>
                     </div>
                 )}
                 {successMessage && (
-                    <div className="mt-4 rounded-md bg-green-50 p-4">
-                        <p className="text-sm text-green-800">
+                    <div className="mt-4 rounded-md bg-green-900/20 p-4">
+                        <p className="text-sm text-green-300">
                             {successMessage}
                         </p>
                     </div>
