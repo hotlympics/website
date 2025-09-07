@@ -9,8 +9,6 @@ import UserRow from "./user-row";
 
 interface UserTableProps {
     users: AdminUser[];
-    searchTerm: string;
-    onSearchChange: (value: string) => void;
     expandedUsers: Set<string>;
     loadingDetails: Set<string>;
     userDetails: Record<string, UserDetails>;
@@ -25,12 +23,16 @@ interface UserTableProps {
     ) => void;
     deletingPhoto: string | null;
     onCreateUser: () => void;
+    searchEmail: string;
+    activeSearchTerm: string;
+    onSearchEmailChange: (value: string) => void;
+    onSearch: (event: React.FormEvent) => void;
+    isSearchMode: boolean;
+    loading: boolean;
 }
 
 const UserTable = ({
     users,
-    searchTerm,
-    onSearchChange,
     expandedUsers,
     loadingDetails,
     userDetails,
@@ -41,6 +43,12 @@ const UserTable = ({
     onDeletePhoto,
     deletingPhoto,
     onCreateUser,
+    searchEmail,
+    activeSearchTerm,
+    onSearchEmailChange,
+    onSearch,
+    isSearchMode,
+    loading,
 }: UserTableProps) => {
     return (
         <div className="overflow-hidden bg-white shadow sm:rounded-md">
@@ -50,10 +58,11 @@ const UserTable = ({
                         <h3 className="text-lg leading-6 font-medium text-gray-900">
                             All Users
                         </h3>
-                        <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                            Click the arrow to expand user details and view
-                            photos
-                        </p>
+                        {isSearchMode && (
+                            <p className="mt-1 text-sm text-blue-600">
+                                Showing search results for "{activeSearchTerm}"
+                            </p>
+                        )}
                     </div>
                     <div className="flex items-center space-x-3">
                         <button
@@ -75,11 +84,23 @@ const UserTable = ({
                             </svg>
                             Add User
                         </button>
-                        <SearchInput
-                            value={searchTerm}
-                            onChange={onSearchChange}
-                            placeholder="Search by email..."
-                        />
+                        <form
+                            onSubmit={onSearch}
+                            className="flex items-center space-x-2"
+                        >
+                            <SearchInput
+                                value={searchEmail}
+                                onChange={onSearchEmailChange}
+                                placeholder="Search by email..."
+                            />
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="rounded bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+                            >
+                                {loading ? "..." : "Search"}
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -132,11 +153,7 @@ const UserTable = ({
                                 <td colSpan={7}>
                                     <EmptyState
                                         title="No users found"
-                                        description={
-                                            searchTerm
-                                                ? `No users match the email "${searchTerm}"`
-                                                : "No users available"
-                                        }
+                                        description="No users available"
                                     />
                                 </td>
                             </tr>
