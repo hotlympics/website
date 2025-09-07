@@ -120,6 +120,7 @@ const getUsers = async (
     nextCursor: string | null;
     prevCursor: string | null;
     hasMore: boolean;
+    hasPrevious: boolean;
 }> => {
     const url = new URL(`${API_BASE_URL}/admin/users`);
     url.searchParams.set("limit", limit.toString());

@@ -9,13 +9,11 @@ export const useUsers = () => {
     const [nextCursor, setNextCursor] = useState<string | null>(null);
     const [prevCursor, setPrevCursor] = useState<string | null>(null);
     const [hasMore, setHasMore] = useState(false);
-    const [isFirstPage, setIsFirstPage] = useState(true);
+    const [hasPrevious, setHasPrevious] = useState(false);
+    const [currentPageStart, setCurrentPageStart] = useState<string | null>(null); // Track where current page starts
 
     const loadData = useCallback(
-        async (
-            startAfter?: string,
-            endBefore?: string
-        ) => {
+        async (startAfter?: string, endBefore?: string) => {
             try {
                 setLoading(true);
                 setError("");
@@ -29,25 +27,14 @@ export const useUsers = () => {
                 setNextCursor(data.nextCursor);
                 setPrevCursor(data.prevCursor);
                 setHasMore(data.hasMore);
+                setHasPrevious(data.hasPrevious);
 
-                // Track if this is the first page
-                if (!startAfter && !endBefore) {
-                    console.log("Setting isFirstPage to true");
-                    setIsFirstPage(true);
+                // Track where this page starts
+                if (data.users.length > 0) {
+                    setCurrentPageStart(data.users[0].id);
                 } else {
-                    console.log("Setting isFirstPage to false", {
-                        startAfter,
-                        endBefore,
-                    });
-                    setIsFirstPage(false);
+                    setCurrentPageStart(null);
                 }
-
-                console.log("Load data complete", {
-                    hasMore: data.hasMore,
-                    nextCursor: data.nextCursor,
-                    prevCursor: data.prevCursor,
-                    isFirstPage: !startAfter && !endBefore,
-                });
             } catch (err) {
                 setError(
                     err instanceof Error ? err.message : "Failed to load data"
@@ -66,10 +53,11 @@ export const useUsers = () => {
     }, [nextCursor, hasMore, loadData]);
 
     const loadPreviousPage = useCallback(async () => {
-        if (prevCursor && !isFirstPage) {
-            await loadData(undefined, prevCursor);
+        if (currentPageStart && hasPrevious) {
+            // Use endBefore with the first user of current page to get previous page
+            await loadData(undefined, currentPageStart);
         }
-    }, [prevCursor, isFirstPage, loadData]);
+    }, [currentPageStart, hasPrevious, loadData]);
 
     return {
         users,
@@ -80,7 +68,7 @@ export const useUsers = () => {
         loadNextPage,
         loadPreviousPage,
         hasMore,
-        hasPrevious: !isFirstPage,
+        hasPrevious,
         nextCursor,
         prevCursor,
     };

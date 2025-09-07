@@ -63,8 +63,6 @@ const UsersTab = ({
         loadPreviousPage,
         hasMore,
         hasPrevious,
-        nextCursor,
-        prevCursor,
     } = useUsers();
     const {
         userDetails,
@@ -212,46 +210,55 @@ const UsersTab = ({
             />
 
             {(hasMore || hasPrevious) && (
-                <div className="mt-4 flex justify-center space-x-4">
-                    {hasPrevious && (
-                        <button
-                            onClick={() => {
-                                console.log("Previous button clicked", {
-                                    hasPrevious,
-                                    prevCursor,
-                                });
-                                loadPreviousPage();
-                            }}
-                            disabled={loading}
-                            className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
-                        >
-                            {loading ? "Loading..." : "Previous Page"}
-                        </button>
-                    )}
-                    {hasMore && (
-                        <button
-                            onClick={() => {
-                                console.log("Next button clicked", {
-                                    hasMore,
-                                    nextCursor,
-                                });
-                                loadNextPage();
-                            }}
-                            disabled={loading}
-                            className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-gray-400"
-                        >
-                            {loading ? "Loading..." : "Next Page"}
-                        </button>
-                    )}
+                <div className="mt-4 flex justify-end">
+                    <div className="flex space-x-2">
+                        {hasPrevious && (
+                            <button
+                                onClick={loadPreviousPage}
+                                disabled={loading}
+                                className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-500 text-white shadow-sm hover:bg-gray-600 disabled:cursor-not-allowed disabled:bg-gray-300"
+                                title="Previous page"
+                            >
+                                <svg
+                                    className="h-3 w-3"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M15 19l-7-7 7-7"
+                                    />
+                                </svg>
+                            </button>
+                        )}
+                        {hasMore && (
+                            <button
+                                onClick={loadNextPage}
+                                disabled={loading}
+                                className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-500 text-white shadow-sm hover:bg-gray-600 disabled:cursor-not-allowed disabled:bg-gray-300"
+                                title="Next page"
+                            >
+                                <svg
+                                    className="h-3 w-3"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M9 5l7 7-7 7"
+                                    />
+                                </svg>
+                            </button>
+                        )}
+                    </div>
                 </div>
             )}
-
-            {/* Debug info */}
-            <div className="mt-2 text-center text-xs text-gray-500">
-                Debug: hasMore={hasMore ? "true" : "false"}, hasPrevious=
-                {hasPrevious ? "true" : "false"}, nextCursor=
-                {nextCursor || "null"}, prevCursor={prevCursor || "null"}
-            </div>
 
             <PhotoModal
                 photoModal={photoModal}
