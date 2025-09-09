@@ -34,9 +34,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             className={`min-h-screen ${isRatingPage ? "overflow-hidden" : ""}`}
         >
             {/* Main content area with conditional bottom padding */}
-            <div>
-                {children}
-            </div>
+            <div>{children}</div>
 
             {/* Persistent MenuBar - only shown on specific pages */}
             {showMenuBar && (
