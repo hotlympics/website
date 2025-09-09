@@ -54,20 +54,12 @@ export const SignInForm = ({ redirect, onMagicLinkSent }: SignInFormProps) => {
 
     return (
         <>
-            <button
-                onClick={() => navigate("/")}
-                className="mb-4 text-gray-300 hover:text-white"
-                disabled={loading}
-            >
-                ← Back to rating
-            </button>
-
             <h2 className="mb-6 text-center text-3xl font-bold text-gray-100">
                 Sign In or Sign Up
             </h2>
 
             <p className="mb-6 text-center text-gray-400">
-                Enter your email to get a magic sign-in link
+                Sign in with your Google account
             </p>
 
             <div className="space-y-3">

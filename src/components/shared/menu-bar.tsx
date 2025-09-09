@@ -28,9 +28,9 @@ const MenuBar = () => {
             path: "/upload", // Virtual path for selection state
             onClick: () => {
                 if (user) {
-                    navigate("/profile"); // Navigate to profile for upload functionality
+                    navigate("/profile?tab=upload"); // Navigate to profile with upload tab
                 } else {
-                    navigate("/signin?redirect=/profile");
+                    navigate("/signin?redirect=/profile?tab=upload");
                 }
             },
             functional: true,
@@ -41,9 +41,9 @@ const MenuBar = () => {
             path: "/my-photos", // Virtual path for selection state
             onClick: () => {
                 if (user) {
-                    navigate("/profile"); // Navigate to profile where photos are shown
+                    navigate("/profile?tab=photos"); // Navigate to profile with photos tab
                 } else {
-                    navigate("/signin?redirect=/profile");
+                    navigate("/signin?redirect=/profile?tab=photos");
                 }
             },
             functional: true,
@@ -68,6 +68,44 @@ const MenuBar = () => {
         if (itemPath === "/") {
             return location.pathname === "/";
         }
+
+        // Handle virtual paths that navigate to /profile with different tabs
+        if (location.pathname === "/profile") {
+            const searchParams = new URLSearchParams(location.search);
+            const currentTab = searchParams.get("tab");
+
+            if (itemPath === "/upload") {
+                return currentTab === "upload";
+            }
+            if (itemPath === "/my-photos") {
+                return currentTab === "photos";
+            }
+            if (itemPath === "/profile") {
+                return !currentTab || currentTab === ""; // No tab parameter means default profile view
+            }
+        }
+
+        // Handle cases where user is on signin page but intended for a specific tab
+        if (location.pathname === "/signin") {
+            const searchParams = new URLSearchParams(location.search);
+            const redirect = searchParams.get("redirect");
+
+            if (redirect) {
+                if (redirect.includes("tab=upload") && itemPath === "/upload") {
+                    return true;
+                }
+                if (
+                    redirect.includes("tab=photos") &&
+                    itemPath === "/my-photos"
+                ) {
+                    return true;
+                }
+                if (redirect === "/profile" && itemPath === "/profile") {
+                    return true;
+                }
+            }
+        }
+
         return location.pathname.startsWith(itemPath);
     };
 
@@ -98,7 +136,9 @@ const MenuBar = () => {
                                 className="sm:size-9"
                                 strokeWidth={1.5}
                                 fill={
-                                    isActive && item.functional
+                                    isActive &&
+                                    item.functional &&
+                                    item.label !== "My Photos"
                                         ? "currentColor"
                                         : "none"
                                 }

@@ -15,6 +15,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         "/profile",
         "/my-photos",
         "/leaderboard",
+        "/signin",
     ].includes(location.pathname);
 
     // Check if we're on the rating page (which should not scroll)
