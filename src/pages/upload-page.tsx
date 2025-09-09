@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
 import { Image, Plus } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import ImageCropModal from "../components/shared/image-crop-modal";
 import { useAuth } from "../hooks/auth/use-auth";
 import { usePhotoUpload } from "../hooks/profile/use-photo-upload";
@@ -93,7 +93,7 @@ const UploadPage = () => {
     const isAtLimit = uploadedPhotos.length >= 10;
 
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="flex min-h-screen flex-col">
             {/* Title at top */}
             <div className="pt-8 pb-4">
                 <h1 className="text-center text-lg font-medium text-gray-100">
@@ -102,37 +102,39 @@ const UploadPage = () => {
             </div>
 
             {/* Main content area - centered */}
-            <div className="flex-1 flex flex-col items-center justify-center px-4">
+            <div className="flex flex-1 flex-col items-center justify-center px-4">
                 {/* Blue image icon with plus */}
                 <div className="relative mb-6">
-                    <div className="w-20 h-16 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <div className="flex h-16 w-20 items-center justify-center rounded-lg bg-blue-600">
                         <Image size={32} className="text-white" />
                     </div>
-                    <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center border-2 border-black">
+                    <div className="absolute -right-2 -bottom-2 flex h-8 w-8 items-center justify-center rounded-full border-2 border-black bg-blue-600">
                         <Plus size={16} className="text-white" />
                     </div>
                 </div>
 
                 {/* Main text */}
-                <h2 className="text-xl text-white font-medium mb-4 text-center">
+                <h2 className="mb-4 text-center text-xl font-medium text-white">
                     Upload Your Photo
                 </h2>
 
                 {/* Subtitle */}
-                <p className="text-gray-400 text-center text-sm mb-8">
+                <p className="mb-8 text-center text-sm text-gray-400">
                     Select a photo from your library or take a new one
                 </p>
 
                 {/* Upload status */}
                 {(isUploading || isProcessing) && (
-                    <div className="text-center mb-4">
-                        <div className="text-blue-500 mb-2">
-                            {isProcessing ? "Processing..." : uploadStatus || "Uploading..."}
+                    <div className="mb-4 text-center">
+                        <div className="mb-2 text-blue-500">
+                            {isProcessing
+                                ? "Processing..."
+                                : uploadStatus || "Uploading..."}
                         </div>
                         {uploadProgress > 0 && (
-                            <div className="w-64 bg-gray-700 rounded-full h-2">
-                                <div 
-                                    className="bg-blue-600 h-2 rounded-full transition-all" 
+                            <div className="h-2 w-64 rounded-full bg-gray-700">
+                                <div
+                                    className="h-2 rounded-full bg-blue-600 transition-all"
                                     style={{ width: `${uploadProgress}%` }}
                                 ></div>
                             </div>
@@ -142,20 +144,19 @@ const UploadPage = () => {
             </div>
 
             {/* Choose Photo button at bottom */}
-            <div className="px-4 pb-32 flex justify-center">
+            <div className="flex justify-center px-4 pb-32">
                 <button
                     onClick={handleChoosePhoto}
                     disabled={isUploading || isAtLimit || isProcessing}
-                    className="w-[90%] py-4 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                    className="flex w-[90%] items-center justify-center space-x-2 rounded-lg bg-blue-600 py-4 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                     <Image size={20} className="text-white" />
                     <span>
-                        {isUploading || isProcessing 
-                            ? "Processing..." 
-                            : isAtLimit 
-                                ? "Upload Limit Reached" 
-                                : "Choose Photo"
-                        }
+                        {isUploading || isProcessing
+                            ? "Processing..."
+                            : isAtLimit
+                              ? "Upload Limit Reached"
+                              : "Choose Photo"}
                     </span>
                 </button>
             </div>

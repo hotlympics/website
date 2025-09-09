@@ -19,14 +19,9 @@ const ProfilePage = () => {
         needsTosAcceptance,
     } = useProfile();
 
-    const {
-        uploadedPhotos,
-        fetchUploadedPhotos,
-    } = usePhotoUpload();
+    const { uploadedPhotos, fetchUploadedPhotos } = usePhotoUpload();
 
-    const {
-        poolSelections,
-    } = usePoolManagement(user);
+    const { poolSelections } = usePoolManagement(user);
 
     useEffect(() => {
         if (user) {
@@ -65,23 +60,29 @@ const ProfilePage = () => {
 
     // Main profile page
     return (
-        <div className="min-h-screen flex flex-col">
-            <div className="flex-1 mx-auto max-w-lg px-4 py-8">
+        <div className="flex min-h-screen flex-col">
+            <div className="mx-auto max-w-lg flex-1 px-4 py-8">
                 {/* Profile Information */}
                 <div className="mb-8 space-y-4">
                     <div className="space-y-3 text-gray-400">
-                        <div className="text-center mb-6">
-                            <span className="text-lg text-gray-100">{user.email}</span>
+                        <div className="mb-6 text-center">
+                            <span className="text-lg text-gray-100">
+                                {user.email}
+                            </span>
                         </div>
-                        
-                        <div className="flex justify-between items-center">
+
+                        <div className="flex items-center justify-between">
                             <span>Photos uploaded:</span>
-                            <span className="text-gray-100 ml-36">{uploadedPhotos.length}/10</span>
+                            <span className="ml-36 text-gray-100">
+                                {uploadedPhotos.length}/10
+                            </span>
                         </div>
-                        
-                        <div className="flex justify-between items-center">
+
+                        <div className="flex items-center justify-between">
                             <span>Photos in pool:</span>
-                            <span className="text-gray-100 ml-36">{poolSelections.size}/2</span>
+                            <span className="ml-36 text-gray-100">
+                                {poolSelections.size}/2
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -102,10 +103,10 @@ const ProfilePage = () => {
             </div>
 
             {/* Sign Out Button - positioned at bottom above menu bar */}
-            <div className="px-4 pb-32 flex justify-center">
+            <div className="flex justify-center px-4 pb-32">
                 <button
                     onClick={logout}
-                    className="w-3/4 py-4 bg-orange-950/50 text-red-500 font-medium rounded-lg hover:bg-orange-950/60 transition-colors"
+                    className="w-3/4 rounded-lg bg-orange-950/50 py-4 font-medium text-red-500 transition-colors hover:bg-orange-950/60"
                 >
                     Sign Out
                 </button>

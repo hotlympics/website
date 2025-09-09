@@ -11,7 +11,6 @@ interface PhotoGalleryProps {
     onPoolToggle: (photoId: string) => void;
     onDeletePhoto: (photoId: string) => void;
     deletingPhoto: string | null;
-    maxPhotos?: number;
 }
 
 const PhotoGallery = ({
@@ -20,19 +19,10 @@ const PhotoGallery = ({
     onPoolToggle,
     onDeletePhoto,
     deletingPhoto,
-    maxPhotos = 10,
 }: PhotoGalleryProps) => {
     if (photos.length === 0) {
         return (
-            <div className="rounded-lg bg-gray-800 p-6 shadow-md">
-                <div className="mb-6 flex items-center justify-between">
-                    <h2 className="text-xl font-semibold text-gray-300">
-                        Uploaded Photos
-                    </h2>
-                    <span className="text-sm text-gray-400">
-                        {photos.length}/{maxPhotos} photos
-                    </span>
-                </div>
+            <div className="rounded-lg bg-black p-6 shadow-md">
                 <p className="text-center text-gray-400">
                     No photos uploaded yet
                 </p>
@@ -41,16 +31,7 @@ const PhotoGallery = ({
     }
 
     return (
-        <div className="rounded-lg bg-gray-800 p-6 shadow-md">
-            <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-300">
-                    Uploaded Photos
-                </h2>
-                <span className="text-sm text-gray-400">
-                    {photos.length}/{maxPhotos} photos
-                </span>
-            </div>
-
+        <div className="rounded-lg bg-black p-6 shadow-md">
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                 {photos.map((photo) => {
                     const isInPool = poolSelections.has(photo.id);
