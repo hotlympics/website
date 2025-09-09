@@ -139,10 +139,28 @@ export const useRatingQueue = () => {
         }
     };
 
+    const handleDiscardPair = async () => {
+        if (!imagePair || imagePair.length !== 2) return;
+
+        // Discard current pair without voting and get next pair
+        const nextPair = imageQueueService.getNextPair();
+
+        if (nextPair) {
+            setImagePair(nextPair);
+            setError(null);
+        } else {
+            // Queue exhausted, need to reinitialize
+            setLoadingImages(true);
+            isInitialized.current = false;
+            await initializeQueue();
+        }
+    };
+
     return {
         imagePair,
         loadingImages,
         error,
         handleImageClick,
+        handleDiscardPair,
     };
 };

@@ -1,3 +1,4 @@
+import { Flag } from "lucide-react";
 import { motion } from "motion/react";
 import {
     forwardRef,
@@ -15,6 +16,7 @@ interface SwipeCardProps {
     onComplete?: (winner: ImageData) => void;
     readOnly?: boolean;
     bare?: boolean; // Render content without its own rounded/bg/shadow
+    onReportImage?: (imageData: ImageData) => void;
 }
 
 export type SwipeCardHandle = {
@@ -23,7 +25,10 @@ export type SwipeCardHandle = {
 };
 
 export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
-    ({ pair, onComplete, readOnly = false, bare = false }, ref) => {
+    (
+        { pair, onComplete, readOnly = false, bare = false, onReportImage },
+        ref
+    ) => {
         const topImage = pair[0];
         const bottomImage = pair[1];
 
@@ -168,6 +173,20 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
                                 />
                             </div>
                         </button>
+
+                        {/* Report flag for top image - top-left corner */}
+                        {onReportImage && (
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onReportImage(topImage);
+                                }}
+                                className="absolute top-2 left-2 z-20 rounded-full bg-black/60 p-2 text-white transition-all hover:bg-black/80"
+                                title="Report this image"
+                            >
+                                <Flag className="h-4 w-4" />
+                            </button>
+                        )}
                     </div>
 
                     <div className="h-px w-full bg-gray-600" />
@@ -188,6 +207,20 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
                                 />
                             </div>
                         </button>
+
+                        {/* Report flag for bottom image - bottom-left corner */}
+                        {onReportImage && (
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onReportImage(bottomImage);
+                                }}
+                                className="absolute bottom-2 left-2 z-20 rounded-full bg-black/60 p-2 text-white transition-all hover:bg-black/80"
+                                title="Report this image"
+                            >
+                                <Flag className="h-4 w-4" />
+                            </button>
+                        )}
                     </div>
                 </div>
             </motion.div>
