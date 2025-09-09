@@ -7,8 +7,13 @@ import ReportModal, { type ReportCategory } from "../shared/report-modal.js";
 import { SwipeCard, type SwipeCardHandle } from "./swipe-card.js";
 
 export const RatingArena = () => {
-    const { imagePair, loadingImages, error, handleImageClick, handleDiscardPair } =
-        useRatingQueue();
+    const {
+        imagePair,
+        loadingImages,
+        error,
+        handleImageClick,
+        handleDiscardPair,
+    } = useRatingQueue();
 
     const cardRef = useRef<SwipeCardHandle | null>(null);
 

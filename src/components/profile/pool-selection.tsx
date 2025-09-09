@@ -28,7 +28,8 @@ const PoolSelection = ({
         <div className="rounded-lg bg-gray-800 p-4">
             <div className="flex items-center justify-between gap-4">
                 <p className="flex-1 text-sm text-gray-400">
-                    Select up to 2 photos for the rating pool ({poolSelections.size}
+                    Select up to 2 photos for the rating pool (
+                    {poolSelections.size}
                     /2 selected)
                 </p>
                 <button
