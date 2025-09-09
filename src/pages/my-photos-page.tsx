@@ -86,7 +86,7 @@ const MyPhotosPage = () => {
     };
 
     return (
-        <div className="flex h-[calc(100vh-7rem)] sm:h-[calc(100vh-8.5rem)] flex-col overflow-hidden">
+        <div className="flex h-[calc(100vh-7rem)] flex-col overflow-hidden sm:h-[calc(100vh-8.5rem)]">
             <div className="mx-auto flex h-full w-full max-w-6xl flex-col px-4">
                 {/* Header section - fixed */}
                 <div className="flex-shrink-0 pt-8 pb-4">
