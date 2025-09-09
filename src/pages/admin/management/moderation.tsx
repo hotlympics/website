@@ -46,13 +46,24 @@ const ModerationTab = ({
         loadData();
     }, [loadData]);
 
-    const handleSearch = async () => {
+    const handleSearch = async (event?: React.FormEvent) => {
+        if (event) {
+            event.preventDefault();
+        }
         await searchReportsByEmail(searchEmail);
     };
 
     const handleClearSearch = async () => {
         setSearchEmail("");
         await loadData();
+    };
+
+    const handleSearchInputChange = (value: string) => {
+        setSearchEmail(value);
+        // If the search input is cleared (X button clicked), clear the search
+        if (value === "") {
+            handleClearSearch();
+        }
     };
 
     const handleReportClick = async (report: AdminReport) => {
@@ -187,16 +198,21 @@ const ModerationTab = ({
                                 Clear Search
                             </button>
                         )}
-                        <SearchInput
-                            value={searchEmail}
-                            onChange={setSearchEmail}
-                            placeholder="Search by email..."
-                        />
-                        <SearchButton
-                            onClick={handleSearch}
-                            loading={loading}
-                            disabled={loading}
-                        />
+                        <form
+                            onSubmit={handleSearch}
+                            className="flex items-center space-x-2"
+                        >
+                            <SearchInput
+                                value={searchEmail}
+                                onChange={handleSearchInputChange}
+                                placeholder="Search by email..."
+                            />
+                            <SearchButton
+                                onClick={() => handleSearch()}
+                                loading={loading}
+                                disabled={loading}
+                            />
+                        </form>
                     </div>
                 </div>
             </div>

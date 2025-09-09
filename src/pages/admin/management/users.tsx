@@ -194,6 +194,12 @@ const UsersTab = ({
         clearSearch();
     };
 
+    const handleSearchButtonClick = () => {
+        if (searchEmail.trim()) {
+            performSearch(searchEmail);
+        }
+    };
+
     const handleSearchInputChange = (value: string) => {
         setSearchEmail(value);
         // If the search input is cleared (X button clicked), clear the search
@@ -236,6 +242,7 @@ const UsersTab = ({
                 activeSearchTerm={activeSearchTerm}
                 onSearchEmailChange={handleSearchInputChange}
                 onSearch={handleSearch}
+                onSearchButtonClick={handleSearchButtonClick}
                 isSearchMode={isSearchMode}
                 loading={loading}
             />

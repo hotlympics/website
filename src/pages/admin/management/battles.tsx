@@ -87,7 +87,10 @@ const BattlesTab = ({
         }
     }, [initialSearchTerm, performSearch]);
 
-    const handleSearch = async () => {
+    const handleSearch = async (event?: React.FormEvent) => {
+        if (event) {
+            event.preventDefault();
+        }
         await performSearch(searchTerm.trim());
     };
 
@@ -152,16 +155,21 @@ const BattlesTab = ({
                         </p>
                     </div>
                     <div className="flex items-center space-x-3">
-                        <SearchInput
-                            value={searchTerm}
-                            onChange={setSearchTerm}
-                            placeholder="Search by image ID..."
-                        />
-                        <SearchButton
-                            onClick={handleSearch}
-                            loading={loading}
-                            disabled={loading}
-                        />
+                        <form
+                            onSubmit={handleSearch}
+                            className="flex items-center space-x-2"
+                        >
+                            <SearchInput
+                                value={searchTerm}
+                                onChange={setSearchTerm}
+                                placeholder="Search by image ID..."
+                            />
+                            <SearchButton
+                                onClick={() => handleSearch()}
+                                loading={loading}
+                                disabled={loading}
+                            />
+                        </form>
                     </div>
                 </div>
             </div>

@@ -28,6 +28,7 @@ interface UserTableProps {
     activeSearchTerm: string;
     onSearchEmailChange: (value: string) => void;
     onSearch: (event: React.FormEvent) => void;
+    onSearchButtonClick: () => void;
     isSearchMode: boolean;
     loading: boolean;
 }
@@ -48,6 +49,7 @@ const UserTable = ({
     activeSearchTerm,
     onSearchEmailChange,
     onSearch,
+    onSearchButtonClick,
     isSearchMode,
     loading,
 }: UserTableProps) => {
@@ -95,7 +97,7 @@ const UserTable = ({
                                 placeholder="Search by email..."
                             />
                             <SearchButton
-                                onClick={() => {}}
+                                onClick={onSearchButtonClick}
                                 loading={loading}
                                 disabled={loading}
                             />
