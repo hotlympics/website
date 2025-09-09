@@ -13,6 +13,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     const showMenuBar = [
         "/",
         "/profile",
+        "/upload",
         "/my-photos",
         "/leaderboard",
         "/signin",

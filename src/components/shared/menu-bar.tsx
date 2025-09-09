@@ -25,12 +25,12 @@ const MenuBar = () => {
         {
             icon: Plus,
             label: "Upload",
-            path: "/upload", // Virtual path for selection state
+            path: "/upload",
             onClick: () => {
                 if (user) {
-                    navigate("/profile?tab=upload"); // Navigate to profile with upload tab
+                    navigate("/upload");
                 } else {
-                    navigate("/signin?redirect=/profile?tab=upload");
+                    navigate("/signin?redirect=/upload");
                 }
             },
             functional: true,
@@ -38,12 +38,12 @@ const MenuBar = () => {
         {
             icon: Images,
             label: "My Photos",
-            path: "/my-photos", // Virtual path for selection state
+            path: "/my-photos",
             onClick: () => {
                 if (user) {
-                    navigate("/profile?tab=photos"); // Navigate to profile with photos tab
+                    navigate("/my-photos");
                 } else {
-                    navigate("/signin?redirect=/profile?tab=photos");
+                    navigate("/signin?redirect=/my-photos");
                 }
             },
             functional: true,
@@ -69,40 +69,27 @@ const MenuBar = () => {
             return location.pathname === "/";
         }
 
-        // Handle virtual paths that navigate to /profile with different tabs
-        if (location.pathname === "/profile") {
-            const searchParams = new URLSearchParams(location.search);
-            const currentTab = searchParams.get("tab");
-
-            if (itemPath === "/upload") {
-                return currentTab === "upload";
-            }
-            if (itemPath === "/my-photos") {
-                return currentTab === "photos";
-            }
-            if (itemPath === "/profile") {
-                return !currentTab || currentTab === ""; // No tab parameter means default profile view
-            }
+        // Handle direct path matches
+        if (itemPath === "/upload") {
+            return location.pathname === "/upload";
+        }
+        if (itemPath === "/my-photos") {
+            return location.pathname === "/my-photos";
+        }
+        if (itemPath === "/profile") {
+            return location.pathname === "/profile";
+        }
+        if (itemPath === "/leaderboard") {
+            return location.pathname === "/leaderboard";
         }
 
-        // Handle cases where user is on signin page but intended for a specific tab
+        // Handle cases where user is on signin page but intended for a specific page
         if (location.pathname === "/signin") {
             const searchParams = new URLSearchParams(location.search);
             const redirect = searchParams.get("redirect");
 
-            if (redirect) {
-                if (redirect.includes("tab=upload") && itemPath === "/upload") {
-                    return true;
-                }
-                if (
-                    redirect.includes("tab=photos") &&
-                    itemPath === "/my-photos"
-                ) {
-                    return true;
-                }
-                if (redirect === "/profile" && itemPath === "/profile") {
-                    return true;
-                }
+            if (redirect === itemPath) {
+                return true;
             }
         }
 
