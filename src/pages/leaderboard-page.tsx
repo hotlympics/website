@@ -1,9 +1,8 @@
 import EmptyState from "../components/admin/shared/empty-state.js";
 import LoadingState from "../components/admin/shared/loading-state.js";
-import LeaderboardDetailCard from "../components/leaderboard/leaderboard-detail-card.js";
+import FullscreenImageModal from "../components/leaderboard/fullscreen-image-modal.js";
 import LeaderboardFullList from "../components/leaderboard/leaderboard-full-list.js";
-import LeaderboardPodium from "../components/leaderboard/leaderboard-podium.js";
-import LeaderboardSelector from "../components/leaderboard/leaderboard-selector.js";
+import LeaderboardHeader from "../components/leaderboard/leaderboard-header.js";
 import { useLeaderboard } from "../hooks/leaderboard/use-leaderboard.js";
 
 const LeaderboardPage = () => {
@@ -12,11 +11,11 @@ const LeaderboardPage = () => {
         loading,
         error,
         selectedEntry,
-        viewMode,
-        currentLeaderboard,
-        selectEntry,
-        clearSelection,
-        switchLeaderboard,
+        showingFullscreen,
+        switchGender,
+        getCurrentGender,
+        openFullscreen,
+        closeFullscreen,
     } = useLeaderboard();
 
     if (loading) {
@@ -60,7 +59,7 @@ const LeaderboardPage = () => {
                         description="There are no entries for this leaderboard yet."
                         icon={
                             <svg
-                                className="mx-auto mb-3 h-12 w-12 text-gray-400"
+                                className="mx-auto mb-3 h-12 w-12 text-gray-300"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -80,54 +79,30 @@ const LeaderboardPage = () => {
     }
 
     return (
-        <div className="fixed inset-0 flex flex-col">
-            {/* Fixed Header */}
-            <div className="flex-shrink-0 px-4 pt-8 pb-4">
-                <div className="mx-auto max-w-6xl">
-                    <div className="flex flex-row items-center justify-end">
-                        <LeaderboardSelector
-                            currentLeaderboard={currentLeaderboard}
-                            onLeaderboardChange={switchLeaderboard}
-                            disabled={loading}
-                        />
-                    </div>
-                </div>
-            </div>
+        <div className="min-h-screen px-4 py-8">
+            <div className="mx-auto max-w-6xl">
+                {/* Header */}
+                <LeaderboardHeader
+                    currentGender={getCurrentGender()}
+                    onGenderChange={switchGender}
+                    disabled={loading}
+                />
 
-            {/* Fixed Top Section - Podium or Detail Card */}
-            <div className="h-80 flex-shrink-0 px-4 pb-4">
-                <div className="mx-auto flex h-full max-w-6xl items-center justify-center">
-                    {viewMode === "podium" ? (
-                        <LeaderboardPodium
-                            entries={entries}
-                            onEntryClick={selectEntry}
-                        />
-                    ) : (
-                        selectedEntry && (
-                            <LeaderboardDetailCard
-                                entry={selectedEntry}
-                                rank={
-                                    entries.findIndex(
-                                        (e) =>
-                                            e.imageId === selectedEntry.imageId
-                                    ) + 1
-                                }
-                                onClose={clearSelection}
-                            />
-                        )
-                    )}
-                </div>
-            </div>
+                {/* Full List */}
+                <LeaderboardFullList
+                    entries={entries}
+                    selectedEntry={selectedEntry}
+                    onEntryClick={openFullscreen}
+                />
 
-            {/* Scrollable Cards Section */}
-            <div className="h-[30rem] overflow-y-auto px-4 pt-4 pb-20">
-                <div className="mx-auto max-w-6xl">
-                    <LeaderboardFullList
-                        entries={entries}
-                        selectedEntry={selectedEntry}
-                        onEntryClick={selectEntry}
+                {/* Fullscreen Image Modal */}
+                {selectedEntry && (
+                    <FullscreenImageModal
+                        entry={selectedEntry}
+                        isOpen={showingFullscreen}
+                        onClose={closeFullscreen}
                     />
-                </div>
+                )}
             </div>
         </div>
     );

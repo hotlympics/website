@@ -17,7 +17,7 @@ const LeaderboardPodium = ({
 
     if (!first) {
         return (
-            <div className="flex h-64 items-center justify-center text-gray-500">
+            <div className="flex h-64 items-center justify-center text-gray-300">
                 <p>No leaderboard data available</p>
             </div>
         );
@@ -52,7 +52,7 @@ const LeaderboardPodium = ({
                 {isFirst && (
                     <div className="relative z-10 mb-3">
                         <CrownIcon
-                            className="translate-y-5 transform text-emerald-500"
+                            className="translate-y-5 transform text-emerald-300"
                             size={56}
                         />
                     </div>
@@ -62,11 +62,11 @@ const LeaderboardPodium = ({
                 <div className="relative">
                     <button
                         onClick={() => onEntryClick(entry)}
-                        className="group relative transition-transform hover:scale-105 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:outline-none"
+                        className="group relative transition-transform hover:scale-105 focus:ring-2 focus:ring-white/10 focus:ring-offset-2 focus:outline-none"
                         type="button"
                     >
                         <div
-                            className={`overflow-hidden rounded-full border-4 shadow-[0_18px_60px_rgba(0,0,0,0.55)] ring-1 ring-black/10 ${sizeClass} ${isFirst ? "border-emerald-400" : "border-emerald-300"} `}
+                            className={`overflow-hidden rounded-full border-4 shadow-[0_18px_60px_rgba(0,0,0,0.55)] ring-1 ring-black/10 ${sizeClass} ${isFirst ? "border-emerald-300" : "border-emerald-300"} `}
                         >
                             <img
                                 src={entry.imageUrl}
@@ -81,14 +81,14 @@ const LeaderboardPodium = ({
                     </button>
 
                     {/* Rank Badge - Overlapping bottom of image */}
-                    <div className="absolute -bottom-2 left-1/2 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full bg-emerald-600 text-base font-bold text-white">
+                    <div className="absolute -bottom-2 left-1/2 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full bg-emerald-900/20 text-base font-bold text-emerald-300">
                         {rank}
                     </div>
                 </div>
 
                 {/* Score */}
                 <p
-                    className={`mt-3 text-center font-bold ${isFirst ? "rounded-full bg-emerald-50 px-3 py-1 text-lg text-emerald-700 shadow-sm" : "text-base text-emerald-600"}`}
+                    className={`mt-3 text-center font-bold ${isFirst ? "rounded-full bg-emerald-900/20 px-3 py-1 text-lg text-emerald-300 shadow-sm" : "text-base text-emerald-300"}`}
                 >
                     {Math.round(entry.rating)} pts
                 </p>

@@ -39,10 +39,10 @@ export function TermsOfService({ onAccept, onDecline }: TermsOfServiceProps) {
         return (
             <div className="flex flex-col gap-6">
                 <div>
-                    <h2 className="mb-4 text-2xl font-bold">
+                    <h2 className="mb-4 text-2xl font-bold text-gray-100">
                         Terms of Service
                     </h2>
-                    <p className="text-gray-600">Loading terms of service...</p>
+                    <p className="text-gray-400">Loading terms of service...</p>
                 </div>
             </div>
         );
@@ -52,17 +52,17 @@ export function TermsOfService({ onAccept, onDecline }: TermsOfServiceProps) {
         return (
             <div className="flex flex-col gap-6">
                 <div>
-                    <h2 className="mb-4 text-2xl font-bold">
+                    <h2 className="mb-4 text-2xl font-bold text-gray-100">
                         Terms of Service
                     </h2>
-                    <div className="rounded-lg bg-red-50 p-4">
-                        <p className="text-red-600">{error}</p>
+                    <div className="rounded-lg bg-red-900/20 p-4">
+                        <p className="text-red-300">{error}</p>
                     </div>
                 </div>
                 <div className="flex gap-4">
                     <button
                         onClick={onDecline}
-                        className="flex-1 rounded-lg bg-gray-200 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-300"
+                        className="flex-1 rounded-lg bg-gray-700 px-6 py-3 font-medium text-gray-300 transition-colors hover:bg-gray-700"
                     >
                         Go Back
                     </button>
@@ -74,38 +74,40 @@ export function TermsOfService({ onAccept, onDecline }: TermsOfServiceProps) {
     return (
         <div className="flex flex-col gap-6">
             <div>
-                <h2 className="mb-4 text-2xl font-bold">Terms of Service</h2>
-                <p className="mb-4 text-gray-600">
+                <h2 className="mb-4 text-2xl font-bold text-gray-100">
+                    Terms of Service
+                </h2>
+                <p className="mb-4 text-gray-400">
                     Please read and accept our terms of service to continue.
                 </p>
             </div>
 
-            <div className="max-h-96 overflow-y-auto rounded-lg bg-gray-50 p-6">
+            <div className="max-h-96 overflow-y-auto rounded-lg bg-gray-700 p-6">
                 <div className="prose prose-sm max-w-none">
                     <ReactMarkdown
                         components={{
                             h1: ({ children }) => (
-                                <h1 className="mb-4 text-xl font-bold text-gray-900">
+                                <h1 className="mb-4 text-xl font-bold text-gray-100">
                                     {children}
                                 </h1>
                             ),
                             h2: ({ children }) => (
-                                <h2 className="mt-6 mb-3 text-lg font-semibold text-gray-800">
+                                <h2 className="mt-6 mb-3 text-lg font-semibold text-gray-300">
                                     {children}
                                 </h2>
                             ),
                             h3: ({ children }) => (
-                                <h3 className="mt-4 mb-2 text-base font-semibold text-gray-800">
+                                <h3 className="mt-4 mb-2 text-base font-semibold text-gray-300">
                                     {children}
                                 </h3>
                             ),
                             p: ({ children }) => (
-                                <p className="mb-4 leading-relaxed text-gray-700">
+                                <p className="mb-4 leading-relaxed text-gray-400">
                                     {children}
                                 </p>
                             ),
                             ul: ({ children }) => (
-                                <ul className="mb-4 ml-5 list-disc text-gray-700">
+                                <ul className="mb-4 ml-5 list-disc text-gray-400">
                                     {children}
                                 </ul>
                             ),
@@ -113,7 +115,7 @@ export function TermsOfService({ onAccept, onDecline }: TermsOfServiceProps) {
                                 <li className="mb-1">{children}</li>
                             ),
                             strong: ({ children }) => (
-                                <strong className="font-semibold text-gray-900">
+                                <strong className="font-semibold text-gray-100">
                                     {children}
                                 </strong>
                             ),
@@ -127,7 +129,7 @@ export function TermsOfService({ onAccept, onDecline }: TermsOfServiceProps) {
             <div className="flex gap-4">
                 <button
                     onClick={onDecline}
-                    className="flex-1 rounded-lg bg-gray-200 px-6 py-3 font-medium text-gray-700 transition-colors hover:bg-gray-300"
+                    className="flex-1 rounded-lg bg-gray-700 px-6 py-3 font-medium text-gray-300 transition-colors hover:bg-gray-700"
                 >
                     Decline
                 </button>

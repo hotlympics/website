@@ -13,8 +13,10 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     const showMenuBar = [
         "/",
         "/profile",
+        "/upload",
         "/my-photos",
         "/leaderboard",
+        "/signin",
     ].includes(location.pathname);
 
     // Check if we're on the rating page (which should not scroll)
@@ -32,16 +34,16 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             className={`min-h-screen ${isRatingPage ? "overflow-hidden" : ""}`}
         >
             {/* Main content area with conditional bottom padding */}
-            <div className={showMenuBar && !isRatingPage ? "pb-32" : ""}>
+            <div className={showMenuBar && !isRatingPage ? "pb-40" : ""}>
                 {children}
             </div>
 
             {/* Persistent MenuBar - only shown on specific pages */}
             {showMenuBar && (
                 <div
-                    className="fixed right-0 bottom-0 left-0 z-20 flex w-full justify-center px-3 pb-4"
+                    className="fixed right-0 bottom-0 left-0 z-20 flex w-full justify-center"
                     style={{
-                        paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
+                        paddingBottom: "env(safe-area-inset-bottom)",
                         paddingLeft: "env(safe-area-inset-left)",
                         paddingRight: "env(safe-area-inset-right)",
                     }}

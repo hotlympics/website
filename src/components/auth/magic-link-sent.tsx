@@ -7,9 +7,9 @@ export const MagicLinkSent = ({
 }) => {
     return (
         <div className="text-center">
-            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
+            <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-blue-900/20">
                 <svg
-                    className="h-8 w-8 text-blue-600"
+                    className="h-8 w-8 text-blue-300"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -23,21 +23,21 @@ export const MagicLinkSent = ({
                 </svg>
             </div>
 
-            <h2 className="mb-2 text-2xl font-bold text-gray-800">
+            <h2 className="mb-2 text-2xl font-bold text-gray-100">
                 Check Your Email
             </h2>
 
-            <p className="mb-6 text-gray-600">
+            <p className="mb-6 text-gray-400">
                 We've sent a magic sign-in link to <strong>{email}</strong>
             </p>
 
-            <p className="mb-4 text-sm text-gray-500">
+            <p className="mb-4 text-sm text-gray-400">
                 Click the link in your email to sign in instantly. The link will
                 expire in 1 hour.
             </p>
 
-            <div className="mb-6 rounded-lg bg-blue-50 p-4">
-                <p className="text-sm text-blue-700">
+            <div className="mb-6 rounded-lg bg-blue-900/20 p-4">
+                <p className="text-sm text-blue-300">
                     <strong>Tip:</strong> Keep this tab open. You'll be
                     automatically signed in when you click the link.
                 </p>
@@ -45,7 +45,7 @@ export const MagicLinkSent = ({
 
             <button
                 onClick={onBackToSignIn}
-                className="text-blue-600 hover:text-blue-700"
+                className="text-blue-300 hover:text-blue-200"
             >
                 Use a different email
             </button>

@@ -1,17 +1,8 @@
-import { useEffect, useState } from "react";
-import DeleteConfirmationModal from "../components/profile/delete-confirmation-modal";
-import PhotoGallery from "../components/profile/photo-gallery";
-import PhotoUpload from "../components/profile/photo-upload";
-import PoolSelection from "../components/profile/pool-selection";
+import { useEffect } from "react";
 import ProfileSetupSequential from "../components/profile/profile-setup-sequential";
 import { usePhotoUpload } from "../hooks/profile/use-photo-upload";
 import { usePoolManagement } from "../hooks/profile/use-pool-management";
 import { useProfile } from "../hooks/profile/use-profile";
-
-interface DeleteConfirmation {
-    photoId: string;
-    isInPool: boolean;
-}
 
 const ProfilePage = () => {
     const {
@@ -23,34 +14,14 @@ const ProfilePage = () => {
         updateProfile,
         acceptTos,
         logout,
-        showSuccessMessage,
         isProfileComplete,
         needsGenderAndDob,
         needsTosAcceptance,
-        refreshUserInfo,
     } = useProfile();
 
-    const {
-        uploadedPhotos,
-        isUploading,
-        uploadStatus,
-        uploadProgress,
-        isDeleting,
-        fetchUploadedPhotos,
-        uploadPhoto,
-        deletePhoto,
-    } = usePhotoUpload();
+    const { uploadedPhotos, fetchUploadedPhotos } = usePhotoUpload();
 
-    const {
-        poolSelections,
-        isUpdatingPool,
-        togglePoolSelection,
-        removeFromPool,
-        updatePoolOnServer,
-    } = usePoolManagement(user);
-
-    const [deleteConfirmation, setDeleteConfirmation] =
-        useState<DeleteConfirmation | null>(null);
+    const { poolSelections } = usePoolManagement(user);
 
     useEffect(() => {
         if (user) {
@@ -58,59 +29,13 @@ const ProfilePage = () => {
         }
     }, [user, fetchUploadedPhotos]);
 
-    const handleFileSelect = async (croppedFile: File) => {
-        await uploadPhoto(
-            croppedFile,
-            (message) => showSuccessMessage(message),
-            (errorMessage) => {
-                // Handle upload error
-                console.error("Upload error:", errorMessage);
-            }
-        );
-    };
-
-    const handleDeletePhoto = (photoId: string) => {
-        const isInPool = poolSelections.has(photoId);
-        setDeleteConfirmation({ photoId, isInPool });
-    };
-
-    const confirmDelete = async () => {
-        if (!deleteConfirmation) return;
-
-        const { photoId } = deleteConfirmation;
-        setDeleteConfirmation(null);
-
-        removeFromPool(photoId);
-        await deletePhoto(photoId);
-    };
-
-    const handlePoolToggle = (photoId: string) => {
-        togglePoolSelection(photoId, (error) => {
-            // Handle error - should show temporary error message
-            console.error(error);
-        });
-    };
-
-    const handlePoolUpdate = async () => {
-        await updatePoolOnServer(
-            () => {
-                refreshUserInfo();
-                showSuccessMessage("Pool selections updated successfully!");
-            },
-            (errorMessage) => {
-                // Handle error
-                console.error("Pool update error:", errorMessage);
-            }
-        );
-    };
-
     // Loading state
     if (authLoading || !user) {
         return (
             <div className="flex min-h-screen items-center justify-center">
                 <div className="text-center">
-                    <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600"></div>
-                    <p className="text-gray-600">Loading...</p>
+                    <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-blue-600"></div>
+                    <p className="text-gray-400">Loading...</p>
                 </div>
             </div>
         );
@@ -135,85 +60,57 @@ const ProfilePage = () => {
 
     // Main profile page
     return (
-        <div className="min-h-screen">
-            <div className="mx-auto max-w-6xl px-4 py-8">
-                <div className="mb-8 flex items-center justify-between">
-                    <h1 className="text-3xl font-bold text-gray-800">
-                        My Account
-                    </h1>
-                    <button
-                        onClick={logout}
-                        className="rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700"
-                    >
-                        Logout
-                    </button>
-                </div>
+        <div className="flex min-h-screen flex-col">
+            <div className="mx-auto max-w-lg flex-1 px-4 py-8">
+                {/* Profile Information */}
+                <div className="mb-8 space-y-4">
+                    <div className="space-y-3 text-gray-400">
+                        <div className="mb-6 text-center">
+                            <span className="text-lg text-gray-100">
+                                {user.email}
+                            </span>
+                        </div>
 
-                <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
-                    {/* Profile Info Card */}
-                    <div className="rounded-lg bg-white p-6 shadow-md">
-                        <h2 className="mb-4 text-xl font-semibold text-gray-700">
-                            Profile Information
-                        </h2>
-                        <p className="text-gray-600">Email: {user.email}</p>
+                        <div className="flex items-center justify-between">
+                            <span>Photos uploaded:</span>
+                            <span className="ml-36 text-gray-100">
+                                {uploadedPhotos.length}/10
+                            </span>
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                            <span>Photos in pool:</span>
+                            <span className="ml-36 text-gray-100">
+                                {poolSelections.size}/2
+                            </span>
+                        </div>
                     </div>
-
-                    {/* Upload Photo Card */}
-                    <PhotoUpload
-                        onFileSelect={handleFileSelect}
-                        isUploading={isUploading}
-                        uploadStatus={uploadStatus}
-                        uploadProgress={uploadProgress}
-                        uploadedPhotosCount={uploadedPhotos.length}
-                    />
-                </div>
-
-                <div className="mt-8">
-                    {uploadedPhotos.length > 0 && (
-                        <PoolSelection
-                            poolSelections={poolSelections}
-                            user={user}
-                            isUpdating={isUpdatingPool}
-                            onUpdatePool={handlePoolUpdate}
-                        />
-                    )}
-
-                    <PhotoGallery
-                        photos={uploadedPhotos}
-                        poolSelections={poolSelections}
-                        onPoolToggle={handlePoolToggle}
-                        onDeletePhoto={handleDeletePhoto}
-                        deletingPhoto={isDeleting}
-                    />
                 </div>
 
                 {/* Error/Success Messages */}
                 {error && (
-                    <div className="mt-4 rounded-md bg-red-50 p-4">
-                        <p className="text-sm text-red-800">{error}</p>
+                    <div className="mt-4 rounded-md bg-red-900/20 p-4">
+                        <p className="text-sm text-red-300">{error}</p>
                     </div>
                 )}
                 {successMessage && (
-                    <div className="mt-4 rounded-md bg-green-50 p-4">
-                        <p className="text-sm text-green-800">
+                    <div className="mt-4 rounded-md bg-green-900/20 p-4">
+                        <p className="text-sm text-green-300">
                             {successMessage}
                         </p>
                     </div>
                 )}
             </div>
 
-            <DeleteConfirmationModal
-                isOpen={!!deleteConfirmation}
-                onClose={() => setDeleteConfirmation(null)}
-                onConfirm={confirmDelete}
-                title="Confirm Deletion"
-                message={
-                    deleteConfirmation?.isInPool
-                        ? "This image is currently in the rating pool. Deleting it will remove it from the pool and delete all associated data."
-                        : "Deleting this image will permanently remove it and all associated data."
-                }
-                warningMessage="Are you sure you want to proceed?"
-            />
+            {/* Sign Out Button - positioned at bottom above menu bar */}
+            <div className="flex justify-center px-4 pb-32">
+                <button
+                    onClick={logout}
+                    className="w-3/4 rounded-lg bg-orange-950/50 py-4 font-medium text-red-500 transition-colors hover:bg-orange-950/60"
+                >
+                    Sign Out
+                </button>
+            </div>
         </div>
     );
 };
