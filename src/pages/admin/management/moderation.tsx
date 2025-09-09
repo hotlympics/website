@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import ReportTable from "../../../components/admin/management/moderation/report-table";
-import SearchInput from "../../../components/admin/shared/search-input";
-import SearchButton from "../../../components/admin/shared/search-button";
-import RefreshButton from "../../../components/admin/shared/refresh-button";
 import ErrorMessage from "../../../components/admin/shared/error-message";
 import InlineLoadingState from "../../../components/admin/shared/inline-loading-state";
+import RefreshButton from "../../../components/admin/shared/refresh-button";
+import SearchButton from "../../../components/admin/shared/search-button";
+import SearchInput from "../../../components/admin/shared/search-input";
 import { useReports } from "../../../hooks/admin/use-reports";
 import {
     adminService,
@@ -162,7 +162,10 @@ const ModerationTab = ({
                                     className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
                                 >
                                     {getStatusFilterOptions().map((option) => (
-                                        <option key={option.value} value={option.value}>
+                                        <option
+                                            key={option.value}
+                                            value={option.value}
+                                        >
                                             {option.label}
                                         </option>
                                     ))}

@@ -3,9 +3,9 @@ interface InlineLoadingStateProps {
     className?: string;
 }
 
-const InlineLoadingState = ({ 
-    message = "Loading...", 
-    className = "" 
+const InlineLoadingState = ({
+    message = "Loading...",
+    className = "",
 }: InlineLoadingStateProps) => {
     return (
         <div className={`py-12 text-center ${className}`}>

@@ -17,8 +17,18 @@ const AdminLayout = ({ children, title }: AdminLayoutProps) => {
         }
     }, [navigate]);
 
+    useEffect(() => {
+        // Add data attribute to body for admin styling
+        document.body.setAttribute("data-admin-page", "true");
+
+        // Cleanup when component unmounts
+        return () => {
+            document.body.removeAttribute("data-admin-page");
+        };
+    }, []);
+
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-slate-100 text-gray-900">
             <AdminHeader title={title} />
             <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                 {children}

@@ -14,6 +14,12 @@
         background-color: #000000; /* Black background */
         color: #e2e8f0; /* Light gray text */
     }
+
+    /* Light gray background for admin pages */
+    body:has([data-admin-page="true"]) {
+        background-color: #f1f5f9;
+        color: #1f2937;
+    }
 }
 
 @layer components {

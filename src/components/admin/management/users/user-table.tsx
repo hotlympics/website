@@ -4,8 +4,8 @@ import type {
     UserDetails,
 } from "../../../../utils/types/admin/admin";
 import EmptyState from "../../shared/empty-state";
-import SearchInput from "../../shared/search-input";
 import SearchButton from "../../shared/search-button";
+import SearchInput from "../../shared/search-input";
 import UserRow from "./user-row";
 
 interface UserTableProps {
