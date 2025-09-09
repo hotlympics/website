@@ -28,7 +28,7 @@ const SearchInput = ({
                 placeholder={placeholder}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                className="block w-64 rounded-md border border-gray-300 bg-white py-2 pr-10 pl-10 leading-5 placeholder-gray-500 focus:border-blue-500 focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:outline-none sm:text-sm"
+                className="block w-64 rounded-md border border-gray-300 bg-white py-2 pr-10 pl-10 leading-5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:outline-none sm:text-sm"
             />
             {value && (
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3">

@@ -1,8 +1,11 @@
 // Re-export types from admin service to maintain clean imports
 export type {
     AdminImageData,
+    AdminReport,
     AdminUser,
     CreateUserData,
+    ReportCategory,
+    ReportStatus,
     UserDetails,
 } from "../../../services/admin/admin-service";
 
