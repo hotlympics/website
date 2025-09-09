@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Image, Plus } from "lucide-react";
+import ImageCropModal from "../components/shared/image-crop-modal";
 import { useAuth } from "../hooks/auth/use-auth";
 import { usePhotoUpload } from "../hooks/profile/use-photo-upload";
 import { useProfile } from "../hooks/profile/use-profile";
 
 const UploadPage = () => {
+    const navigate = useNavigate();
     const { user, loading: authLoading } = useAuth();
     const {
+        uploadedPhotos,
         isUploading,
         uploadStatus,
         uploadProgress,
@@ -15,7 +18,10 @@ const UploadPage = () => {
         uploadPhoto,
     } = usePhotoUpload();
     const { showSuccessMessage } = useProfile();
-    const [fileInputRef, setFileInputRef] = useState<HTMLInputElement | null>(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [showCropModal, setShowCropModal] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (user) {
@@ -41,21 +47,50 @@ const UploadPage = () => {
     }
 
     const handleChoosePhoto = () => {
-        fileInputRef?.click();
+        fileInputRef.current?.click();
     };
 
-    const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        if (!file) return;
-
-        await uploadPhoto(
-            file,
-            (message) => showSuccessMessage(message),
-            (errorMessage) => {
-                console.error("Upload error:", errorMessage);
-            }
-        );
+        if (file) {
+            setSelectedFile(file);
+            setShowCropModal(true);
+        }
+        // Reset input value to allow selecting the same file again
+        event.target.value = "";
     };
+
+    const handleCropComplete = async (croppedFile: File) => {
+        setIsProcessing(true);
+        try {
+            await uploadPhoto(
+                croppedFile,
+                (message) => {
+                    showSuccessMessage(message);
+                    // Navigate to My Photos tab after successful upload
+                    setTimeout(() => {
+                        navigate("/my-photos");
+                    }, 1500); // Small delay to show success message
+                },
+                (errorMessage) => {
+                    console.error("Upload error:", errorMessage);
+                }
+            );
+            setShowCropModal(false);
+            setSelectedFile(null);
+        } catch (error) {
+            console.error("Error processing cropped image:", error);
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    const handleCropCancel = () => {
+        setShowCropModal(false);
+        setSelectedFile(null);
+    };
+
+    const isAtLimit = uploadedPhotos.length >= 10;
 
     return (
         <div className="min-h-screen flex flex-col">
@@ -89,9 +124,11 @@ const UploadPage = () => {
                 </p>
 
                 {/* Upload status */}
-                {isUploading && (
+                {(isUploading || isProcessing) && (
                     <div className="text-center mb-4">
-                        <div className="text-blue-500 mb-2">{uploadStatus}</div>
+                        <div className="text-blue-500 mb-2">
+                            {isProcessing ? "Processing..." : uploadStatus || "Uploading..."}
+                        </div>
                         {uploadProgress > 0 && (
                             <div className="w-64 bg-gray-700 rounded-full h-2">
                                 <div 
@@ -108,21 +145,38 @@ const UploadPage = () => {
             <div className="px-4 pb-32 flex justify-center">
                 <button
                     onClick={handleChoosePhoto}
-                    disabled={isUploading}
-                    className="w-[90%] py-4 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
+                    disabled={isUploading || isAtLimit || isProcessing}
+                    className="w-[90%] py-4 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                 >
                     <Image size={20} className="text-white" />
-                    <span>Choose Photo</span>
+                    <span>
+                        {isUploading || isProcessing 
+                            ? "Processing..." 
+                            : isAtLimit 
+                                ? "Upload Limit Reached" 
+                                : "Choose Photo"
+                        }
+                    </span>
                 </button>
             </div>
 
             {/* Hidden file input */}
             <input
+                ref={fileInputRef}
                 type="file"
-                ref={setFileInputRef}
-                onChange={handleFileSelect}
                 accept="image/*"
+                onChange={handleFileSelect}
+                disabled={isUploading || isAtLimit || isProcessing}
                 className="hidden"
+            />
+
+            {/* Crop Modal */}
+            <ImageCropModal
+                isOpen={showCropModal}
+                onClose={handleCropCancel}
+                onCropComplete={handleCropComplete}
+                imageFile={selectedFile}
+                isLoading={isProcessing}
             />
         </div>
     );
