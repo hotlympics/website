@@ -97,7 +97,7 @@ const MenuBar = () => {
     };
 
     return (
-        <div className="mx-0 flex w-full items-center justify-center rounded-none bg-black/95 p-6 shadow-lg backdrop-blur-sm sm:p-8">
+        <div className="mx-0 flex w-full items-center justify-center rounded-none bg-black p-6 shadow-lg sm:p-8">
             <div className="flex w-full max-w-md items-start justify-between px-2">
                 {menuItems.map((item) => {
                     const Icon = item.icon;

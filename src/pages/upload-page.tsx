@@ -93,46 +93,46 @@ const UploadPage = () => {
     const isAtLimit = uploadedPhotos.length >= 10;
 
     return (
-        <div className="flex min-h-screen flex-col">
+        <div className="flex h-screen flex-col overflow-hidden">
             {/* Title at top */}
-            <div className="pt-8 pb-4">
-                <h1 className="text-center text-lg font-medium text-gray-100">
+            <div className="flex-shrink-0 pt-8 pb-2">
+                <h1 className="text-center text-xl font-medium text-gray-100">
                     Upload Photo
                 </h1>
             </div>
 
-            {/* Main content area - centered */}
-            <div className="flex flex-1 flex-col items-center justify-center px-4">
+            {/* Main content area - centered and flexible */}
+            <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-4">
                 {/* Blue image icon with plus */}
-                <div className="relative mb-6">
-                    <div className="flex h-16 w-20 items-center justify-center rounded-lg bg-blue-600">
-                        <Image size={32} className="text-white" />
+                <div className="relative mb-4">
+                    <div className="flex h-12 w-16 items-center justify-center rounded-lg bg-blue-600">
+                        <Image size={24} className="text-white" />
                     </div>
-                    <div className="absolute -right-2 -bottom-2 flex h-8 w-8 items-center justify-center rounded-full border-2 border-black bg-blue-600">
-                        <Plus size={16} className="text-white" />
+                    <div className="absolute -right-1 -bottom-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-black bg-blue-600">
+                        <Plus size={12} className="text-white" />
                     </div>
                 </div>
 
                 {/* Main text */}
-                <h2 className="mb-4 text-center text-xl font-medium text-white">
+                <h2 className="mb-3 text-center text-lg font-medium text-white">
                     Upload Your Photo
                 </h2>
 
                 {/* Subtitle */}
-                <p className="mb-8 text-center text-sm text-gray-400">
+                <p className="mb-6 text-center text-sm text-gray-400">
                     Select a photo from your library or take a new one
                 </p>
 
                 {/* Upload status */}
                 {(isUploading || isProcessing) && (
                     <div className="mb-4 text-center">
-                        <div className="mb-2 text-blue-500">
+                        <div className="mb-2 text-sm text-blue-500">
                             {isProcessing
                                 ? "Processing..."
                                 : uploadStatus || "Uploading..."}
                         </div>
                         {uploadProgress > 0 && (
-                            <div className="h-2 w-64 rounded-full bg-gray-700">
+                            <div className="h-2 w-48 rounded-full bg-gray-700">
                                 <div
                                     className="h-2 rounded-full bg-blue-600 transition-all"
                                     style={{ width: `${uploadProgress}%` }}
@@ -144,13 +144,13 @@ const UploadPage = () => {
             </div>
 
             {/* Choose Photo button at bottom */}
-            <div className="flex justify-center px-4 pb-32">
+            <div className="flex flex-shrink-0 justify-center px-4 pb-40">
                 <button
                     onClick={handleChoosePhoto}
                     disabled={isUploading || isAtLimit || isProcessing}
-                    className="flex w-[90%] items-center justify-center space-x-2 rounded-lg bg-blue-600 py-4 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex w-[90%] items-center justify-center space-x-2 rounded-lg bg-blue-600 py-3 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                    <Image size={20} className="text-white" />
+                    <Image size={18} className="text-white" />
                     <span>
                         {isUploading || isProcessing
                             ? "Processing..."

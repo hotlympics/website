@@ -60,8 +60,8 @@ const ProfilePage = () => {
 
     // Main profile page
     return (
-        <div className="flex min-h-screen flex-col">
-            <div className="mx-auto max-w-lg flex-1 px-4 py-8">
+        <div className="flex h-[calc(100vh-7rem)] flex-col overflow-hidden sm:h-[calc(100vh-8.5rem)]">
+            <div className="mx-auto max-w-lg flex-1 overflow-y-auto px-4 py-8">
                 {/* Profile Information */}
                 <div className="mb-8 space-y-4">
                     <div className="space-y-3 text-gray-400">
@@ -103,7 +103,7 @@ const ProfilePage = () => {
             </div>
 
             {/* Sign Out Button - positioned at bottom above menu bar */}
-            <div className="flex justify-center px-4 pb-32">
+            <div className="flex flex-shrink-0 justify-center px-4 pb-4">
                 <button
                     onClick={logout}
                     className="w-3/4 rounded-lg bg-orange-950/50 py-4 font-medium text-red-500 transition-colors hover:bg-orange-950/60"
