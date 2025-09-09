@@ -151,13 +151,8 @@ const MyPhotosPage = () => {
                 isOpen={!!deleteConfirmation}
                 onClose={() => setDeleteConfirmation(null)}
                 onConfirm={confirmDelete}
-                title="Confirm Deletion"
-                message={
-                    deleteConfirmation?.isInPool
-                        ? "This image is currently in the rating pool. Deleting it will remove it from the pool and delete all associated data."
-                        : "Deleting this image will permanently remove it and all associated data."
-                }
-                warningMessage="Are you sure you want to proceed?"
+                title="Delete Photo"
+                message="This will permanently delete the photo and all associated data. Are you sure?"
             />
         </div>
     );

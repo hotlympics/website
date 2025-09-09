@@ -77,26 +77,25 @@ const PhotoGallery = ({
                                 </div>
                             )}
 
+                            {/* Always visible delete button */}
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     onDeletePhoto(photo.id);
                                 }}
                                 disabled={deletingPhoto === photo.id}
-                                className="absolute top-2 right-2 rounded-md bg-red-600 p-2 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-red-700 disabled:bg-gray-600"
+                                className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white shadow-lg transition-colors hover:bg-red-700 disabled:bg-gray-600"
                                 title="Delete photo"
                             >
                                 <svg
-                                    className="h-4 w-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                                    className="h-3 w-3"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
                                 >
                                     <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                        fillRule="evenodd"
+                                        d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 112 0v4a1 1 0 11-2 0V9zm4 0a1 1 0 112 0v4a1 1 0 11-2 0V9z"
+                                        clipRule="evenodd"
                                     />
                                 </svg>
                             </button>
