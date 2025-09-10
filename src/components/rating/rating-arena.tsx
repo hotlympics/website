@@ -26,6 +26,7 @@ export const RatingArena = () => {
         imageData: null,
     });
     const [isSubmittingReport, setIsSubmittingReport] = useState(false);
+    const [reportError, setReportError] = useState<string | null>(null);
 
     const handleReportImage = (imageData: ImageData) => {
         setReportModal({
@@ -39,6 +40,7 @@ export const RatingArena = () => {
             isOpen: false,
             imageData: null,
         });
+        setReportError(null); // Clear any previous errors
     };
 
     const handleSubmitReport = async (
@@ -48,6 +50,7 @@ export const RatingArena = () => {
         if (!reportModal.imageData) return;
 
         setIsSubmittingReport(true);
+        setReportError(null); // Clear any previous errors
 
         try {
             await reportService.submitReport({
@@ -61,11 +64,23 @@ export const RatingArena = () => {
             // Discard the current pair and show next images
             await handleDiscardPair();
 
-            // TODO: Show success toast/notification
             console.log("Report submitted successfully");
         } catch (error) {
             console.error("Failed to submit report:", error);
-            // TODO: Show error toast/notification
+
+            // Handle specific error messages
+            const errorMessage =
+                error instanceof Error
+                    ? error.message
+                    : "Failed to submit report";
+
+            if (errorMessage.includes("already reported")) {
+                setReportError(
+                    "You have already reported this image. Thank you for your previous report."
+                );
+            } else {
+                setReportError("Failed to submit report. Please try again.");
+            }
         } finally {
             setIsSubmittingReport(false);
         }
@@ -193,6 +208,7 @@ export const RatingArena = () => {
                 onClose={handleCloseReportModal}
                 onSubmit={handleSubmitReport}
                 isLoading={isSubmittingReport}
+                error={reportError}
             />
         </div>
     );

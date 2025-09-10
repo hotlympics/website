@@ -4,6 +4,7 @@ import type {
     UserDetails,
 } from "../../../../utils/types/admin/admin";
 import EmptyState from "../../shared/empty-state";
+import SearchButton from "../../shared/search-button";
 import SearchInput from "../../shared/search-input";
 import UserRow from "./user-row";
 
@@ -93,13 +94,11 @@ const UserTable = ({
                                 onChange={onSearchEmailChange}
                                 placeholder="Search by email..."
                             />
-                            <button
-                                type="submit"
+                            <SearchButton
+                                onClick={() => onSearch({ preventDefault: () => {} } as React.FormEvent)}
+                                loading={loading}
                                 disabled={loading}
-                                className="rounded bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
-                            >
-                                {loading ? "..." : "Search"}
-                            </button>
+                            />
                         </form>
                     </div>
                 </div>

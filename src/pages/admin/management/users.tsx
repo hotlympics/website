@@ -37,7 +37,8 @@ interface UsersTabProps {
     setUserDeleteConfirmation: (data: UserDeleteConfirmation | null) => void;
     onNavigateToBattles: (imageId: string) => void;
     userToExpand?: string | null;
-    onClearUserToExpand: () => void;
+    userSearchEmail?: string;
+    onClearUserNavigation: () => void;
 }
 
 const UsersTab = ({
@@ -51,7 +52,8 @@ const UsersTab = ({
     setUserDeleteConfirmation,
     onNavigateToBattles,
     userToExpand,
-    onClearUserToExpand,
+    userSearchEmail,
+    onClearUserNavigation,
 }: UsersTabProps) => {
     const {
         users,
@@ -69,7 +71,7 @@ const UsersTab = ({
         isSearchMode,
         performSearch,
         clearSearch,
-    } = useUsers();
+    } = useUsers(userSearchEmail);
     const {
         userDetails,
         setUserDetails,
@@ -83,19 +85,15 @@ const UsersTab = ({
     const { deletingPhoto, togglingPool, deletePhoto, togglePhotoPool } =
         usePhotoActions();
 
+    // Handle user expansion after data is loaded
     useEffect(() => {
-        loadData();
-    }, [loadData]);
-
-    // Handle user expansion from navigation
-    useEffect(() => {
-        if (userToExpand) {
+        if (userToExpand && !loading) {
             toggleUserExpansion(userToExpand);
-            // Clear the userToExpand state after using it to prevent loops
-            onClearUserToExpand();
+            // Clear navigation state after expansion
+            onClearUserNavigation();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userToExpand]); // Remove toggleUserExpansion from dependencies to prevent loop
+    }, [userToExpand, loading]);
 
     // Create utility handlers
     const { openPhotoModal } = createPhotoModalHandlers(

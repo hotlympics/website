@@ -1,6 +1,36 @@
 import { getApiUrl } from "../../utils/api";
 const API_BASE_URL = getApiUrl();
 
+export type ReportCategory =
+    | "NOT_PERSON"
+    | "IMPERSONATION"
+    | "NUDITY"
+    | "VIOLENCE"
+    | "SPAM"
+    | "INAPPROPRIATE"
+    | "OTHER";
+
+export type ReportStatus =
+    | "PENDING"
+    | "UNDER_REVIEW"
+    | "APPROVED"
+    | "REJECTED"
+    | "DUPLICATE";
+
+export interface AdminReport {
+    reportID: string;
+    imageId: string;
+    userId: string;
+    category: ReportCategory;
+    description?: string;
+    status: ReportStatus;
+    createdAt: string; // ISO string from server
+    reviewedAt?: string; // ISO string from server
+    reviewedBy?: string;
+    adminNotes?: string;
+    imageOwnerEmail?: string; // Email of the user who owns the reported image
+}
+
 export interface AdminUser {
     id: string;
     firebaseUid: string;
@@ -71,6 +101,14 @@ export interface BattleSearchResult {
     battles: AdminBattle[];
     totalCount: number;
     searchTerm: string;
+}
+
+export interface ReportSearchResult {
+    reports: AdminReport[];
+    totalCount: number;
+    searchEmail: string;
+    returnedCount: number;
+    message?: string;
 }
 
 const getAuthHeaders = (): { Authorization: string } => {
@@ -304,6 +342,101 @@ const getImageUrl = async (
     return response.json();
 };
 
+const getReports = async (
+    status?: ReportStatus,
+    limit: number = 20,
+): Promise<{
+    reports: AdminReport[];
+    limit: number;
+    status: ReportStatus | null;
+}> => {
+    const url = new URL(`${API_BASE_URL}/admin/reports`);
+    if (status) {
+        url.searchParams.set("status", status);
+    }
+    url.searchParams.set("limit", limit.toString());
+
+    const response = await fetch(url.toString(), {
+        headers: getAuthHeaders(),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || "Failed to fetch reports");
+    }
+
+    return response.json();
+};
+
+const updateReportStatus = async (
+    reportId: string,
+    status: ReportStatus,
+    adminNotes?: string
+): Promise<{ message: string; reportId: string; status: ReportStatus }> => {
+    const response = await fetch(`${API_BASE_URL}/admin/reports/${reportId}`, {
+        method: "PUT",
+        headers: {
+            ...getAuthHeaders(),
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status, adminNotes }),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+            errorData.error?.message || "Failed to update report status"
+        );
+    }
+
+    return response.json();
+};
+
+const searchReportsByEmail = async (
+    email: string,
+    limit: number = 20
+): Promise<ReportSearchResult> => {
+    const response = await fetch(
+        `${API_BASE_URL}/admin/reports/search-by-email?email=${encodeURIComponent(email)}&limit=${limit}`,
+        {
+            headers: getAuthHeaders(),
+        }
+    );
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+            errorData.error?.message || "Failed to search reports by email"
+        );
+    }
+
+    return response.json();
+};
+
+const getReportsForImage = async (
+    imageId: string
+): Promise<{
+    reports: AdminReport[];
+    imageId: string;
+    totalCount: number;
+}> => {
+    const response = await fetch(
+        `${API_BASE_URL}/admin/images/${encodeURIComponent(imageId)}/reports`,
+        {
+            headers: getAuthHeaders(),
+        }
+    );
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+            errorData.error?.message || "Failed to fetch image reports"
+        );
+    }
+
+    return response.json();
+};
+
 export const adminService = {
     login,
     logout,
@@ -316,4 +449,8 @@ export const adminService = {
     togglePhotoPool,
     searchBattlesWithEmails,
     getImageUrl,
+    getReports,
+    updateReportStatus,
+    searchReportsByEmail,
+    getReportsForImage,
 };

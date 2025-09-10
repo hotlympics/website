@@ -1,8 +1,8 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { adminService } from "../../services/admin/admin-service";
 import type { AdminUser } from "../../utils/types/admin/admin";
 
-export const useUsers = () => {
+export const useUsers = (initialSearchEmail?: string) => {
     const [users, setUsers] = useState<AdminUser[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -13,9 +13,11 @@ export const useUsers = () => {
     const [currentPageStart, setCurrentPageStart] = useState<string | null>(
         null
     );
-    const [searchEmail, setSearchEmail] = useState("");
-    const [activeSearchTerm, setActiveSearchTerm] = useState(""); // The actual search term being used
-    const [isSearchMode, setIsSearchMode] = useState(false);
+    const [searchEmail, setSearchEmail] = useState(initialSearchEmail || "");
+    const [activeSearchTerm, setActiveSearchTerm] = useState(
+        initialSearchEmail || ""
+    ); // The actual search term being used
+    const [isSearchMode, setIsSearchMode] = useState(!!initialSearchEmail);
 
     const loadData = useCallback(
         async (
@@ -87,6 +89,13 @@ export const useUsers = () => {
             await loadData(undefined, currentPageStart);
         }
     }, [currentPageStart, hasPrevious, loadData]);
+
+    // Auto-load data on initialization
+    useEffect(() => {
+        // If we have an initial search email, load with that search
+        // Otherwise, load default data
+        loadData(undefined, undefined, initialSearchEmail || undefined);
+    }, [loadData, initialSearchEmail]);
 
     return {
         users,
