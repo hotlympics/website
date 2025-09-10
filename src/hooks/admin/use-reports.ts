@@ -27,7 +27,7 @@ export const useReports = () => {
 
                 const data = await adminService.getReports(
                     filterStatus,
-                    10, // Always get 10 items
+                    10 // Always get 10 items
                 );
 
                 setReports(data.reports);

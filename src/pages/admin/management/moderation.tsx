@@ -137,10 +137,8 @@ const ModerationTab = ({
     }[] => [
         { value: "ALL", label: "All Reports" },
         { value: "PENDING", label: "Pending" },
-        { value: "UNDER_REVIEW", label: "Under Review" },
         { value: "APPROVED", label: "Approved" },
         { value: "REJECTED", label: "Rejected" },
-        { value: "DUPLICATE", label: "Duplicate" },
     ];
 
     return (
@@ -355,21 +353,6 @@ const ModerationTab = ({
                                     onClick={() =>
                                         handleStatusUpdate(
                                             selectedReport.reportID,
-                                            "UNDER_REVIEW"
-                                        )
-                                    }
-                                    disabled={
-                                        updating ||
-                                        selectedReport.status === "UNDER_REVIEW"
-                                    }
-                                    className="w-full rounded bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700 disabled:opacity-50"
-                                >
-                                    Mark Under Review
-                                </button>
-                                <button
-                                    onClick={() =>
-                                        handleStatusUpdate(
-                                            selectedReport.reportID,
                                             "APPROVED"
                                         )
                                     }
@@ -398,21 +381,6 @@ const ModerationTab = ({
                                     className="w-full rounded bg-gray-600 px-3 py-2 text-sm text-white hover:bg-gray-700 disabled:opacity-50"
                                 >
                                     Reject Report
-                                </button>
-                                <button
-                                    onClick={() =>
-                                        handleStatusUpdate(
-                                            selectedReport.reportID,
-                                            "DUPLICATE"
-                                        )
-                                    }
-                                    disabled={
-                                        updating ||
-                                        selectedReport.status === "DUPLICATE"
-                                    }
-                                    className="w-full rounded bg-gray-600 px-3 py-2 text-sm text-white hover:bg-gray-700 disabled:opacity-50"
-                                >
-                                    Mark Duplicate
                                 </button>
                             </div>
                         </div>

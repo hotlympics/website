@@ -95,7 +95,11 @@ const UserTable = ({
                                 placeholder="Search by email..."
                             />
                             <SearchButton
-                                onClick={() => onSearch({ preventDefault: () => {} } as React.FormEvent)}
+                                onClick={() =>
+                                    onSearch({
+                                        preventDefault: () => {},
+                                    } as React.FormEvent)
+                                }
                                 loading={loading}
                                 disabled={loading}
                             />

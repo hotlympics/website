@@ -10,12 +10,7 @@ export type ReportCategory =
     | "INAPPROPRIATE"
     | "OTHER";
 
-export type ReportStatus =
-    | "PENDING"
-    | "UNDER_REVIEW"
-    | "APPROVED"
-    | "REJECTED"
-    | "DUPLICATE";
+export type ReportStatus = "PENDING" | "APPROVED" | "REJECTED";
 
 export interface AdminReport {
     reportID: string;
@@ -344,7 +339,7 @@ const getImageUrl = async (
 
 const getReports = async (
     status?: ReportStatus,
-    limit: number = 20,
+    limit: number = 10
 ): Promise<{
     reports: AdminReport[];
     limit: number;
@@ -394,7 +389,7 @@ const updateReportStatus = async (
 
 const searchReportsByEmail = async (
     email: string,
-    limit: number = 20
+    limit: number = 10
 ): Promise<ReportSearchResult> => {
     const response = await fetch(
         `${API_BASE_URL}/admin/reports/search-by-email?email=${encodeURIComponent(email)}&limit=${limit}`,
