@@ -15,6 +15,7 @@ interface ReportModalProps {
     onClose: () => void;
     onSubmit: (category: ReportCategory, description?: string) => void;
     isLoading?: boolean;
+    error?: string | null;
 }
 
 const reportCategories = [
@@ -32,6 +33,7 @@ const ReportModal = ({
     onClose,
     onSubmit,
     isLoading = false,
+    error = null,
 }: ReportModalProps) => {
     const [selectedCategory, setSelectedCategory] =
         useState<ReportCategory | null>(null);
@@ -83,6 +85,12 @@ const ReportModal = ({
                 <p className="mb-4 text-sm text-gray-600">
                     Please select the reason for reporting this image:
                 </p>
+
+                {error && (
+                    <div className="mb-4 rounded-md bg-red-50 border border-red-200 p-3">
+                        <div className="text-sm text-red-700">{error}</div>
+                    </div>
+                )}
 
                 <div className="mb-4 space-y-2">
                     {reportCategories.map((category) => (
