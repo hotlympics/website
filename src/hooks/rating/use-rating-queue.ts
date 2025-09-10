@@ -78,7 +78,7 @@ export const useRatingQueue = () => {
             }
         } catch (err) {
             console.error("Error initializing image queue:", err);
-            setError("Failed to load images. Please try again.");
+            setError("Failed to load images. Please try again: " + err);
 
             // Clear rating page priority on error to allow background caching
             cacheManager.setRatingPagePriority(false);
