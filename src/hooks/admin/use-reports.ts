@@ -27,9 +27,7 @@ export const useReports = () => {
 
                 const data = await adminService.getReports(
                     filterStatus,
-                    10, // Always get 10 items, no pagination
-                    undefined, // No startAfter
-                    undefined // No endBefore
+                    10, // Always get 10 items
                 );
 
                 setReports(data.reports);

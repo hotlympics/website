@@ -345,14 +345,8 @@ const getImageUrl = async (
 const getReports = async (
     status?: ReportStatus,
     limit: number = 20,
-    startAfter?: string,
-    endBefore?: string
 ): Promise<{
     reports: AdminReport[];
-    nextCursor: string | null;
-    prevCursor: string | null;
-    hasMore: boolean;
-    hasPrevious: boolean;
     limit: number;
     status: ReportStatus | null;
 }> => {
@@ -361,12 +355,6 @@ const getReports = async (
         url.searchParams.set("status", status);
     }
     url.searchParams.set("limit", limit.toString());
-    if (startAfter) {
-        url.searchParams.set("startAfter", startAfter);
-    }
-    if (endBefore) {
-        url.searchParams.set("endBefore", endBefore);
-    }
 
     const response = await fetch(url.toString(), {
         headers: getAuthHeaders(),
