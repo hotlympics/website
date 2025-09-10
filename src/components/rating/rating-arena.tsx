@@ -67,12 +67,17 @@ export const RatingArena = () => {
             console.log("Report submitted successfully");
         } catch (error) {
             console.error("Failed to submit report:", error);
-            
+
             // Handle specific error messages
-            const errorMessage = error instanceof Error ? error.message : "Failed to submit report";
-            
+            const errorMessage =
+                error instanceof Error
+                    ? error.message
+                    : "Failed to submit report";
+
             if (errorMessage.includes("already reported")) {
-                setReportError("You have already reported this image. Thank you for your previous report.");
+                setReportError(
+                    "You have already reported this image. Thank you for your previous report."
+                );
             } else {
                 setReportError("Failed to submit report. Please try again.");
             }

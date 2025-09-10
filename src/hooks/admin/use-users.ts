@@ -14,7 +14,9 @@ export const useUsers = (initialSearchEmail?: string) => {
         null
     );
     const [searchEmail, setSearchEmail] = useState(initialSearchEmail || "");
-    const [activeSearchTerm, setActiveSearchTerm] = useState(initialSearchEmail || ""); // The actual search term being used
+    const [activeSearchTerm, setActiveSearchTerm] = useState(
+        initialSearchEmail || ""
+    ); // The actual search term being used
     const [isSearchMode, setIsSearchMode] = useState(!!initialSearchEmail);
 
     const loadData = useCallback(

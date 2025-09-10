@@ -13,7 +13,7 @@ import {
 } from "../../../services/admin/admin-service";
 
 const ModerationTab = ({
-    onNavigateToUsers,
+    onNavigateToUsers: _onNavigateToUsers,
 }: {
     onNavigateToUsers?: (email: string, userId?: string) => void;
 }) => {
@@ -246,7 +246,6 @@ const ModerationTab = ({
                             reports={reports}
                             selectedReport={selectedReport}
                             onReportClick={handleReportClick}
-                            onNavigateToUsers={onNavigateToUsers}
                         />
                     ) : (
                         <div className="py-12 text-center">

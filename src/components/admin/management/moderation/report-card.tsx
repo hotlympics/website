@@ -5,7 +5,6 @@ interface ReportCardProps {
     report: AdminReport;
     isSelected: boolean;
     onReportClick: (report: AdminReport) => void;
-    onNavigateToUsers?: (email: string, userId?: string) => void;
 }
 
 const formatTime = (dateString: string) => {
@@ -54,12 +53,7 @@ const getCategoryDisplayName = (category: string) => {
     }
 };
 
-const ReportCard = ({
-    report,
-    isSelected,
-    onReportClick,
-    onNavigateToUsers: _onNavigateToUsers,
-}: ReportCardProps) => {
+const ReportCard = ({ report, isSelected, onReportClick }: ReportCardProps) => {
     const getRowClasses = () => {
         if (isSelected) {
             return "transition-colors bg-blue-200 hover:bg-blue-250";

@@ -6,14 +6,12 @@ interface ReportTableProps {
     reports: AdminReport[];
     selectedReport: AdminReport | null;
     onReportClick: (report: AdminReport) => void;
-    onNavigateToUsers?: (email: string, userId?: string) => void;
 }
 
 const ReportTable = ({
     reports,
     selectedReport,
     onReportClick,
-    onNavigateToUsers,
 }: ReportTableProps) => {
     return (
         <div className="overflow-x-auto">
@@ -47,7 +45,6 @@ const ReportTable = ({
                                     selectedReport?.reportID === report.reportID
                                 }
                                 onReportClick={onReportClick}
-                                onNavigateToUsers={onNavigateToUsers}
                             />
                         ))
                     ) : (

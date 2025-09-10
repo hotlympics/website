@@ -87,7 +87,7 @@ const ReportModal = ({
                 </p>
 
                 {error && (
-                    <div className="mb-4 rounded-md bg-red-50 border border-red-200 p-3">
+                    <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3">
                         <div className="text-sm text-red-700">{error}</div>
                     </div>
                 )}
