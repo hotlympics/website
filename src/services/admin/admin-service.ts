@@ -12,10 +12,8 @@ export type ReportCategory =
 
 export type ReportStatus =
     | "PENDING"
-    | "UNDER_REVIEW"
     | "APPROVED"
-    | "REJECTED"
-    | "DUPLICATE";
+    | "REJECTED";
 
 export interface AdminReport {
     reportID: string;
