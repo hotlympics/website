@@ -97,55 +97,56 @@ const MenuBar = () => {
     };
 
     return (
-        <div 
-            className="fixed right-0 bottom-0 left-0 z-20 flex w-full justify-center"
+        <nav
+            className="
+                fixed right-0 bottom-0 left-0
+                z-20
+                w-full
+                flex items-end justify-evenly
+                bg-black 
+                pt-2
+            "
             style={{
-                paddingBottom: "env(safe-area-inset-bottom)",
+                paddingBottom: `calc(0.5rem + env(safe-area-inset-bottom))`,
                 paddingLeft: "env(safe-area-inset-left)",
                 paddingRight: "env(safe-area-inset-right)",
             }}
         >
-            <div className="w-full max-w-7xl">
-                <div className="mx-0 flex w-full items-center justify-center bg-black py-3 px-6 sm:px-8">
-                    <div className="flex w-full items-start justify-between px-2">
-                        {menuItems.map((item) => {
-                            const Icon = item.icon;
-                            const isActive = getIsActive(item.path);
-                            return (
-                                <button
-                                    key={item.label}
-                                    onClick={item.onClick}
-                                    disabled={loading || !item.functional}
-                                    className={`flex h-10 w-10 items-center justify-center bg-black transition-all duration-200 sm:h-18 sm:w-18 ${
-                                        item.functional
-                                            ? `${
-                                                  isActive
-                                                      ? "text-blue-500"
-                                                      : "text-gray-400 hover:text-gray-300"
-                                              } hover:bg-white/10 active:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50`
-                                            : "cursor-not-allowed text-gray-600"
-                                    }`}
-                                    title={item.label}
-                                >
-                                    <Icon
-                                        size={30}
-                                        className="sm:size-9"
-                                        strokeWidth={1.5}
-                                        fill={
-                                            isActive &&
-                                            item.functional &&
-                                            item.label !== "My Photos"
-                                                ? "currentColor"
-                                                : "none"
-                                        }
-                                    />
-                                </button>
-                            );
-                        })}
-                    </div>
-                </div>
-            </div>
-        </div>
+            {menuItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = getIsActive(item.path);
+                return (
+                    <button
+                        key={item.label}
+                        onClick={item.onClick}
+                        disabled={loading || !item.functional}
+                        className={`flex h-12 w-12 items-center justify-center bg-black transition-all duration-200 sm:h-18 sm:w-18 ${
+                            item.functional
+                                ? `${
+                                      isActive
+                                          ? "text-blue-500"
+                                          : "text-gray-400 hover:text-gray-300"
+                                  } hover:bg-white/10 active:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50`
+                                : "cursor-not-allowed text-gray-600"
+                        }`}
+                        title={item.label}
+                    >
+                        <Icon
+                            size={30}
+                            className="sm:size-9"
+                            strokeWidth={1.5}
+                            fill={
+                                isActive &&
+                                item.functional &&
+                                item.label !== "My Photos"
+                                    ? "currentColor"
+                                    : "none"
+                            }
+                        />
+                    </button>
+                );
+            })}
+        </nav>
     );
 };
 
