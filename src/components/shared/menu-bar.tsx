@@ -97,8 +97,8 @@ const MenuBar = () => {
     };
 
     return (
-        <div className="mx-0 flex w-full items-center justify-center rounded-none bg-black p-6 shadow-lg sm:p-8">
-            <div className="flex w-full max-w-md items-start justify-between px-2">
+        <div className="mx-0 flex w-full items-center justify-center bg-black py-3 px-6 sm:px-8">
+            <div className="flex w-full items-start justify-between px-2">
                 {menuItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = getIsActive(item.path);
@@ -107,7 +107,7 @@ const MenuBar = () => {
                             key={item.label}
                             onClick={item.onClick}
                             disabled={loading || !item.functional}
-                            className={`flex h-16 w-16 items-center justify-center rounded-xl transition-all duration-200 sm:h-18 sm:w-18 ${
+                            className={`flex h-10 w-10 items-center justify-center bg-black transition-all duration-200 sm:h-18 sm:w-18 ${
                                 item.functional
                                     ? `${
                                           isActive
