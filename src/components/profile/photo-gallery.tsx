@@ -3,6 +3,7 @@ interface UploadedPhoto {
     url: string;
     uploadedAt: string;
     inPool?: boolean;
+    rating?: number;
 }
 
 interface PhotoGalleryProps {
@@ -23,6 +24,7 @@ const PhotoGallery = ({
     return (
         <div className="grid grid-cols-2 gap-4 p-6">
             {photos.map((photo) => {
+                console.log("Photo data:", photo);
                 const isInPool = poolSelections.has(photo.id);
                 return (
                     <div
@@ -61,6 +63,11 @@ const PhotoGallery = ({
                                 </svg>
                             </div>
                         )}
+
+                        {/* ELO Score */}
+                        <div className="absolute bottom-1 left-1 rounded bg-black px-2 py-0.5 text-sm font-medium text-white">
+                            {Math.round(photo.rating)}
+                        </div>
 
                         {deletingPhoto === photo.id && (
                             <div className="bg-opacity-50 absolute inset-0 flex items-center justify-center bg-black">

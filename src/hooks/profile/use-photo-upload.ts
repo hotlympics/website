@@ -10,6 +10,7 @@ interface UploadedPhoto {
     url: string;
     uploadedAt: string;
     inPool?: boolean;
+    rating?: number;
 }
 
 export const usePhotoUpload = () => {
@@ -32,6 +33,7 @@ export const usePhotoUpload = () => {
 
             if (response.ok) {
                 const photos = await response.json();
+                console.log("API Response for user photos:", photos);
                 setUploadedPhotos(photos);
             }
         } catch (err) {

@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import type { ImageData } from "../../services/core/image-queue.js";
-import type { SwipeCardHandle } from "./swipe-card.js";
 import { CardFrame } from "./card-frame.js";
+import type { SwipeCardHandle } from "./swipe-card.js";
 
 interface CardContainerProps {
     imagePair: ImageData[];

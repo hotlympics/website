@@ -3,12 +3,12 @@ import { useRatingQueue } from "../../hooks/rating/use-rating-queue.js";
 import type { ImageData } from "../../services/core/image-queue.js";
 import { reportService } from "../../services/report-service.js";
 import ReportModal, { type ReportCategory } from "../shared/report-modal.js";
-import { type SwipeCardHandle } from "./swipe-card.js";
 import { CardContainer } from "./card-container.js";
 import { EmptyState } from "./empty-state.js";
 import { ErrorState } from "./error-state.js";
 import { LoadingState } from "./loading-state.js";
 import { MainContentArea } from "./main-content-area.js";
+import { type SwipeCardHandle } from "./swipe-card.js";
 
 export const RatingArena = () => {
     const {

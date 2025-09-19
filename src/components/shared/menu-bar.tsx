@@ -98,14 +98,7 @@ const MenuBar = () => {
 
     return (
         <nav
-            className="
-                fixed right-0 bottom-0 left-0
-                z-20
-                w-full
-                flex items-end justify-evenly
-                bg-black 
-                pt-2
-            "
+            className="fixed right-0 bottom-0 left-0 z-20 flex w-full items-end justify-evenly bg-black pt-2"
             style={{
                 paddingBottom: `calc(0.5rem + env(safe-area-inset-bottom))`,
                 paddingLeft: "env(safe-area-inset-left)",

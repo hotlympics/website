@@ -6,9 +6,11 @@ interface BackgroundNextPairProps {
     onReportImage: (imageData: ImageData) => void;
 }
 
-export const BackgroundNextPair = ({ onReportImage }: BackgroundNextPairProps) => {
+export const BackgroundNextPair = ({
+    onReportImage,
+}: BackgroundNextPairProps) => {
     const nextPair = imageQueueService.peekNextPair();
-    
+
     if (!nextPair || nextPair.length !== 2) {
         return null;
     }
