@@ -96,17 +96,17 @@ const MyPhotosPage = () => {
 
                     {uploadedPhotos.length > 0 && (
                         <>
-                            <div className="mb-4 ml-4">
-                                <span className="text-sm text-gray-400">
-                                    {uploadedPhotos.length}/10 photos
-                                </span>
-                            </div>
                             <PoolSelection
                                 poolSelections={poolSelections}
                                 user={user}
                                 isUpdating={isUpdatingPool}
                                 onUpdatePool={handlePoolUpdate}
                             />
+                            <div className="mt-2 ml-4">
+                                <span className="text-sm text-gray-400">
+                                    {uploadedPhotos.length}/10 photos uploaded
+                                </span>
+                            </div>
                         </>
                     )}
                 </div>
