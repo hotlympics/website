@@ -88,13 +88,11 @@ const MyPhotosPage = () => {
     return (
         <div className="flex h-[calc(100vh-7rem)] flex-col overflow-hidden sm:h-[calc(100vh-8.5rem)]">
             <div className="mx-auto flex h-full w-full max-w-6xl flex-col px-4">
-                {/* Header section - fixed */}
+                {/* Header section */}
                 <div className="flex-shrink-0 pt-8 pb-4">
-                    <div className="mb-4 text-center">
-                        <h1 className="text-xl font-bold text-gray-100">
-                            My Photos
-                        </h1>
-                    </div>
+                    <h1 className="mb-4 text-center text-xl font-bold text-gray-100">
+                        My Photos
+                    </h1>
 
                     {uploadedPhotos.length > 0 && (
                         <>
@@ -103,51 +101,47 @@ const MyPhotosPage = () => {
                                     {uploadedPhotos.length}/10 photos
                                 </span>
                             </div>
-                            <div className="mb-4">
-                                <PoolSelection
-                                    poolSelections={poolSelections}
-                                    user={user}
-                                    isUpdating={isUpdatingPool}
-                                    onUpdatePool={handlePoolUpdate}
-                                />
-                            </div>
+                            <PoolSelection
+                                poolSelections={poolSelections}
+                                user={user}
+                                isUpdating={isUpdatingPool}
+                                onUpdatePool={handlePoolUpdate}
+                            />
                         </>
                     )}
                 </div>
 
                 {/* Scrollable content area */}
                 <div className="min-h-0 flex-1 overflow-y-auto pb-32">
-                    <PhotoGallery
-                        photos={uploadedPhotos}
-                        poolSelections={poolSelections}
-                        onPoolToggle={handlePoolToggle}
-                        onDeletePhoto={handleDeletePhoto}
-                        deletingPhoto={isDeleting}
-                    />
-
-                    {uploadedPhotos.length === 0 && (
+                    {uploadedPhotos.length > 0 ? (
+                        <PhotoGallery
+                            photos={uploadedPhotos}
+                            poolSelections={poolSelections}
+                            onPoolToggle={handlePoolToggle}
+                            onDeletePhoto={handleDeletePhoto}
+                            deletingPhoto={isDeleting}
+                        />
+                    ) : (
                         <div className="py-12 text-center">
-                            <div className="mb-4 text-gray-400">
-                                <svg
-                                    className="mx-auto mb-4 h-12 w-12"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={1}
-                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                    />
-                                </svg>
-                                <p className="mb-2 text-lg">
-                                    No photos uploaded yet
-                                </p>
-                                <p className="text-sm">
-                                    Upload your first photo to get started!
-                                </p>
-                            </div>
+                            <svg
+                                className="mx-auto mb-4 h-12 w-12 text-gray-400"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={1}
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                />
+                            </svg>
+                            <p className="mb-2 text-lg text-gray-400">
+                                No photos uploaded yet
+                            </p>
+                            <p className="text-sm text-gray-400">
+                                Upload your first photo to get started!
+                            </p>
                         </div>
                     )}
                 </div>
