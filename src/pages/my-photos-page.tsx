@@ -86,7 +86,7 @@ const MyPhotosPage = () => {
     };
 
     return (
-        <div className="flex h-[calc(100vh-7rem)] flex-col overflow-hidden sm:h-[calc(100vh-8.5rem)]">
+        <div className="flex h-[calc(100vh-4rem)] flex-col overflow-hidden">
             <div className="mx-auto flex h-full w-full max-w-6xl flex-col px-4">
                 {/* Header section */}
                 <div className="flex-shrink-0 pt-8 pb-4">
@@ -112,7 +112,7 @@ const MyPhotosPage = () => {
                 </div>
 
                 {/* Scrollable content area */}
-                <div className="min-h-0 flex-1 overflow-y-auto pb-32">
+                <div className="overflow-y-auto">
                     {uploadedPhotos.length > 0 ? (
                         <PhotoGallery
                             photos={uploadedPhotos}

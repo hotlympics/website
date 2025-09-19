@@ -21,7 +21,7 @@ const PhotoGallery = ({
     deletingPhoto,
 }: PhotoGalleryProps) => {
     return (
-        <div className="grid grid-cols-2 gap-4 p-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-4 p-6">
             {photos.map((photo) => {
                 const isInPool = poolSelections.has(photo.id);
                 return (
