@@ -66,7 +66,7 @@ const PhotoGallery = ({
 
                         {/* ELO Score */}
                         <div className="absolute bottom-1 left-1 rounded bg-black px-2 py-0.5 text-sm font-medium text-white">
-                            {Math.round(photo.rating)}
+                            {Math.round(photo.rating ?? 0)}
                         </div>
 
                         {deletingPhoto === photo.id && (
