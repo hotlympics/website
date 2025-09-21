@@ -206,14 +206,6 @@ const initialize = async (
         queue.activeBlock = cacheResult.data.activeBlock;
         queue.bufferBlock = cacheResult.data.bufferBlock;
 
-        for (let i = 0; i < 10; i++) {
-            console.log(queue.activeBlock[i]);
-        }
-        for (let i = 0; i < 10; i++) {
-            console.log(queue.bufferBlock[i]);
-        }
-        console.log(queue.bufferBlock.length);
-
         queue.preloadedImages.clear();
         queue.isFetchingBlock = false;
 
@@ -281,9 +273,6 @@ const initialize = async (
 
 const getNextPair = (): ImageData[] | null => {
     const queue = getQueue();
-    console.log(queue.currentIndex);
-    console.log(queue.activeBlock.length);
-    console.log(queue.bufferBlock.length);
 
     // First increment to get the NEXT pair
     queue.currentIndex += 2;

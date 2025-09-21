@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useRatingQueue } from "../../hooks/rating/use-rating-queue.js";
 import type { ImageData } from "../../services/core/image-queue.js";
-import { imageQueueService } from "../../services/core/image-queue.js";
 import { reportService } from "../../services/report-service.js";
 import ReportModal, { type ReportCategory } from "../shared/report-modal.js";
-import { SwipeCard, type SwipeCardHandle } from "./swipe-card.js";
+import { CardContainer } from "./card-container.js";
+import { EmptyState } from "./empty-state.js";
+import { ErrorState } from "./error-state.js";
+import { LoadingState } from "./loading-state.js";
+import { MainContentArea } from "./main-content-area.js";
+import { type SwipeCardHandle } from "./swipe-card.js";
 
 export const RatingArena = () => {
     const {
@@ -114,95 +118,24 @@ export const RatingArena = () => {
     }, [imagePair, reportModal.isOpen]);
 
     return (
-        <div className="relative flex min-h-[100dvh] flex-col items-center justify-between overflow-hidden">
-            {/* Centered content with bottom margin for MenuBar */}
-            <div
-                className="mt-4 flex w-full flex-grow flex-col items-center justify-center pb-20"
-                style={{
-                    paddingBottom: "calc(5rem + env(safe-area-inset-bottom))",
-                }}
-            >
-                <div className="mx-auto w-full max-w-7xl px-3">
-                    {loadingImages ? (
-                        <div className="flex items-center justify-center py-32">
-                            <div className="text-xl text-gray-300">
-                                Loading images...
-                            </div>
-                        </div>
-                    ) : error ? (
-                        <div className="flex flex-col items-center justify-center py-32">
-                            <p className="mb-4 text-xl text-red-400">{error}</p>
-                            <span className="text-gray-300">
-                                We encountered an error. Please refresh the page
-                            </span>
-                        </div>
-                    ) : imagePair && imagePair.length === 2 ? (
-                        <div className="flex items-center justify-center py-2">
-                            <div
-                                className="relative w-full"
-                                style={{
-                                    maxWidth:
-                                        "min(24rem, calc((100dvh - 160px)/2))",
-                                    maxHeight: "calc(100dvh - 160px)",
-                                }}
-                            >
-                                {/* Fixed shadow frame that does not move with cards */}
-                                <div
-                                    className="relative w-full overflow-hidden rounded-2xl bg-gray-800 shadow-[0_18px_60px_rgba(0,0,0,0.8)] ring-1 ring-white/10"
-                                    style={{
-                                        aspectRatio: "1/2",
-                                        maxHeight: "calc(100dvh - 160px)",
-                                    }}
-                                >
-                                    {/* Background next pair, visible from start of swipe */}
-                                    {(() => {
-                                        const nextPair =
-                                            imageQueueService.peekNextPair();
-                                        if (
-                                            !nextPair ||
-                                            nextPair.length !== 2
-                                        ) {
-                                            return null;
-                                        }
-                                        return (
-                                            <div className="absolute inset-0 z-0">
-                                                <SwipeCard
-                                                    pair={nextPair}
-                                                    readOnly
-                                                    bare
-                                                    onReportImage={
-                                                        handleReportImage
-                                                    }
-                                                />
-                                            </div>
-                                        );
-                                    })()}
+        <div className="relative flex min-h-[100dvh] flex-col items-center justify-between overflow-hidden bg-red-800">
+            <MainContentArea>
+                {loadingImages ? (
+                    <LoadingState />
+                ) : error ? (
+                    <ErrorState error={error} />
+                ) : imagePair && imagePair.length === 2 ? (
+                    <CardContainer
+                        ref={cardRef}
+                        imagePair={imagePair}
+                        onComplete={handleImageClick}
+                        onReportImage={handleReportImage}
+                    />
+                ) : (
+                    <EmptyState />
+                )}
+            </MainContentArea>
 
-                                    {/* Top swipeable card */}
-                                    <div className="absolute inset-0 z-10">
-                                        <SwipeCard
-                                            ref={cardRef}
-                                            key={`${imagePair[0].imageId}-${imagePair[1].imageId}`}
-                                            pair={imagePair}
-                                            onComplete={handleImageClick}
-                                            onReportImage={handleReportImage}
-                                            bare
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="flex items-center justify-center py-32">
-                            <p className="text-xl text-gray-300">
-                                No images available
-                            </p>
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            {/* Report Modal */}
             <ReportModal
                 isOpen={reportModal.isOpen}
                 onClose={handleCloseReportModal}

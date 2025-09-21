@@ -5,11 +5,31 @@ import {
     validateImageFile,
 } from "../../utils/shared/image-compression";
 
-interface UploadedPhoto {
+interface GlickoState {
+    rating: number;
+    rd: number;
+    volatility: number;
+    mu: number;
+    phi: number;
+    lastUpdateAt: unknown;
+    systemVersion: number;
+}
+
+export interface UploadedPhoto {
     id: string;
     url: string;
-    uploadedAt: string;
-    inPool?: boolean;
+    battles: number;
+    wins: number;
+    losses: number;
+    draws: number;
+    glicko: GlickoState;
+    inPool: boolean;
+    status: "pending" | "active" | undefined;
+    gender: "male" | "female";
+    dateOfBirth: unknown;
+    createdAt: unknown;
+    uploadedAt?: unknown;
+    randomSeed: number;
 }
 
 export const usePhotoUpload = () => {
@@ -22,7 +42,7 @@ export const usePhotoUpload = () => {
     const fetchUploadedPhotos = useCallback(async () => {
         try {
             const response = await fetch(
-                `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/images/user`,
+                `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/images/user/withmetadata`,
                 {
                     headers: {
                         Authorization: `Bearer ${await getIdToken()}`,
@@ -32,6 +52,10 @@ export const usePhotoUpload = () => {
 
             if (response.ok) {
                 const photos = await response.json();
+                console.log(
+                    "API Response for user photos with metadata:",
+                    photos
+                );
                 setUploadedPhotos(photos);
             }
         } catch (err) {
@@ -88,10 +112,29 @@ export const usePhotoUpload = () => {
             setUploadStatus("Finalizing upload...");
             await uploadService.confirmUpload(imageId, fileName);
 
-            const uploadedPhoto = {
+            const uploadedPhoto: UploadedPhoto = {
                 id: imageId,
                 url: downloadUrl,
-                uploadedAt: new Date().toISOString(),
+                battles: 0,
+                wins: 0,
+                losses: 0,
+                draws: 0,
+                glicko: {
+                    rating: 1500,
+                    rd: 350,
+                    volatility: 0.06,
+                    mu: 0,
+                    phi: 2.014,
+                    lastUpdateAt: new Date(),
+                    systemVersion: 2,
+                },
+                inPool: false,
+                status: "pending",
+                gender: "male", // This will be updated when we fetch from server
+                dateOfBirth: new Date(),
+                createdAt: new Date(),
+                uploadedAt: new Date(),
+                randomSeed: Math.random(),
             };
 
             setUploadedPhotos([uploadedPhoto, ...uploadedPhotos]);

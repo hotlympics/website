@@ -97,44 +97,49 @@ const MenuBar = () => {
     };
 
     return (
-        <div className="mx-0 flex w-full items-center justify-center rounded-none bg-black p-6 shadow-lg sm:p-8">
-            <div className="flex w-full max-w-md items-start justify-between px-2">
-                {menuItems.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = getIsActive(item.path);
-                    return (
-                        <button
-                            key={item.label}
-                            onClick={item.onClick}
-                            disabled={loading || !item.functional}
-                            className={`flex h-16 w-16 items-center justify-center rounded-xl transition-all duration-200 sm:h-18 sm:w-18 ${
-                                item.functional
-                                    ? `${
-                                          isActive
-                                              ? "text-blue-500"
-                                              : "text-gray-400 hover:text-gray-300"
-                                      } hover:bg-white/10 active:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50`
-                                    : "cursor-not-allowed text-gray-600"
-                            }`}
-                            title={item.label}
-                        >
-                            <Icon
-                                size={30}
-                                className="sm:size-9"
-                                strokeWidth={1.5}
-                                fill={
-                                    isActive &&
-                                    item.functional &&
-                                    item.label !== "My Photos"
-                                        ? "currentColor"
-                                        : "none"
-                                }
-                            />
-                        </button>
-                    );
-                })}
-            </div>
-        </div>
+        <nav
+            className="fixed right-0 bottom-0 left-0 z-20 flex w-full items-end justify-evenly bg-black pt-2"
+            style={{
+                paddingBottom: `calc(0.5rem + env(safe-area-inset-bottom))`,
+                paddingLeft: "env(safe-area-inset-left)",
+                paddingRight: "env(safe-area-inset-right)",
+            }}
+        >
+            {menuItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = getIsActive(item.path);
+                return (
+                    <button
+                        key={item.label}
+                        onClick={item.onClick}
+                        disabled={loading || !item.functional}
+                        className={`flex h-12 w-12 items-center justify-center bg-black transition-all duration-200 sm:h-18 sm:w-18 ${
+                            item.functional
+                                ? `${
+                                      isActive
+                                          ? "text-blue-500"
+                                          : "text-gray-400 hover:text-gray-300"
+                                  } hover:bg-white/10 active:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50`
+                                : "cursor-not-allowed text-gray-600"
+                        }`}
+                        title={item.label}
+                    >
+                        <Icon
+                            size={30}
+                            className="sm:size-9"
+                            strokeWidth={1.5}
+                            fill={
+                                isActive &&
+                                item.functional &&
+                                item.label !== "My Photos"
+                                    ? "currentColor"
+                                    : "none"
+                            }
+                        />
+                    </button>
+                );
+            })}
+        </nav>
     );
 };
 

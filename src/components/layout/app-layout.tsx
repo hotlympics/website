@@ -30,27 +30,12 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     }, [isRatingPage]);
 
     return (
-        <div
-            className={`min-h-screen ${isRatingPage ? "overflow-hidden" : ""}`}
-        >
+        <div className={`min-v-screen min-h-screen bg-black`}>
             {/* Main content area with conditional bottom padding */}
             <div>{children}</div>
 
             {/* Persistent MenuBar - only shown on specific pages */}
-            {showMenuBar && (
-                <div
-                    className="fixed right-0 bottom-0 left-0 z-20 flex w-full justify-center"
-                    style={{
-                        paddingBottom: "env(safe-area-inset-bottom)",
-                        paddingLeft: "env(safe-area-inset-left)",
-                        paddingRight: "env(safe-area-inset-right)",
-                    }}
-                >
-                    <div className="w-full max-w-7xl">
-                        <MenuBar />
-                    </div>
-                </div>
-            )}
+            {showMenuBar && <MenuBar />}
         </div>
     );
 };
