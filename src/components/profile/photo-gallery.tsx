@@ -24,9 +24,7 @@ const PhotoGallery = ({
                     <div
                         key={photo.id}
                         className={`group relative aspect-square cursor-pointer overflow-hidden rounded-lg bg-gray-700 ${
-                            deletingPhoto === photo.id
-                                ? "opacity-50"
-                                : ""
+                            deletingPhoto === photo.id ? "opacity-50" : ""
                         } ${isInPool ? "ring-4 ring-green-500" : ""}`}
                         onClick={() => onPoolToggle(photo.id)}
                     >
@@ -63,6 +61,13 @@ const PhotoGallery = ({
                             {Math.round(photo.glicko.rating)}
                         </div>
 
+                        {/* Win/Loss Tracker */}
+                        <div className="absolute right-1 bottom-1 rounded bg-black px-2 py-0.5 text-sm font-medium">
+                            <span className="text-green-500">{photo.wins}</span>
+                            <span className="text-white">/</span>
+                            <span className="text-red-600">{photo.losses}</span>
+                        </div>
+
                         {deletingPhoto === photo.id && (
                             <div className="bg-opacity-50 absolute inset-0 flex items-center justify-center bg-black">
                                 <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-700 border-t-white"></div>
@@ -76,11 +81,11 @@ const PhotoGallery = ({
                                 onDeletePhoto(photo.id);
                             }}
                             disabled={deletingPhoto === photo.id}
-                            className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white shadow-lg transition-colors hover:bg-red-700 disabled:bg-gray-600"
+                            className="absolute top-2 right-2 rounded-full bg-red-600 p-2 text-white shadow-lg transition-colors hover:bg-red-700 disabled:bg-gray-600"
                             title="Delete photo"
                         >
                             <svg
-                                className="h-3 w-3"
+                                className="h-4 w-4"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
