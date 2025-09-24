@@ -9,7 +9,8 @@ export const MainContentArea = ({ children }: MainContentAreaProps) => {
         <div
             className="flex min-h-[100dvh] w-full flex-col items-center justify-center bg-black"
             style={{
-                paddingBottom: "calc(5rem + env(safe-area-inset-bottom))",
+                paddingTop: "1rem",
+                paddingBottom: "calc(4rem + env(safe-area-inset-bottom))",
             }}
         >
             {children}

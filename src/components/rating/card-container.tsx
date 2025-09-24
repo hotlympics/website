@@ -12,7 +12,7 @@ interface CardContainerProps {
 export const CardContainer = forwardRef<SwipeCardHandle, CardContainerProps>(
     ({ imagePair, onComplete, onReportImage }, ref) => {
         return (
-            <div className="flex h-full w-full items-center justify-center py-2">
+            <div className="flex h-full w-full items-center justify-center">
                 <CardFrame
                     ref={ref}
                     imagePair={imagePair}
