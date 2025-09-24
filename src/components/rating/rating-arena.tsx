@@ -118,7 +118,7 @@ export const RatingArena = () => {
     }, [imagePair, reportModal.isOpen]);
 
     return (
-        <div className="relative flex min-h-[100dvh] flex-col items-center justify-between overflow-hidden bg-red-800">
+        <div className="relative flex min-h-[100dvh] flex-col items-center justify-between overflow-hidden">
             <MainContentArea>
                 {loadingImages ? (
                     <LoadingState />

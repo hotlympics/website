@@ -15,11 +15,11 @@ export const CardFrame = forwardRef<SwipeCardHandle, CardFrameProps>(
             <div
                 className="relative w-full"
                 style={{
-                    maxWidth: "min(24rem, calc((100dvh - 160px)/2))",
+                    maxWidth: "min(24rem, calc((100dvh - 96px)/2))",
                 }}
             >
                 <div
-                    className="relative w-full overflow-hidden rounded-2xl bg-gray-800 shadow-[0_18px_60px_rgba(0,0,0,0.8)] ring-1 ring-white/10"
+                    className="relative w-full overflow-hidden rounded-2xl shadow-[0_18px_60px_rgba(0,0,0,0.8)] ring-1 ring-white/10"
                     style={{
                         aspectRatio: "1/2",
                     }}
