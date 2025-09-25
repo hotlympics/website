@@ -25,7 +25,6 @@ const SignUpCTA = ({ className = "" }: SignUpCTAProps) => {
                             Sign In or Sign Up
                         </Link>
                     </div>
-
                 </div>
             </div>
         </div>

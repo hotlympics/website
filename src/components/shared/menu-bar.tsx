@@ -99,7 +99,7 @@ const MenuBar = () => {
                 paddingRight: "env(safe-area-inset-right)",
             }}
         >
-            <nav className="flex items-center justify-evenly w-full max-w-md mx-4 rounded-2xl border border-white/10 bg-black/80 px-4 py-2 shadow-lg backdrop-blur-md">
+            <nav className="mx-4 flex w-full max-w-md items-center justify-evenly rounded-2xl border border-white/10 bg-black/80 px-4 py-2 shadow-lg backdrop-blur-md">
                 {menuItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = getIsActive(item.path);
