@@ -10,7 +10,7 @@ import {
 const DemoMyPhotosPage = () => {
     return (
         <div className="flex h-screen flex-col overflow-hidden">
-            <div className="flex h-full flex-col overflow-hidden blur-[3px]">
+            <div className="flex h-full flex-col overflow-hidden pb-36 blur-[3px]">
                 <div className="mx-auto flex h-full w-full max-w-6xl flex-col px-4">
                     {/* Header section */}
                     <div className="flex-shrink-0 pt-8 pb-4">

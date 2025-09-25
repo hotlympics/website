@@ -107,7 +107,7 @@ const MenuBar = () => {
                 {menuItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = getIsActive(item.path);
-                    
+
                     return (
                         <button
                             key={item.label}
