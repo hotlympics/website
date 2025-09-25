@@ -9,7 +9,7 @@ const SignUpCTA = ({ className = "" }: SignUpCTAProps) => {
         <div
             className={`fixed right-0 bottom-0 left-0 z-10 border-t border-gray-700 bg-gray-800 ${className}`}
             style={{
-                paddingBottom: "calc(env(safe-area-inset-bottom) + 5rem)",
+                paddingBottom: "calc(env(safe-area-inset-bottom) + 4rem)",
                 paddingLeft: "env(safe-area-inset-left)",
                 paddingRight: "env(safe-area-inset-right)",
             }}
