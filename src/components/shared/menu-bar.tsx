@@ -98,7 +98,7 @@ const MenuBar = () => {
         <div
             className="fixed right-0 bottom-0 left-0 z-20 flex justify-center"
             style={{
-                paddingBottom: `calc(0.75rem + env(safe-area-inset-bottom))`,
+                paddingBottom: "env(safe-area-inset-bottom)",
                 paddingLeft: "env(safe-area-inset-left)",
                 paddingRight: "env(safe-area-inset-right)",
             }}
