@@ -62,7 +62,7 @@ const DemoPhotoGallery = ({
 
                         {/* Delete button (visible but non-functional in demo) */}
                         <button
-                            className="absolute top-2 right-2 rounded-full bg-red-600 p-2 text-white shadow-lg transition-colors hover:bg-red-700 cursor-pointer"
+                            className="absolute top-2 right-2 cursor-pointer rounded-full bg-red-600 p-2 text-white shadow-lg transition-colors hover:bg-red-700"
                             title="Delete photo"
                         >
                             <svg
