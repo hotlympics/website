@@ -1,4 +1,3 @@
-import { X } from "lucide-react";
 import { useState } from "react";
 
 export type ReportCategory =
@@ -69,17 +68,10 @@ const ReportModal = ({
                 className="mx-4 w-full max-w-md rounded-lg bg-white p-6 shadow-xl"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="mb-4 flex items-center justify-between">
+                <div className="mb-4">
                     <h3 className="text-lg font-semibold text-gray-900">
                         Report Image
                     </h3>
-                    <button
-                        onClick={handleClose}
-                        disabled={isLoading}
-                        className="rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                        <X className="h-5 w-5" />
-                    </button>
                 </div>
 
                 <p className="mb-4 text-sm text-gray-600">

@@ -79,7 +79,7 @@ const LeaderboardPage = () => {
     }
 
     return (
-        <div className="min-h-screen px-4 py-8">
+        <div className="min-h-screen bg-gray-900 px-4 py-8">
             <div className="mx-auto max-w-6xl">
                 {/* Header */}
                 <LeaderboardHeader

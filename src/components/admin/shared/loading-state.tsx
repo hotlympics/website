@@ -9,7 +9,7 @@ const LoadingState = ({
 }: LoadingStateProps) => {
     return (
         <div
-            className={`flex min-h-screen items-center justify-center bg-black ${className}`}
+            className={`flex min-h-screen items-center justify-center ${className}`}
         >
             <div className="text-center">
                 <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></div>
