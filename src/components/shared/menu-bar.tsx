@@ -39,13 +39,7 @@ const MenuBar = () => {
             icon: Images,
             label: "My Photos",
             path: "/my-photos",
-            onClick: () => {
-                if (user) {
-                    navigate("/my-photos");
-                } else {
-                    navigate("/signin?redirect=/my-photos");
-                }
-            },
+            onClick: () => navigate("/my-photos"), // Always navigate to show demo for unauthenticated users
             functional: true,
         },
         {
@@ -113,7 +107,7 @@ const MenuBar = () => {
                         key={item.label}
                         onClick={item.onClick}
                         disabled={loading || !item.functional}
-                        className={`flex h-12 w-12 items-center justify-center bg-black transition-all duration-200 sm:h-18 sm:w-18 ${
+                        className={`flex h-12 w-12 items-center justify-center bg-black transition-all duration-200 focus:border-transparent focus:ring-0 focus:outline-none active:outline-none sm:h-18 sm:w-18 ${
                             item.functional
                                 ? `${
                                       isActive
@@ -122,6 +116,11 @@ const MenuBar = () => {
                                   } hover:bg-white/10 active:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50`
                                 : "cursor-not-allowed text-gray-600"
                         }`}
+                        style={{
+                            outline: "none",
+                            border: "none",
+                            boxShadow: "none",
+                        }}
                         title={item.label}
                     >
                         <Icon

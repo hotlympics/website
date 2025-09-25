@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
 import DeleteConfirmationModal from "../components/profile/delete-confirmation-modal";
 import PhotoGallery from "../components/profile/photo-gallery";
 import PoolSelection from "../components/profile/pool-selection";
@@ -7,6 +6,7 @@ import { useAuth } from "../hooks/auth/use-auth";
 import { usePhotoUpload } from "../hooks/profile/use-photo-upload";
 import { usePoolManagement } from "../hooks/profile/use-pool-management";
 import { useProfile } from "../hooks/profile/use-profile";
+import DemoMyPhotosPage from "./demo-my-photos-page";
 
 interface DeleteConfirmation {
     photoId: string;
@@ -15,6 +15,29 @@ interface DeleteConfirmation {
 
 const MyPhotosPage = () => {
     const { user: authUser, loading: authLoading } = useAuth();
+
+    // Show demo page immediately if not authenticated (before calling other hooks)
+    if (!authLoading && !authUser) {
+        return <DemoMyPhotosPage />;
+    }
+
+    // Loading state
+    if (authLoading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center">
+                <div className="text-center">
+                    <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-blue-600"></div>
+                    <p className="text-gray-400">Loading...</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Only call these hooks if user is authenticated
+    return <AuthenticatedMyPhotosPage />;
+};
+
+const AuthenticatedMyPhotosPage = () => {
     const { uploadedPhotos, isDeleting, fetchUploadedPhotos, deletePhoto } =
         usePhotoUpload();
     const { user, showSuccessMessage, refreshUserInfo } = useProfile();
@@ -34,23 +57,6 @@ const MyPhotosPage = () => {
             fetchUploadedPhotos();
         }
     }, [user, fetchUploadedPhotos]);
-
-    // Redirect to sign in if not authenticated
-    if (!authLoading && !authUser) {
-        return <Navigate to="/signin?redirect=/my-photos" replace />;
-    }
-
-    // Loading state
-    if (authLoading) {
-        return (
-            <div className="flex min-h-screen items-center justify-center">
-                <div className="text-center">
-                    <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-blue-600"></div>
-                    <p className="text-gray-400">Loading...</p>
-                </div>
-            </div>
-        );
-    }
 
     const handleDeletePhoto = (photoId: string) => {
         const isInPool = poolSelections.has(photoId);

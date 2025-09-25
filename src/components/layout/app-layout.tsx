@@ -30,7 +30,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     }, [isRatingPage]);
 
     return (
-        <div className={`min-v-screen min-h-screen bg-black`}>
+        <div className={`min-v-screen min-h-screen`}>
             {/* Main content area with conditional bottom padding */}
             <div>{children}</div>
 

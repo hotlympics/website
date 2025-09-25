@@ -11,7 +11,7 @@
     body,
     #root {
         min-height: 100dvh;
-        background-color: #000000; /* Black background */
+        background-color: #111827; /* Gray-900 background */
         color: #e2e8f0; /* Light gray text */
     }
 
