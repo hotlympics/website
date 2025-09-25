@@ -7,7 +7,7 @@ interface SignUpCTAProps {
 const SignUpCTA = ({ className = "" }: SignUpCTAProps) => {
     return (
         <div className={`border-t border-gray-700 bg-gray-800 ${className}`}>
-            <div className="mx-auto max-w-4xl px-4 py-8">
+            <div className="mx-auto max-w-4xl px-4 py-8 pb-24">
                 <div className="text-center">
                     <h2 className="mb-3 text-2xl font-bold text-white">
                         Ready to Find Out How Your Photos Compare?
@@ -25,9 +25,7 @@ const SignUpCTA = ({ className = "" }: SignUpCTAProps) => {
                             Sign In or Sign Up
                         </Link>
                     </div>
-                    <p className="mt-6 text-sm text-gray-400">
-                        No credit card required • Start rating in minutes
-                    </p>
+
                 </div>
             </div>
         </div>
