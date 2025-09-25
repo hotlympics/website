@@ -65,16 +65,20 @@ const MenuBar = () => {
 
         // Handle direct path matches
         if (itemPath === "/upload") {
-            return location.pathname === "/upload";
+            const directMatch = location.pathname === "/upload";
+            if (directMatch) return true;
         }
         if (itemPath === "/my-photos") {
-            return location.pathname === "/my-photos";
+            const directMatch = location.pathname === "/my-photos";
+            if (directMatch) return true;
         }
         if (itemPath === "/profile") {
-            return location.pathname === "/profile";
+            const directMatch = location.pathname === "/profile";
+            if (directMatch) return true;
         }
         if (itemPath === "/leaderboard") {
-            return location.pathname === "/leaderboard";
+            const directMatch = location.pathname === "/leaderboard";
+            if (directMatch) return true;
         }
 
         // Handle cases where user is on signin page but intended for a specific page
@@ -103,6 +107,7 @@ const MenuBar = () => {
                 {menuItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = getIsActive(item.path);
+                    
                     return (
                         <button
                             key={item.label}
