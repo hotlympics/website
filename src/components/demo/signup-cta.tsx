@@ -20,9 +20,6 @@ const SignUpCTA = ({ className = "" }: SignUpCTAProps) => {
                         Ready to Find Out How Your Photos Compare?
                     </h2>
                     <p className="mx-auto mb-4 max-w-2xl text-xs text-gray-300 sm:text-sm">
-                        Join Hotlympics to upload your photos, get real ratings
-                        from other users, and discover which looks work best for
-                        you through head-to-head competitions.
                     </p>
                     <div className="flex flex-col justify-center gap-4 sm:flex-row">
                         <Link
