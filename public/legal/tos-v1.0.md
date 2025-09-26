@@ -1,7 +1,5 @@
 # Hotlympics Terms of Service
 
-## 0. Test
-
 ## 1. Acceptance of Terms
 
 By accessing and using Hotlympics, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using this service.
