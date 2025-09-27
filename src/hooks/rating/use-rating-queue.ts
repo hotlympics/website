@@ -15,13 +15,16 @@ export const useRatingQueue = () => {
     const [imagePair, setImagePair] = useState<ImageData[] | null>(null);
     const [loadingImages, setLoadingImages] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [viewingGender, setViewingGender] = useState<
+        "male" | "female" | null
+    >(null);
     const isInitialized = useRef(false);
     const isInitializing = useRef(false);
     const isHomePage = location.pathname === "/";
 
     // TODO: replace this eventually with a preferences object in user collection
     // so users can choose what they want to see
-    const getViewingGender = async (): Promise<"male" | "female"> => {
+    const getDefaultViewingGender = async (): Promise<"male" | "female"> => {
         const user = await userCacheService.getCurrentUser();
 
         if (user && user.gender !== "unknown") {
@@ -33,60 +36,87 @@ export const useRatingQueue = () => {
         return "female";
     };
 
-    const initializeQueue = useCallback(async () => {
-        if (isInitialized.current || isInitializing.current) {
-            return;
-        }
+    const initializeQueue = useCallback(
+        async (genderOverride?: "male" | "female") => {
+            if (isInitialized.current || isInitializing.current) {
+                return;
+            }
 
-        isInitializing.current = true;
-        setLoadingImages(true);
-        setError(null);
+            isInitializing.current = true;
+            setLoadingImages(true);
+            setError(null);
 
-        // Signal cache manager that rating page is priority
-        cacheManager.setRatingPagePriority(true);
+            // Signal cache manager that rating page is priority
+            cacheManager.setRatingPagePriority(true);
 
-        try {
-            // Get viewing gender based on user's gender (opposite gender)
-            const gender = await getViewingGender();
+            try {
+                // Get viewing gender - use override if provided, otherwise get default
+                const gender =
+                    genderOverride ?? (await getDefaultViewingGender());
+                setViewingGender(gender);
 
-            // Initialize the queue service with progressive loading callback
-            const onFirstPairReady = (firstPair: ImageData[]) => {
-                // Show first pair immediately when ready
-                setImagePair(firstPair);
-                setLoadingImages(false);
-                isInitialized.current = true;
-
-                // Signal cache manager that first pair is displayed - safe for background caching
-                cacheManager.onFirstPairDisplayed();
-            };
-
-            // Initialize the queue service - it will check cache internally
-            await imageQueueService.initialize(gender, onFirstPairReady);
-
-            // If no callback was triggered (e.g., cache hit with full preload), get first pair normally
-            if (!isInitialized.current) {
-                const firstPair = imageQueueService.getCurrentPair();
-                if (firstPair) {
+                // Initialize the queue service with progressive loading callback
+                const onFirstPairReady = (firstPair: ImageData[]) => {
+                    // Show first pair immediately when ready
                     setImagePair(firstPair);
+                    setLoadingImages(false);
                     isInitialized.current = true;
 
-                    // Signal cache manager that first pair is displayed
+                    // Signal cache manager that first pair is displayed - safe for background caching
                     cacheManager.onFirstPairDisplayed();
-                } else {
-                    setError("No images available for rating at this time.");
-                }
-            }
-        } catch (err) {
-            console.error("Error initializing image queue:", err);
-            setError("Failed to load images. Please try again.");
+                };
 
-            // Clear rating page priority on error to allow background caching
-            cacheManager.setRatingPagePriority(false);
-        } finally {
-            setLoadingImages(false);
+                // Initialize the queue service - it will check cache internally
+                await imageQueueService.initialize(gender, onFirstPairReady);
+
+                // If no callback was triggered (e.g., cache hit with full preload), get first pair normally
+                if (!isInitialized.current) {
+                    const firstPair = imageQueueService.getCurrentPair();
+                    if (firstPair) {
+                        setImagePair(firstPair);
+                        isInitialized.current = true;
+
+                        // Signal cache manager that first pair is displayed
+                        cacheManager.onFirstPairDisplayed();
+                    } else {
+                        setError(
+                            "No images available for rating at this time."
+                        );
+                    }
+                }
+            } catch (err) {
+                console.error("Error initializing image queue:", err);
+                setError("Failed to load images. Please try again.");
+
+                // Clear rating page priority on error to allow background caching
+                cacheManager.setRatingPagePriority(false);
+            } finally {
+                setLoadingImages(false);
+                isInitializing.current = false;
+            }
+        },
+        []
+    );
+
+    // Function to change viewing gender preference
+    const changeViewingGender = useCallback(
+        async (newGender: "male" | "female") => {
+            console.log(`[Rating Queue] Changing gender from ${viewingGender} to ${newGender}`);
+            
+            // Clear cache to ensure fresh images for new gender
+            imageQueueService.clearQueueCache();
+            console.log("[Rating Queue] Cache cleared for gender change");
+            
+            // Reset state to reinitialize with new gender
+            isInitialized.current = false;
             isInitializing.current = false;
-        }
-    }, []);
+            setViewingGender(newGender);
+
+            // Reinitialize the queue with new gender
+            await initializeQueue(newGender);
+        },
+        [initializeQueue, viewingGender]
+    );
 
     useEffect(() => {
         // Wait for auth to finish loading before starting image load
@@ -162,5 +192,7 @@ export const useRatingQueue = () => {
         error,
         handleImageClick,
         handleDiscardPair,
+        viewingGender,
+        changeViewingGender,
     };
 };

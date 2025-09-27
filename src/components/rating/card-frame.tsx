@@ -7,10 +7,11 @@ interface CardFrameProps {
     imagePair: ImageData[];
     onComplete: (selectedImage: ImageData) => void;
     onReportImage: (imageData: ImageData) => void;
+    onSettingsClick?: () => void;
 }
 
 export const CardFrame = forwardRef<SwipeCardHandle, CardFrameProps>(
-    ({ imagePair, onComplete, onReportImage }, ref) => {
+    ({ imagePair, onComplete, onReportImage, onSettingsClick }, ref) => {
         return (
             <div
                 className="relative w-full"
@@ -24,7 +25,10 @@ export const CardFrame = forwardRef<SwipeCardHandle, CardFrameProps>(
                         aspectRatio: "1/2",
                     }}
                 >
-                    <BackgroundNextPair onReportImage={onReportImage} />
+                    <BackgroundNextPair
+                        onReportImage={onReportImage}
+                        onSettingsClick={onSettingsClick}
+                    />
 
                     <div className="absolute inset-0 z-10">
                         <SwipeCard
@@ -33,6 +37,7 @@ export const CardFrame = forwardRef<SwipeCardHandle, CardFrameProps>(
                             pair={imagePair}
                             onComplete={onComplete}
                             onReportImage={onReportImage}
+                            onSettingsClick={onSettingsClick}
                             bare
                         />
                     </div>

@@ -1,4 +1,4 @@
-import { Flag } from "lucide-react";
+import { Flag, Settings } from "lucide-react";
 import { motion } from "motion/react";
 import {
     forwardRef,
@@ -17,6 +17,7 @@ interface SwipeCardProps {
     readOnly?: boolean;
     bare?: boolean; // Render content without its own rounded/bg/shadow
     onReportImage?: (imageData: ImageData) => void;
+    onSettingsClick?: () => void;
 }
 
 export type SwipeCardHandle = {
@@ -26,7 +27,14 @@ export type SwipeCardHandle = {
 
 export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
     (
-        { pair, onComplete, readOnly = false, bare = false, onReportImage },
+        {
+            pair,
+            onComplete,
+            readOnly = false,
+            bare = false,
+            onReportImage,
+            onSettingsClick,
+        },
         ref
     ) => {
         const topImage = pair[0];
@@ -185,6 +193,20 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(
                                 title="Report this image"
                             >
                                 <Flag className="h-4 w-4" />
+                            </button>
+                        )}
+
+                        {/* Settings cog button - top-right corner */}
+                        {onSettingsClick && (
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onSettingsClick();
+                                }}
+                                className="absolute top-2 right-2 z-20 rounded-full bg-black/60 p-2 text-white transition-all hover:bg-black/80"
+                                title="Settings"
+                            >
+                                <Settings className="h-4 w-4" />
                             </button>
                         )}
                     </div>
