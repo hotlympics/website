@@ -3,6 +3,7 @@ import { useRatingQueue } from "../../hooks/rating/use-rating-queue.js";
 import type { ImageData } from "../../services/core/image-queue.js";
 import { reportService } from "../../services/report-service.js";
 import ReportModal, { type ReportCategory } from "../shared/report-modal.js";
+import { SettingsModal } from "../shared/settings-modal.js";
 import { CardContainer } from "./card-container.js";
 import { EmptyState } from "./empty-state.js";
 import { ErrorState } from "./error-state.js";
@@ -17,6 +18,8 @@ export const RatingArena = () => {
         error,
         handleImageClick,
         handleDiscardPair,
+        viewingGender,
+        changeViewingGender,
     } = useRatingQueue();
 
     const cardRef = useRef<SwipeCardHandle | null>(null);
@@ -31,6 +34,22 @@ export const RatingArena = () => {
     });
     const [isSubmittingReport, setIsSubmittingReport] = useState(false);
     const [reportError, setReportError] = useState<string | null>(null);
+
+    // Settings modal state
+    const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+
+    const handleOpenSettingsModal = () => {
+        setIsSettingsModalOpen(true);
+    };
+
+    const handleCloseSettingsModal = () => {
+        setIsSettingsModalOpen(false);
+    };
+
+    const handleGenderChange = (newGender: "male" | "female") => {
+        changeViewingGender(newGender);
+        setIsSettingsModalOpen(false);
+    };
 
     const handleReportImage = (imageData: ImageData) => {
         setReportModal({
@@ -103,7 +122,7 @@ export const RatingArena = () => {
                     activeElement.tagName === "TEXTAREA" ||
                     (activeElement as HTMLElement).contentEditable === "true");
 
-            if (isTyping || reportModal.isOpen) return;
+            if (isTyping || reportModal.isOpen || isSettingsModalOpen) return;
 
             if (e.key === "ArrowUp") {
                 e.preventDefault();
@@ -115,7 +134,7 @@ export const RatingArena = () => {
         };
         window.addEventListener("keydown", onKeyDown);
         return () => window.removeEventListener("keydown", onKeyDown);
-    }, [imagePair, reportModal.isOpen]);
+    }, [imagePair, reportModal.isOpen, isSettingsModalOpen]);
 
     return (
         <div className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden">
@@ -130,6 +149,7 @@ export const RatingArena = () => {
                         imagePair={imagePair}
                         onComplete={handleImageClick}
                         onReportImage={handleReportImage}
+                        onSettingsClick={handleOpenSettingsModal}
                     />
                 ) : (
                     <EmptyState />
@@ -142,6 +162,13 @@ export const RatingArena = () => {
                 onSubmit={handleSubmitReport}
                 isLoading={isSubmittingReport}
                 error={reportError}
+            />
+
+            <SettingsModal
+                isOpen={isSettingsModalOpen}
+                onClose={handleCloseSettingsModal}
+                currentGender={viewingGender || "female"}
+                onApply={handleGenderChange}
             />
         </div>
     );

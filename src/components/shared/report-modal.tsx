@@ -90,7 +90,7 @@ const ReportModal = ({
                             key={category.value}
                             className={`flex cursor-pointer items-start space-x-3 rounded-lg border p-3 transition-colors ${
                                 selectedCategory === category.value
-                                    ? "border-blue-500 bg-blue-50"
+                                    ? "border-gray-800 bg-gray-100"
                                     : "border-gray-200 hover:bg-gray-50"
                             }`}
                         >
@@ -104,7 +104,7 @@ const ReportModal = ({
                                         e.target.value as ReportCategory
                                     )
                                 }
-                                className="mt-0.5 h-4 w-4 text-blue-600"
+                                className="mt-0.5 h-4 w-4 text-gray-600"
                                 disabled={isLoading}
                             />
                             <div className="flex-1">
@@ -127,7 +127,7 @@ const ReportModal = ({
                             placeholder="Describe what's wrong with this image..."
                             disabled={isLoading}
                             maxLength={280}
-                            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-50"
+                            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-600 focus:border-gray-800 focus:ring-1 focus:ring-gray-800 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-50"
                             rows={3}
                         />
                         <div className="mt-1 text-right text-xs text-gray-500">
@@ -158,10 +158,10 @@ const ReportModal = ({
                             (selectedCategory === "OTHER" &&
                                 !description.trim())
                                 ? "cursor-not-allowed bg-gray-400"
-                                : "bg-red-600 hover:bg-red-700 focus:ring-red-500"
+                                : "bg-gray-800 hover:bg-gray-900 focus:ring-gray-700"
                         }`}
                     >
-                        {isLoading ? "Submitting..." : "Submit Report"}
+                        {isLoading ? "Submitting..." : "Apply"}
                     </button>
                 </div>
             </div>

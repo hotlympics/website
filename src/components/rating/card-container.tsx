@@ -7,10 +7,11 @@ interface CardContainerProps {
     imagePair: ImageData[];
     onComplete: (selectedImage: ImageData) => void;
     onReportImage: (imageData: ImageData) => void;
+    onSettingsClick?: () => void;
 }
 
 export const CardContainer = forwardRef<SwipeCardHandle, CardContainerProps>(
-    ({ imagePair, onComplete, onReportImage }, ref) => {
+    ({ imagePair, onComplete, onReportImage, onSettingsClick }, ref) => {
         return (
             <div className="flex h-full w-full items-center justify-center">
                 <CardFrame
@@ -18,6 +19,7 @@ export const CardContainer = forwardRef<SwipeCardHandle, CardContainerProps>(
                     imagePair={imagePair}
                     onComplete={onComplete}
                     onReportImage={onReportImage}
+                    onSettingsClick={onSettingsClick}
                 />
             </div>
         );

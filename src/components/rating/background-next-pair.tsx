@@ -4,10 +4,12 @@ import { SwipeCard } from "./swipe-card.js";
 
 interface BackgroundNextPairProps {
     onReportImage: (imageData: ImageData) => void;
+    onSettingsClick?: () => void;
 }
 
 export const BackgroundNextPair = ({
     onReportImage,
+    onSettingsClick,
 }: BackgroundNextPairProps) => {
     const nextPair = imageQueueService.peekNextPair();
 
@@ -22,6 +24,7 @@ export const BackgroundNextPair = ({
                 readOnly
                 bare
                 onReportImage={onReportImage}
+                onSettingsClick={onSettingsClick}
             />
         </div>
     );

@@ -19,8 +19,7 @@ const SignUpCTA = ({ className = "" }: SignUpCTAProps) => {
                     <h2 className="mb-2 text-lg font-bold text-white sm:text-xl">
                         Ready to Find Out How Your Photos Compare?
                     </h2>
-                    <p className="mx-auto mb-4 max-w-2xl text-xs text-gray-300 sm:text-sm">
-                    </p>
+                    <p className="mx-auto mb-4 max-w-2xl text-xs text-gray-300 sm:text-sm"></p>
                     <div className="flex flex-col justify-center gap-4 sm:flex-row">
                         <Link
                             to="/signin"
