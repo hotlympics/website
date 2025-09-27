@@ -101,12 +101,14 @@ export const useRatingQueue = () => {
     // Function to change viewing gender preference
     const changeViewingGender = useCallback(
         async (newGender: "male" | "female") => {
-            console.log(`[Rating Queue] Changing gender from ${viewingGender} to ${newGender}`);
-            
+            console.log(
+                `[Rating Queue] Changing gender from ${viewingGender} to ${newGender}`
+            );
+
             // Clear cache to ensure fresh images for new gender
             imageQueueService.clearQueueCache();
             console.log("[Rating Queue] Cache cleared for gender change");
-            
+
             // Reset state to reinitialize with new gender
             isInitialized.current = false;
             isInitializing.current = false;
