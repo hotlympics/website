@@ -92,7 +92,7 @@ const AuthenticatedMyPhotosPage = () => {
     };
 
     return (
-        <div className="flex h-[calc(100vh-4rem)] flex-col overflow-hidden">
+        <div className="fixed inset-0 top-0 bottom-16 flex flex-col overflow-hidden">
             <div className="mx-auto flex h-full w-full max-w-6xl flex-col px-4">
                 {/* Header section */}
                 <div className="flex-shrink-0 pt-4 pb-4">
