@@ -13,7 +13,7 @@ const DemoMyPhotosPage = () => {
             <div className="flex h-full flex-col overflow-hidden pb-36 blur-[2px]">
                 <div className="mx-auto flex h-full w-full max-w-6xl flex-col px-4">
                     {/* Header section */}
-                    <div className="flex-shrink-0 pt-8 pb-4">
+                    <div className="flex-shrink-0 pt-4 pb-4">
                         <h1 className="mb-4 text-center text-xl font-bold text-gray-100">
                             My Photos
                         </h1>

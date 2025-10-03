@@ -16,16 +16,16 @@ const PhotoGallery = ({
     deletingPhoto,
 }: PhotoGalleryProps) => {
     return (
-        <div className="grid grid-cols-2 gap-4 p-6">
+        <div className="grid grid-cols-2 gap-3 px-0 py-4">
             {photos.map((photo) => {
                 console.log("Photo data:", photo);
                 const isInPool = poolSelections.has(photo.id);
                 return (
                     <div
                         key={photo.id}
-                        className={`group relative aspect-square cursor-pointer overflow-hidden rounded-lg bg-gray-700 ${
+                        className={`group relative aspect-square cursor-pointer overflow-hidden rounded-lg border-4 bg-gray-700 ${
                             deletingPhoto === photo.id ? "opacity-50" : ""
-                        } ${isInPool ? "ring-4 ring-green-500" : ""}`}
+                        } ${isInPool ? "border-green-500" : "border-transparent"}`}
                         onClick={() => onPoolToggle(photo.id)}
                     >
                         <img

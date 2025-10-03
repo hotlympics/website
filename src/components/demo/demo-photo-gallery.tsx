@@ -10,14 +10,14 @@ const DemoPhotoGallery = ({
     poolSelections,
 }: DemoPhotoGalleryProps) => {
     return (
-        <div className="grid grid-cols-2 gap-4 p-6">
+        <div className="grid grid-cols-2 gap-3 px-0 py-4">
             {photos.map((photo) => {
                 const isInPool = poolSelections.has(photo.id);
                 return (
                     <div
                         key={photo.id}
-                        className={`group relative aspect-square overflow-hidden rounded-lg bg-gray-700 ${
-                            isInPool ? "ring-4 ring-green-500" : ""
+                        className={`group relative aspect-square overflow-hidden rounded-lg border-4 bg-gray-700 ${
+                            isInPool ? "border-green-500" : "border-transparent"
                         }`}
                     >
                         <img
