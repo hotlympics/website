@@ -118,7 +118,7 @@ const AuthenticatedMyPhotosPage = () => {
                 </div>
 
                 {/* Scrollable content area */}
-                <div className="overflow-y-auto">
+                <div className="-mx-4 overflow-y-auto px-4">
                     {uploadedPhotos.length > 0 ? (
                         <PhotoGallery
                             photos={uploadedPhotos}
