@@ -7,10 +7,12 @@ interface MainContentAreaProps {
 export const MainContentArea = ({ children }: MainContentAreaProps) => {
     return (
         <div
-            className="flex min-h-[100dvh] w-full flex-col items-center justify-center pb-16 sm:pb-12"
+            className="flex min-h-[100dvh] w-full flex-col items-center justify-center"
             style={{
-                paddingTop: "1rem",
+                paddingTop: "0.5rem",
                 paddingBottom: "calc(4rem + env(safe-area-inset-bottom))",
+                paddingLeft: "0.5rem",
+                paddingRight: "0.5rem",
             }}
         >
             {children}

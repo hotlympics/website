@@ -16,7 +16,8 @@ export const CardFrame = forwardRef<SwipeCardHandle, CardFrameProps>(
             <div
                 className="relative w-full"
                 style={{
-                    maxWidth: "min(24rem, calc((100dvh - 8rem)/2))",
+                    maxWidth:
+                        "calc((100dvh - 5rem - env(safe-area-inset-bottom)) / 2)",
                 }}
             >
                 <div
