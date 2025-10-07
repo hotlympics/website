@@ -61,6 +61,13 @@ const ProfilePage = () => {
     // Main profile page
     return (
         <div className="flex h-[calc(100vh-7rem)] flex-col overflow-hidden sm:h-[calc(100vh-8.5rem)]">
+            {/* Title at top */}
+            <div className="flex-shrink-0 pt-8 pb-2">
+                <h1 className="text-center text-2xl font-medium text-gray-100">
+                    Profile
+                </h1>
+            </div>
+
             <div className="mx-auto max-w-lg flex-1 overflow-y-auto px-4 py-8">
                 {/* Profile Information */}
                 <div className="mb-8 space-y-4">

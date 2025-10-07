@@ -92,11 +92,11 @@ const AuthenticatedMyPhotosPage = () => {
     };
 
     return (
-        <div className="flex h-[calc(100vh-4rem)] flex-col overflow-hidden">
+        <div className="fixed inset-0 top-0 bottom-16 flex flex-col overflow-hidden">
             <div className="mx-auto flex h-full w-full max-w-6xl flex-col px-4">
                 {/* Header section */}
-                <div className="flex-shrink-0 pt-8 pb-4">
-                    <h1 className="mb-4 text-center text-xl font-bold text-gray-100">
+                <div className="flex-shrink-0 pt-8 pb-2">
+                    <h1 className="mb-4 text-center text-2xl font-medium text-gray-100">
                         My Photos
                     </h1>
 
@@ -118,7 +118,7 @@ const AuthenticatedMyPhotosPage = () => {
                 </div>
 
                 {/* Scrollable content area */}
-                <div className="overflow-y-auto">
+                <div className="-mx-4 overflow-y-auto px-4">
                     {uploadedPhotos.length > 0 ? (
                         <PhotoGallery
                             photos={uploadedPhotos}

@@ -50,12 +50,16 @@ website/
 ## Development Commands
 
 ```bash
-npm run dev        # Start development server
-npm run build      # Build for production
-npm run preview    # Preview production build
-npm run lint       # Run linter
-npm run typecheck  # Run TypeScript type checking
-./run-checks.sh    # Run all CI checks locally
+npm run dev              # Start development server (http://localhost:8000)
+npm run dev:local        # Start with SERVER_ENV=local for local backend
+npm run build            # Build for production (includes TypeScript check)
+npm run preview          # Preview production build
+npm run lint             # Run ESLint
+npm run lint:fix         # Run ESLint with auto-fix
+npm run format           # Format code with Prettier
+./run-checks.sh          # Run all CI checks (install, format, lint, build)
+npm run deploy           # Build and deploy to Firebase Hosting
+npm run deploy:preview   # Deploy to preview channel
 ```
 
 ## Development Workflow
@@ -77,42 +81,121 @@ Fix any linting or formatting errors before considering the changes complete.
 
 This ensures dependencies are installed and the build succeeds. The user will manually run and test the website once the build completes successfully.
 
-## API Integration
+## Architecture
+
+### API Integration
+
+Backend API URL is determined dynamically by `src/utils/api.ts`:
+
+- Uses `VITE_API_URL` environment variable if set
+- Defaults to `http://localhost:3000` for localhost
+- Uses network IP for LAN access
 
 The frontend communicates with the backend server for:
 
-- Fetching image pairs
-- Submitting ratings
+- Fetching image pairs for rating
+- Submitting rating results
 - User authentication
 - Image uploads
-- Retrieving Elo scores
+- Retrieving leaderboard data
 
-## Component Architecture
+### Authentication
 
-- **RatingView**: Main component for displaying and rating image pairs
-- **ImageUpload**: Handles user image uploads with validation
-- **AuthForm**: User authentication (sign in/sign up)
-- **UserProfile**: Displays user stats and uploaded images
-- **LeaderBoard**: Shows top-rated images with Elo scores
+Firebase Authentication is used for user management:
 
-## State Management
+- **Magic Link**: Email-based passwordless authentication
+- **Google OAuth**: Sign in with Google account
+- **Auth Context**: `src/context/auth-context.tsx` provides global auth state
+- **Auth Service**: `src/services/auth/firebase-auth.ts` handles Firebase operations
 
-Consider using:
+Auth state changes trigger cache clearing to prevent data leaks between users.
 
-- React Context for authentication state
-- Local state for UI interactions
-- Custom hooks for data fetching
+### Image Queue System
+
+Core rating functionality uses a sophisticated image queue (`src/services/core/image-queue.ts`):
+
+- **Double Buffering**: Maintains active and buffer blocks for smooth transitions
+- **Block Size**: Fetches 10 images at a time (always divisible by 2 for pairing)
+- **Preloading**: Aggressively preloads images to minimize perceived latency
+- **Gender-Specific**: Separate queues for male/female image pools
+- **Singleton Pattern**: Single queue instance shared across the app
+
+The queue ensures users always have image pairs ready without waiting for network requests.
+
+### Rating System (Glicko-2)
+
+Images are rated using the Glicko-2 algorithm (evolution of Elo):
+
+- **Rating (R)**: Display rating, default 1500
+- **Rating Deviation (RD)**: Uncertainty measure, default 350
+- **Volatility (σ)**: Rating stability over time, default 0.06
+- **Internal Values**: System also tracks mu (μ) and phi (φ) for calculations
+
+Image data structure includes:
+
+- Battle statistics (wins, losses, draws)
+- Pool status (active/inactive)
+- Gender classification
+- User association
+
+All rating calculations happen server-side; frontend only displays and submits results.
+
+### Caching Strategy
+
+Multi-layer caching system (`src/services/cache/cache-manager.ts`):
+
+- **Leaderboards**: Cached for 10 minutes with image preloading
+- **User Profiles**: Cached for 2 hours
+- **Image Cache**: Browser cache for preloaded images
+- **Priority Mode**: Rating page gets priority to avoid interference with critical image loading
+- **Background Refresh**: Expired caches refresh in background without blocking UI
+
+Configuration in `src/config/cache-config.ts`.
+
+### State Management
+
+- **Auth Context**: Global authentication state via React Context
+- **Custom Hooks**: Data fetching logic encapsulated in hooks
+    - `src/hooks/rating/use-rating-queue.ts` - Rating queue management
+    - `src/hooks/leaderboard/use-leaderboard.ts` - Leaderboard data
+    - `src/hooks/profile/` - User profile operations
+    - `src/hooks/auth/` - Authentication flows
+- **Local State**: Component-level UI state with React hooks
 
 ## Routing
 
-- `/` - Home/Rating page
-- `/login` - Authentication page
-- `/upload` - Image upload page (protected)
-- `/profile` - User profile page (protected)
+Main routes defined in `src/app.tsx`:
+
+- `/` - Rating page (main interface)
+- `/signin` - Authentication page
+- `/profile` - User profile page
+- `/upload` - Image upload page
+- `/my-photos` - User's uploaded photos
 - `/leaderboard` - Top rated images
+- `/auth/*` - Auth verification routes
+- `/admin/*` - Admin routes
 
-## Testing Strategy
+All routes use React Router v7 with client-side routing.
 
-- Unit tests for utility functions
-- Component tests for React components
-- Integration tests for API interactions
+## Build Configuration
+
+Vite configuration (`vite.config.ts`) includes:
+
+- **Plugins**: React SWC, Tailwind CSS, auto-imports, image optimization, compression
+- **Auto-imports**: React and React Router hooks auto-imported (configured via `unplugin-auto-import`)
+- **Path Alias**: `@/` maps to `./src/`
+- **Dev Server**: Runs on port 8000 with network access enabled
+- **Environment**: `__SERVER_ENV__` injected based on `SERVER_ENV` env variable
+
+## Environment Variables
+
+See `.env.example` for required variables:
+
+- `VITE_API_URL` - Backend API URL (defaults to localhost:3000 if not set)
+- `VITE_GOOGLE_CLIENT_ID` - Google OAuth client ID
+- `VITE_FIREBASE_API_KEY` - Firebase configuration
+- `VITE_FIREBASE_AUTH_DOMAIN`
+- `VITE_FIREBASE_PROJECT_ID`
+- `VITE_FIREBASE_STORAGE_BUCKET`
+- `VITE_FIREBASE_MESSAGING_SENDER_ID`
+- `VITE_FIREBASE_APP_ID`

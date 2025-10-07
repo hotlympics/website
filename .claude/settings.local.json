@@ -7,7 +7,8 @@
             "Bash(npm run lint)",
             "Bash(ls:*)",
             "Bash(./run-checks.sh:*)",
-            "mcp__context7__get-library-docs"
+            "mcp__context7__get-library-docs",
+            "Bash(/dev/null)"
         ],
         "deny": []
     }
