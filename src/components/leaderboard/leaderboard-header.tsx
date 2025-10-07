@@ -61,7 +61,7 @@ const LeaderboardHeader = ({
         <div className="mb-8 flex items-center justify-between">
             <div className="flex w-full justify-center">
                 <div className="flex w-[350px] items-center justify-between">
-                    <h1 className="text-3xl font-semibold text-white">
+                    <h1 className="text-2xl font-medium text-white">
                         Leaderboard
                     </h1>
                     <div className="relative" ref={dropdownRef}>

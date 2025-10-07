@@ -96,7 +96,7 @@ const UploadPage = () => {
         <div className="flex h-screen flex-col overflow-hidden">
             {/* Title at top */}
             <div className="flex-shrink-0 pt-8 pb-2">
-                <h1 className="text-center text-xl font-medium text-gray-100">
+                <h1 className="text-center text-2xl font-medium text-gray-100">
                     Upload Photo
                 </h1>
             </div>
